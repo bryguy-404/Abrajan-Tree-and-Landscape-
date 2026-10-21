@@ -1,0 +1,306 @@
+---
+import Icon from './Icon.astro';
+import { treeServices } from '../data/services';
+---
+
+<section
+  class="section services"
+  id="services"
+  aria-labelledby="services-title"
+>
+  <div class="container">
+    <div class="section-heading reveal">
+      <div>
+        <p class="eyebrow">
+          <span class="eyebrow-line"></span> TREE WORK IS AT OUR ROOTS
+        </p>
+        <h2 id="services-title">
+          Big Trees.
+          <br />
+          <span>The Right Team.</span>
+        </h2>
+      </div>
+      <p>
+        From a planned removal to the unexpected after a storm, your trees
+        deserve experienced hands.
+      </p>
+    </div>
+    <div class="tree-services-layout">
+      <figure class="tree-feature reveal">
+        <img
+          src="/images/tree-care.webp"
+          width="900"
+          height="1471"
+          loading="lazy"
+          alt="An Abrajan crew member working high in a tree on a residential property"
+        />
+        <figcaption>
+          <span>
+            <span class="status-dot"></span> YOUR LOCAL TREE CREW
+          </span>
+          <p>
+            Rooted in Michiana.
+            <br />
+            Since 2000.
+          </p>
+        </figcaption>
+      </figure>
+      <div class="tree-service-grid">
+        {treeServices.map((service, index) => (
+          <article
+            class:list={[
+              'tree-service-card',
+              'reveal',
+              { 'emergency-card': index === 1 },
+            ]}
+            id={service.id}
+            aria-labelledby={`${service.id}-title`}
+          >
+            <div class="tree-service-top">
+              <Icon name={service.icon} size={33} />
+              <span>{index === 1 ? '24/7' : `0${index + 1}`}</span>
+            </div>
+            <h3 id={`${service.id}-title`}>{service.title}</h3>
+            <p>{service.text}</p>
+            <small>{service.detail}</small>
+            <a
+              class="text-link"
+              href="#contact"
+              data-service={service.value}
+              aria-label={`Request an estimate for ${service.title.toLowerCase()}`}
+            >
+              Request an Estimate <Icon name="diagonal" size={19} />
+            </a>
+          </article>
+        ))}
+      </div>
+    </div>
+    <div class="tree-services-footer">
+      <span>
+        <Icon name="shield" size={18} /> Licensed & Insured
+      </span>
+      <span>
+        <Icon name="home" size={18} /> Residential & Commercial
+      </span>
+      <a href="#property-care">
+        Landscaping & Property Care, Too <Icon name="arrow" size={18} />
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  h2 span {
+    color: #5b752f;
+  }
+  .tree-services-layout {
+    display: grid;
+    grid-template-columns: 0.9fr 1.6fr;
+    gap: 24px;
+  }
+  .tree-feature {
+    position: relative;
+    min-height: 560px;
+    overflow: hidden;
+    border-radius: 4px;
+    isolation: isolate;
+    background: var(--deep);
+    margin: 0;
+  }
+  .tree-feature img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 48% 37%;
+    z-index: -2;
+  }
+  .tree-feature::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 50%, #08291ee8);
+    z-index: -1;
+  }
+  figcaption {
+    position: absolute;
+    left: 30px;
+    right: 25px;
+    bottom: 30px;
+    color: white;
+  }
+  figcaption > span {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+  }
+  figcaption p {
+    font-size: 29px;
+    line-height: 1.3;
+    letter-spacing: -1px;
+    color: white;
+    margin-top: 15px;
+  }
+  .tree-service-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+  .tree-service-card {
+    padding: 27px 25px;
+    background: white;
+    border: 1px solid #dfe4d8;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s;
+    scroll-margin-top: 110px;
+  }
+  .tree-service-card:hover {
+    border-color: #9db876;
+    box-shadow: 0 8px 30px #123c2c08;
+  }
+  .tree-service-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #597c31;
+    margin-bottom: 23px;
+  }
+  .tree-service-top > span {
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: #7a876d;
+  }
+  .tree-service-card h3 {
+    font-size: 21px;
+    letter-spacing: -0.65px;
+    line-height: 1.3;
+  }
+  .tree-service-card > p {
+    font-size: 12px;
+    line-height: 1.85;
+    margin-top: 13px;
+  }
+  .tree-service-card > small {
+    font-size: 10px;
+    line-height: 1.8;
+    color: #60735e;
+    margin: 16px 0 22px;
+  }
+  .tree-service-card .text-link {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid #e3e8dc;
+    border-bottom: 0;
+    padding-top: 17px;
+    margin-top: auto;
+    font-size: 11px;
+  }
+  .emergency-card {
+    background: #edf2e2;
+    border-color: #cbd9b5;
+  }
+  .emergency-card .tree-service-top > span {
+    border-radius: 30px;
+    color: var(--pine);
+    background: var(--lime);
+    padding: 5px 11px;
+    font-weight: 700;
+  }
+  .tree-services-footer {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    margin-top: 29px;
+    padding-top: 25px;
+    border-top: 1px solid #dce1d4;
+    font-size: 11px;
+  }
+  .tree-services-footer > * {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+  }
+  .tree-services-footer a {
+    margin-left: auto;
+  }
+  .tree-services-footer a:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  @media (max-width: 1100px) {
+    .tree-services-layout {
+      grid-template-columns: 0.8fr 1.7fr;
+      gap: 18px;
+    }
+    .tree-service-card {
+      padding: 24px 20px;
+    }
+    figcaption {
+      left: 22px;
+    }
+    figcaption p {
+      font-size: 25px;
+    }
+  }
+  @media (max-width: 800px) {
+    .tree-services-layout {
+      grid-template-columns: 1fr;
+    }
+    .tree-feature {
+      min-height: 340px;
+    }
+    .tree-feature img {
+      object-position: center 36%;
+    }
+    .tree-feature::after {
+      background: linear-gradient(90deg, #08291ec9, transparent);
+    }
+    .tree-service-card {
+      padding: 28px;
+    }
+    .tree-services-footer {
+      flex-wrap: wrap;
+      gap: 17px 25px;
+    }
+    .tree-services-footer a {
+      margin-left: 0;
+    }
+  }
+  @media (max-width: 600px) {
+    .tree-feature {
+      min-height: 320px;
+    }
+    .tree-service-grid {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    .tree-service-card {
+      padding: 26px;
+    }
+    .tree-service-top {
+      margin-bottom: 18px;
+    }
+    .tree-service-card h3 {
+      font-size: 24px;
+    }
+    .tree-service-card > p {
+      font-size: 13px;
+    }
+    .tree-service-card > small {
+      font-size: 11px;
+    }
+    .tree-services-footer {
+      font-size: 10px;
+    }
+    .tree-services-footer a {
+      width: 100%;
+      padding-top: 8px;
+    }
+  }
+</style>

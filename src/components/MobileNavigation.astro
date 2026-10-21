@@ -2,11 +2,11 @@
 import Icon from './Icon.astro';
 const links = [
   ['Home', 'top'],
-  ['About us', 'about'],
-  ['Services', 'services'],
-  ['Our work', 'our-work'],
+  ['Tree Services', 'services'],
+  ['About Us', 'about'],
+  ['Our Work', 'our-work'],
   ['Reviews', 'reviews'],
-  ['Service area', 'service-area'],
+  ['Service Area', 'service-area'],
   ['Contact', 'contact'],
 ];
 ---
@@ -41,7 +41,7 @@ const links = [
         <Icon name="close" size={22} />
       </button>
     </div>
-    <p class="drawer-eyebrow">A little closer to the outdoors</p>
+    <p class="drawer-eyebrow">Serving Michiana since 2000</p>
     <nav class="drawer-nav" aria-label="Mobile navigation">
       {links.map(([label, id], index) => (
         <a
@@ -58,13 +58,9 @@ const links = [
       ))}
     </nav>
     <div class="drawer-contact">
-      <p>Let’s make something beautiful.</p>
+      <p>Local roots. Experienced tree care.</p>
       <a class="button button-lime" href="#contact">
-        Get a free estimate <Icon name="diagonal" size={18} />
-      </a>
-      <a class="drawer-phone" href="tel:+15742922913">
-        <Icon name="phone" size={19} />
-        574-292-2913
+        Get a Free Estimate <Icon name="diagonal" size={18} />
       </a>
       <span class="drawer-area">South Bend & the Michiana area</span>
     </div>
@@ -76,12 +72,8 @@ const links = [
 </dialog>
 
 <nav class="mobile-contact-bar" aria-label="Quick contact" hidden>
-  <a class="mobile-call" href="tel:+15742922913">
-    <Icon name="phone" size={18} />
-    <span>Call now</span>
-  </a>
   <a class="mobile-estimate" href="#contact">
-    <span>Free estimate</span>
+    <span>Free Estimate</span>
     <Icon name="diagonal" size={18} />
   </a>
 </nav>
@@ -344,24 +336,12 @@ const links = [
     font-size: 11px;
     margin-bottom: 12px;
   }
-  .drawer-phone {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 9px;
-    min-height: 44px;
-    margin-top: 10px;
-    font-size: 13px;
-    font-weight: 550;
-  }
   .drawer-area {
     display: block;
     text-align: center;
     font-size: 9px;
     color: #b3c4b6;
-  }
-  .drawer-phone :global(svg) {
-    color: var(--lime);
+    margin-top: 16px;
   }
   .drawer-contact .button {
     font-size: 12px;
@@ -425,7 +405,7 @@ const links = [
   @media (max-width: 600px) {
     .mobile-contact-bar:not([hidden]) {
       display: grid;
-      grid-template-columns: 1fr 1.12fr;
+      grid-template-columns: 1fr;
       position: fixed;
       z-index: 25;
       bottom: 0;
@@ -446,10 +426,6 @@ const links = [
       font-size: 12px;
       font-weight: 650;
       border-radius: 100px;
-    }
-    .mobile-call {
-      color: #fff;
-      border: 1px solid #ffffff57;
     }
     .mobile-estimate {
       color: var(--deep);

@@ -7,50 +7,20 @@ import BeforeAfterGallery from '../components/BeforeAfterGallery.astro';
 import MobileNavigation from '../components/MobileNavigation.astro';
 import CustomerReviews from '../components/CustomerReviews.astro';
 import ServiceArea from '../components/ServiceArea.astro';
+import TreeServices from '../components/TreeServices.astro';
+import { estimateServiceOptions } from '../data/services';
 
 const formEnabled = import.meta.env.PUBLIC_CONTACT_FORM_ENABLED === 'true';
-const services = [
-  {
-    number: '01',
-    title: 'Tree care & removal',
-    image: 'tree-care.webp',
-    alt: 'Abrajan crew member performing tree work',
-    icon: 'tree',
-    text: 'From careful trimming to tree and stump removal, give your property the room it needs to thrive.',
-    items: 'Tree trimming · Tree removal · Stump removal',
-    value: 'Tree care & removal',
-  },
-  {
-    number: '02',
-    title: 'Complete landscaping',
-    image: 'garden-beds.webp',
-    alt: 'Curved mulch and stone beds around established trees, landscaped by Abrajan',
-    icon: 'leaf',
-    text: 'Fresh mulch, thoughtful planting, and clean edges. It’s the details that make a yard feel like home.',
-    items: 'Sod & mulch · Gravel & stone · Hedge pruning',
-    value: 'Landscaping & mulch',
-  },
-  {
-    number: '03',
-    title: 'Lawn & property care',
-    image: 'lawn-care.webp',
-    alt: 'A residential lawn and garden beds maintained by Abrajan',
-    icon: 'sun',
-    text: 'Keep your outdoor space looking its best with regular attention and a dependable crew.',
-    items: 'Mowing & edging · De-thatching · Grub control',
-    value: 'Lawn & property care',
-  },
-];
 const faqs = [
   {
     question: 'Can I get a free estimate?',
     answer:
-      'Yes. Call 574-292-2913 or 574-292-2100 and tell us about your property and the work you have in mind. We’ll discuss the next step for your free estimate.',
+      'Yes. Estimates are free. We’ll talk through your tree or property needs and the work you have in mind before planning the next step.',
   },
   {
     question: 'Do you work with homes and businesses?',
     answer:
-      'We provide residential and commercial landscaping, tree services, and lawn care throughout the Michiana area. Get in touch to confirm service for your location.',
+      'Yes. We handle tree removal, trimming, stump grinding, and property care for residential and commercial properties across Michiana.',
   },
   {
     question: 'Are you licensed and insured?',
@@ -58,9 +28,9 @@ const faqs = [
       'Yes. Abrajan Tree & Complete Landscaping Service is licensed and insured.',
   },
   {
-    question: 'Can you help during the fall and winter?',
+    question: 'Do you offer emergency tree service?',
     answer:
-      'Absolutely. Our seasonal services include spring and fall cleanups, leaf hauling, gutter cleaning, snow plowing and shoveling, and salting sidewalks and parking lots.',
+      'Yes. Abrajan offers 24/7 emergency tree service for storm damage, fallen trees, and broken limbs. Online estimate requests are not an emergency dispatch service.',
   },
 ];
 ---
@@ -74,19 +44,19 @@ const faqs = [
     <meta name="robots" content="noindex, nofollow" />
     <meta
       name="description"
-      content="Abrajan Tree & Complete Landscaping Service brings tree care, lawn maintenance, landscaping, and seasonal property care to Michiana. Licensed and insured. Free estimates."
+      content="Tree removal, 24/7 emergency tree service, trimming, and stump grinding across Michiana. Serving South Bend and surrounding communities since 2000. Free estimates."
     />
     <meta
       property="og:title"
-      content="Abrajan — Beautiful yards. Healthy trees."
+      content="Abrajan — Tree Service in Michiana Since 2000"
     />
     <meta
       property="og:description"
-      content="Local people. Complete care. Tree and landscaping services for homes and businesses in Michiana."
+      content="Local Roots. Expert tree care. Tree removal, trimming, stump grinding, and 24/7 storm damage service across Michiana."
     />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="/images/hero-landscape.webp" />
-    <title>Abrajan | Tree Care & Complete Landscaping in Michiana</title>
+    <title>Abrajan | Tree Removal & Tree Service in Michiana</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preload" as="image" href="/images/hero-landscape.webp" />
   </head>
@@ -97,14 +67,17 @@ const faqs = [
     <div class="topbar">
       <div class="container topbar-inner">
         <span>
-          <Icon name="pin" size={15} /> Proudly serving the Michiana area
+          <Icon name="pin" size={15} /> Serving Michiana Since 2000
         </span>
         <div>
           <span class="topbar-assurance">
-            <Icon name="shield" size={15} /> Licensed & insured
+            <Icon name="shield" size={15} /> Licensed & Insured
           </span>
-          <a href="tel:+15742922913">
-            <Icon name="phone" size={14} /> 574-292-2913
+          <a
+            href="#emergency-tree-service"
+            aria-label="24/7 emergency tree service"
+          >
+            <Icon name="storm" size={15} /> 24/7 Emergency Service
           </a>
         </div>
       </div>
@@ -134,14 +107,14 @@ const faqs = [
           >
             Home
           </a>
-          <a href="#about" data-nav-section="about">
-            About us
-          </a>
           <a href="#services" data-nav-section="services">
-            Services
+            Tree Services
+          </a>
+          <a href="#about" data-nav-section="about">
+            About Us
           </a>
           <a href="#our-work" data-nav-section="our-work">
-            Our work
+            Our Work
           </a>
           <a href="#reviews" data-nav-section="reviews">
             Reviews
@@ -151,7 +124,7 @@ const faqs = [
           </a>
         </nav>
         <a class="button button-lime nav-cta" href="#contact">
-          Get a free estimate <Icon name="diagonal" size={19} />
+          Get a Free Estimate <Icon name="diagonal" size={19} />
         </a>
         <button
           class="menu-toggle"
@@ -186,35 +159,36 @@ const faqs = [
         <div class="container hero-inner">
           <div class="hero-copy">
             <p class="eyebrow light">
-              <span class="eyebrow-line"></span> TREE CARE & COMPLETE
-              LANDSCAPING
+              <span class="eyebrow-line"></span> MICHIANA TREE SERVICE • SINCE
+              2000
             </p>
             <h1 id="hero-title">
-              Beautiful yards.
+              Tree Removal.
               <br />
-              Healthy trees.
+              Expert Care.
               <br />
-              <span>More life outside.</span>
+              <span>Local Roots.</span>
             </h1>
             <p class="hero-description">
-              From the tallest tree to the smallest detail, we care for your
-              outdoor space—so you can simply enjoy it.
+              Tree removal, trimming, stump grinding, and 24/7 storm damage
+              service. Experienced hands for the place you call home.
             </p>
             <div class="hero-actions">
               <a class="button button-lime" href="#contact">
-                Get a free estimate <Icon name="diagonal" size={20} />
+                Get a Free Estimate <Icon name="diagonal" size={20} />
               </a>
               <a class="button button-outline" href="#services">
-                Explore our services <Icon name="arrow" size={20} />
+                Explore Tree Services <Icon name="arrow" size={20} />
               </a>
             </div>
           </div>
           <div class="hero-bottom">
             <span>
-              <span class="status-dot"></span> LOCAL PEOPLE. COMPLETE CARE.
+              <span class="status-dot"></span> 24/7 EMERGENCY & STORM DAMAGE
+              SERVICE
             </span>
             <a href="#about" class="scroll-cue">
-              A better yard starts here{' '}
+              Meet Your Local Tree Crew{' '}
               <span>
                 <Icon name="arrow" size={18} />
               </span>
@@ -227,24 +201,26 @@ const faqs = [
           <div>
             <Icon name="shield" size={29} />
             <span>
-              Licensed & insured<small>Peace of mind comes standard.</small>
+              Licensed & Insured<small>Peace of mind comes standard.</small>
             </span>
           </div>
           <div>
             <Icon name="leaf" size={29} />
             <span>
-              Free, personal estimates
-              <small>Let’s find the right fit for your yard.</small>
+              Free, Personal Estimates
+              <small>Clear plans for your trees and property.</small>
             </span>
           </div>
           <div>
             <Icon name="home" size={29} />
             <span>
-              Homes & businesses<small>Complete care, all year long.</small>
+              Serving Michiana Since 2000
+              <small>Local Roots. Experienced crews.</small>
             </span>
           </div>
         </div>
       </div>
+      <TreeServices />
       <section class="section about" id="about" aria-labelledby="about-title">
         <div class="container about-grid">
           <div class="about-visual reveal">
@@ -261,9 +237,9 @@ const faqs = [
             <div class="about-note">
               <Icon name="leaf" size={37} />
               <span>
-                Rooted in care.
+                Serving Michiana.
                 <br />
-                <strong>Growing together.</strong>
+                <strong>Since 2000.</strong>
               </span>
             </div>
           </div>
@@ -272,129 +248,65 @@ const faqs = [
               <span class="eyebrow-line"></span> A LITTLE ABOUT ABRAJAN
             </p>
             <h2 id="about-title">
-              Local roots.
+              Local Roots.
               <br />
-              Beautiful results.
+              Experienced Hands.
             </h2>
             <p class="section-lead">
-              Your yard is more than a piece of land. It’s part of your home.
+              Tree work is personal when it’s your home underneath it.
             </p>
             <p>
-              At Abrajan, we bring personal attention and hardworking hands to
-              residential and commercial properties across Michiana. Our goal is
-              simple: make your yard beautiful, and make caring for it easier.
+              We’ve been serving Michiana since 2000, helping homeowners and
+              businesses care for their trees and the property around them. From
+              planned removals to storm damage, tree work is at the heart of
+              what we do.
             </p>
             <p>
-              We work with you one on one, listen to your vision, and put our
-              experienced crews to work on the details that matter to you.
+              We listen to what you need, talk through the work, and bring an
+              experienced crew. And when your landscape needs attention, you
+              already know a team who can help.
             </p>
             <div class="about-checks">
               <span>
-                <Icon name="check" size={18} /> Experienced, dedicated crews
+                <Icon name="check" size={18} /> Experienced, Dedicated Crews
               </span>
               <span>
-                <Icon name="check" size={18} /> Care that fits your property
+                <Icon name="check" size={18} /> Care That Fits Your Property
               </span>
             </div>
             <a class="text-link" href="#contact">
-              Let’s talk about your yard <Icon name="diagonal" size={22} />
+              Let’s Talk About Your Trees <Icon name="diagonal" size={22} />
             </a>
           </div>
         </div>
       </section>
       <section
-        class="section services"
-        id="services"
-        aria-labelledby="services-title"
+        class="seasonal"
+        id="property-care"
+        aria-labelledby="seasonal-title"
       >
-        <div class="container">
-          <div class="section-heading reveal">
-            <div>
-              <p class="eyebrow">
-                <span class="eyebrow-line"></span> WHAT WE DO
-              </p>
-              <h2 id="services-title">
-                Everything your
-                <br />
-                outdoors needs.
-              </h2>
-            </div>
-            <p>
-              One team for your trees, lawn, and landscape.
-              <br class="desktop-break" /> A little less on your to-do list.
-            </p>
-          </div>
-          <div class="service-grid">
-            {services.map((service) => (
-              <article class="service-card reveal">
-                <a
-                  class="service-image"
-                  href="#contact"
-                  data-service={service.value}
-                  aria-label={`Request an estimate for ${service.title}`}
-                >
-                  <img
-                    src={`/images/${service.image}`}
-                    alt={service.alt}
-                    width="650"
-                    height="520"
-                    loading="lazy"
-                  />
-                  <span class="service-number">{service.number}</span>
-                  <span class="service-icon">
-                    <Icon name={service.icon} size={26} />
-                  </span>
-                </a>
-                <div class="service-body">
-                  <h3>
-                    <a href="#contact" data-service={service.value}>
-                      {service.title}
-                    </a>
-                  </h3>
-                  <p>{service.text}</p>
-                  <small>{service.items}</small>
-                  <a
-                    class="text-link"
-                    href="#contact"
-                    data-service={service.value}
-                  >
-                    Let’s get started <Icon name="diagonal" size={20} />
-                  </a>
-                </div>
-              </article>
-            ))}
-          </div>
-          <div class="service-extra">
-            <span>AND THE FINISHING TOUCHES</span>
-            <p>
-              Gutter cleaning <i>·</i> Topsoil & sand <i>·</i> Leaf hauling{' '}
-              <i>·</i> Spring & fall cleanups
-            </p>
-          </div>
-        </div>
-      </section>
-      <section class="seasonal" aria-labelledby="seasonal-title">
         <SectionContours tone="dark" />
         <div class="container seasonal-grid">
           <div class="seasonal-intro reveal">
             <p class="eyebrow light">
-              <span class="eyebrow-line"></span> HERE THROUGH EVERY SEASON
+              <span class="eyebrow-line"></span> MORE CARE FOR YOUR PROPERTY
             </p>
             <h2 id="seasonal-title">
-              The seasons change.
+              Beyond the Trees.
               <br />
-              <span>Our care stays.</span>
+              <span>The Whole Property.</span>
             </h2>
             <p>
-              From the first spring cleanup to the last snowfall, we help keep
-              your property looking good and ready for whatever comes next.
+              Tree work comes first. Landscaping, land clearing, and ongoing
+              property care bring everything else together—with the same local
+              team you already know.
             </p>
             <a
               class="button button-lime"
               href="#contact"
-              data-service="Seasonal cleanup"
+              data-service="Landscaping & mulch"
             >
-              Plan your seasonal care <Icon name="diagonal" size={20} />
+              Plan Your Property Care <Icon name="diagonal" size={20} />
             </a>
           </div>
           <div class="season-list reveal">
@@ -403,40 +315,43 @@ const faqs = [
                 <Icon name="leaf" size={27} />
               </span>
               <div>
-                <h3>A fresh start</h3>
-                <p>Spring cleanup, fresh mulch, and de-thatching.</p>
+                <h3>Land Clearing</h3>
+                <p>Open up space and clear overgrowth for a fresh start.</p>
               </div>
-              <span class="season-label">SPRING</span>
+              <span class="season-label">CLEAR</span>
             </div>
             <div>
               <span class="season-icon">
                 <Icon name="sun" size={27} />
               </span>
               <div>
-                <h3>Room to enjoy</h3>
-                <p>Weekly mowing, edging, and hedge trimming.</p>
+                <h3>Landscaping</h3>
+                <p>Mulch, planting, stone, and thoughtful finishing touches.</p>
               </div>
-              <span class="season-label">SUMMER</span>
+              <span class="season-label">REFRESH</span>
             </div>
             <div>
               <span class="season-icon">
                 <Icon name="tree" size={27} />
               </span>
               <div>
-                <h3>A clean finish</h3>
-                <p>Fall cleanup, leaf hauling, and gutter cleaning.</p>
+                <h3>Property Cleanups</h3>
+                <p>Seasonal cleanups, leaf hauling, and gutter cleaning.</p>
               </div>
-              <span class="season-label">FALL</span>
+              <span class="season-label">RESTORE</span>
             </div>
             <div>
               <span class="season-icon">
                 <Icon name="snow" size={27} />
               </span>
               <div>
-                <h3>Clear the way</h3>
-                <p>Snow plowing, shoveling, and salting.</p>
+                <h3>Year-Round Upkeep</h3>
+                <p>
+                  Lawn care through the growing season. Snow and ice care in
+                  winter.
+                </p>
               </div>
-              <span class="season-label">WINTER</span>
+              <span class="season-label">MAINTAIN</span>
             </div>
           </div>
         </div>
@@ -450,9 +365,9 @@ const faqs = [
                 AFTER.
               </p>
               <h2 id="work-title">
-                Good work.
+                Good Work.
                 <br />
-                <span>Right in your backyard.</span>
+                <span>Right in Your Backyard.</span>
               </h2>
             </div>
             <p>
@@ -473,23 +388,23 @@ const faqs = [
               <span class="eyebrow-line"></span> SIMPLE FROM THE START
             </p>
             <h2 id="process-title">
-              Your better yard starts
+              Better Tree Care Starts
               <br />
-              with a conversation.
+              With a Conversation.
             </h2>
           </div>
           <div class="process-grid">
             <div class="reveal">
               <span class="step-number">01</span>
-              <h3>Tell us what you have in mind</h3>
+              <h3>Tell Us About Your Trees</h3>
               <p>
-                A fresh start, regular upkeep, or a tree that needs attention.
-                We’re here to listen.
+                A tree to remove, branches to trim, or a stump in the way. Start
+                with what your property needs.
               </p>
             </div>
             <div class="reveal">
               <span class="step-number">02</span>
-              <h3>Let’s make a plan</h3>
+              <h3>Let’s Make a Plan</h3>
               <p>
                 We’ll talk through your property’s needs and provide a free
                 estimate for the work.
@@ -497,7 +412,7 @@ const faqs = [
             </div>
             <div class="reveal">
               <span class="step-number">03</span>
-              <h3>Enjoy your outdoor space</h3>
+              <h3>Leave the Work to Us</h3>
               <p>
                 Our crew takes care of the work, so you have more time for the
                 good things outside.
@@ -513,15 +428,15 @@ const faqs = [
               <span class="eyebrow-line"></span> GOOD TO KNOW
             </p>
             <h2 id="faq-title">
-              A few questions,
+              A Few Questions,
               <br />
-              answered.
+              Answered.
             </h2>
             <p>
               Have something else in mind?
               <br />
-              <a class="text-link" href="tel:+15742922913">
-                Give us a call <Icon name="diagonal" size={20} />
+              <a class="text-link" href="#contact">
+                Let’s Talk About Your Project <Icon name="diagonal" size={20} />
               </a>
             </p>
           </div>
@@ -547,30 +462,17 @@ const faqs = [
         <div class="container contact-grid">
           <div class="contact-copy reveal">
             <p class="eyebrow light">
-              <span class="eyebrow-line"></span> LET’S MAKE SOMETHING BEAUTIFUL
+              <span class="eyebrow-line"></span> LET’S TALK TREES
             </p>
             <h2 id="contact-title">
-              A better yard
+              Your Trees.
               <br />
-              is one hello away.
+              Our Next Project.
             </h2>
             <p>
-              Tell us a little about your property and what you have in mind.
-              We’d love to help bring it to life.
+              Tell us what needs attention, where you’re located, and what you
+              have in mind. We’ll start with a free estimate.
             </p>
-            <a href="tel:+15742922913" class="contact-phone">
-              <span>
-                <Icon name="phone" size={25} />
-              </span>
-              <div>
-                <small>CALL FOR A FREE ESTIMATE</small>
-                <strong>574-292-2913</strong>
-              </div>
-            </a>
-            <a href="tel:+15742922100" class="alternate-phone">
-              You can also reach us at <strong>574-292-2100</strong>{' '}
-              <Icon name="diagonal" size={16} />
-            </a>
             <div class="contact-location">
               <Icon name="pin" size={20} /> Serving homes & businesses
               throughout Michiana.
@@ -582,12 +484,14 @@ const faqs = [
             method="post"
             data-enabled={String(formEnabled)}
           >
-            <h3>Let’s talk about your project.</h3>
-            <p class="form-intro">A beautiful outdoor space starts here.</p>
+            <h3>Let’s Talk About Your Project.</h3>
+            <p class="form-intro">
+              Tree work and property care, planned around you.
+            </p>
             <div class="form-row">
               <div class="field">
                 <label for="name">
-                  Your name <span>*</span>
+                  Your Name <span>*</span>
                 </label>
                 <input
                   id="name"
@@ -601,13 +505,13 @@ const faqs = [
               </div>
               <div class="field">
                 <label for="phone">
-                  Phone number <span>*</span>
+                  Phone Number <span>*</span>
                 </label>
                 <input
                   id="phone"
                   name="phone"
                   type="tel"
-                  placeholder="(574) 000-0000"
+                  placeholder="Your preferred contact number"
                   autocomplete="tel"
                   minlength="7"
                   maxlength="30"
@@ -617,7 +521,7 @@ const faqs = [
             </div>
             <div class="field">
               <label for="email">
-                Email address <span>*</span>
+                Email Address <span>*</span>
               </label>
               <input
                 id="email"
@@ -631,29 +535,26 @@ const faqs = [
             </div>
             <div class="field">
               <label for="service">
-                How can we help? <span>*</span>
+                How Can We Help? <span>*</span>
               </label>
               <select id="service" name="service" required>
                 <option value="" disabled selected>
-                  Select a service
+                  Select a Service
                 </option>
-                <option>Tree care & removal</option>
-                <option>Landscaping & mulch</option>
-                <option>Lawn & property care</option>
-                <option>Seasonal cleanup</option>
-                <option>Snow & ice management</option>
-                <option>Something else</option>
+                {estimateServiceOptions.map(({ value, label }) => (
+                  <option value={value}>{label}</option>
+                ))}
               </select>
             </div>
             <div class="field">
               <label for="message">
-                A little about your project <span>*</span>
+                A Little About Your Project <span>*</span>
               </label>
               <textarea
                 id="message"
                 name="message"
                 rows="3"
-                placeholder="What would you love to do with your outdoor space? Include your city or neighborhood."
+                placeholder="Tell us about your trees or property, and include your city or neighborhood."
                 maxlength="3000"
                 required
               ></textarea>
@@ -669,12 +570,12 @@ const faqs = [
               />
             </div>
             <button class="button button-green form-submit" type="submit">
-              Request my free estimate <Icon name="diagonal" size={20} />
+              Request My Free Estimate <Icon name="diagonal" size={20} />
             </button>
             <p class="form-note">
               {formEnabled
                 ? 'Your details are only used to respond to your request.'
-                : 'Online requests are coming soon. For now, call us for your free estimate.'}
+                : 'Design preview — online requests are not enabled yet.'}
             </p>
             <p
               class="form-status"
@@ -685,8 +586,8 @@ const faqs = [
             ></p>
             <noscript>
               <p>
-                Please call <a href="tel:+15742922913">574-292-2913</a> to
-                request an estimate.
+                This form requires JavaScript. Online requests are not available
+                while the site is in preview mode.
               </p>
             </noscript>
           </form>
@@ -707,12 +608,12 @@ const faqs = [
           </span>
         </a>
         <p>
-          Making your yard beautiful.
+          Tree Care With Local Roots.
           <br />
-          <span>One season at a time.</span>
+          <span>Serving Michiana Since 2000.</span>
         </p>
         <a class="back-top" href="#top">
-          Back to top{' '}
+          Back to Top{' '}
           <span>
             <Icon name="arrow" size={20} />
           </span>
@@ -726,7 +627,7 @@ const faqs = [
         <nav aria-label="Footer navigation">
           <a href="#about">About</a>
           <a href="#services">Services</a>
-          <a href="#our-work">Our work</a>
+          <a href="#our-work">Our Work</a>
           <a href="#contact">Contact</a>
           <a href="/privacy/">Privacy</a>
           <a href="/terms/">Terms</a>
@@ -777,7 +678,7 @@ const faqs = [
         };
         if (form.dataset.enabled !== 'true') {
           announce(
-            'This preview does not send requests. Please call 574-292-2913 for your free estimate. Your information has not been sent or saved.',
+            'This preview does not send requests. Your information has not been sent or saved.',
           );
           return;
         }
@@ -793,7 +694,7 @@ const faqs = [
             const result = await response.json().catch(() => ({}));
             throw new Error(
               result.error ||
-                'We couldn’t send your request. Please try again or call 574-292-2913.',
+                'We couldn’t send your request. Please try again later.',
             );
           }
           form.reset();
@@ -805,7 +706,7 @@ const faqs = [
           announce(
             error instanceof Error
               ? error.message
-              : 'We couldn’t send your request. Please call 574-292-2913.',
+              : 'We couldn’t send your request. Please try again later.',
           );
         } finally {
           submit.disabled = false;

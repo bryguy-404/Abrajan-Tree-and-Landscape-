@@ -1918,6 +1918,15 @@ button {
   .container {
     width: calc(100% - 32px);
   }
+  .nav-inner {
+    gap: 10px;
+  }
+  .brand {
+    width: 154px;
+  }
+  .brand-window {
+    height: 50px;
+  }
   .topbar {
     font-size: 8px;
   }

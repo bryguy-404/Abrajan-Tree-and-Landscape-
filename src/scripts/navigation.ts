@@ -7,8 +7,8 @@ const navLinks = [
 ];
 const sectionIds = [
   'top',
-  'about',
   'services',
+  'about',
   'our-work',
   'reviews',
   'service-area',

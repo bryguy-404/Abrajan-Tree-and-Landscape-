@@ -111,6 +111,28 @@ test('successful provider response sends only to configured recipient', async ()
   assert.equal(payload.reply_to, valid.email);
   assert.ok(payload.text.includes(valid.message));
 });
+test('tree services and land clearing reach the estimate email with their selected service', async () => {
+  for (const service of [
+    'Tree removal',
+    'Emergency tree service',
+    'Tree trimming',
+    'Stump grinding',
+    'Land clearing',
+  ]) {
+    let payload;
+    const response = await handleEstimate(
+      request({ ...valid, service }),
+      env,
+      async (_url, options) => {
+        payload = JSON.parse(options.body);
+        return Response.json({ id: 'test-email' });
+      },
+    );
+    assert.equal(response.status, 200);
+    assert.equal(payload.subject, `Website estimate request: ${service}`);
+    assert.ok(payload.text.includes(`Service: ${service}`));
+  }
+});
 test('provider failures never return false success', async () => {
   assert.equal(
     (

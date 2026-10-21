@@ -1,12 +1,10 @@
 import { handleGoogleReviews } from './google-reviews.js';
+import { estimateServices } from '../src/data/services.js';
 // Static Astro output with private review and contact endpoints.
 const SERVICES = new Set([
+  ...estimateServices,
+  // Accept requests from a previously deployed homepage during rollout.
   'Tree care & removal',
-  'Landscaping & mulch',
-  'Lawn & property care',
-  'Seasonal cleanup',
-  'Snow & ice management',
-  'Something else',
 ]);
 const MAX_BODY_BYTES = 12000;
 const json = (body, status = 200) =>
@@ -95,8 +93,7 @@ export async function handleEstimate(request, env, send = fetch) {
   if (!env.RESEND_API_KEY || !env.CONTACT_FROM_EMAIL || !env.CONTACT_TO_EMAIL)
     return json(
       {
-        error:
-          'Online requests are not available yet. Please call 574-292-2913 for your free estimate.',
+        error: 'Online requests are not available yet. Please try again later.',
       },
       503,
     );
@@ -119,8 +116,7 @@ export async function handleEstimate(request, env, send = fetch) {
     if (!response.ok)
       return json(
         {
-          error:
-            'We couldn’t send your request. Please try again or call 574-292-2913.',
+          error: 'We couldn’t send your request. Please try again later.',
         },
         502,
       );
@@ -128,8 +124,7 @@ export async function handleEstimate(request, env, send = fetch) {
   } catch {
     return json(
       {
-        error:
-          'We couldn’t send your request. Please try again or call 574-292-2913.',
+        error: 'We couldn’t send your request. Please try again later.',
       },
       502,
     );
@@ -139,7 +134,8 @@ export async function handleEstimate(request, env, send = fetch) {
 export default {
   async fetch(request, env) {
     const path = new URL(request.url).pathname;
-    if (path === '/api/google-reviews') return handleGoogleReviews(request, env);
+    if (path === '/api/google-reviews')
+      return handleGoogleReviews(request, env);
     if (path === '/api/estimate') return handleEstimate(request, env);
     if (path.startsWith('/api/')) return json({ error: 'Not found' }, 404);
     return env.ASSETS.fetch(request);

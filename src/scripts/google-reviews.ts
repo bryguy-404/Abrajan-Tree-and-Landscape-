@@ -106,14 +106,14 @@ if (section) {
         card.append(stars, quote);
         if (review.text.length > 250) {
           quote.classList.add('is-collapsed');
-          const expand = element('button', 'review-expand', 'Read full review');
+          const expand = element('button', 'review-expand', 'Read Full Review');
           expand.type = 'button';
           expand.setAttribute('aria-controls', quote.id);
           expand.setAttribute('aria-expanded', 'false');
           expand.addEventListener('click', () => {
             const collapsed = quote.classList.toggle('is-collapsed');
             expand.setAttribute('aria-expanded', String(!collapsed));
-            expand.textContent = collapsed ? 'Read full review' : 'Show less';
+            expand.textContent = collapsed ? 'Read Full Review' : 'Show Less';
           });
           card.append(expand);
         }
