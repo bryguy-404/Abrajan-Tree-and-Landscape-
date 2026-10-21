@@ -1,0 +1,3 @@
+# Copy to .dev.vars (ignored). Keep credentials private; never use PUBLIC_ prefixes.
+GOOGLE_PLACES_API_KEY=
+GOOGLE_PLACE_ID=

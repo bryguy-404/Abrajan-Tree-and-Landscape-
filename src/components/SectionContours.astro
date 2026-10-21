@@ -1,0 +1,118 @@
+---
+interface Props {
+  tone?: 'light' | 'dark';
+}
+
+const { tone = 'light' } = Astro.props;
+const curves = [
+  'M-100 620C95 572 197 494 184 380S95 207 164 89 324-8 338-120',
+  'M-66 655C146 586 235 495 218 380S133 211 200 94 363-8 375-120',
+  'M-27 691C195 599 273 497 253 380S171 215 237 100 402-8 412-120',
+  'M15 726C245 611 311 498 288 380S209 219 274 106 441-8 449-120',
+];
+---
+
+<div class:list={['section-contours', `contours-${tone}`]} aria-hidden="true">
+  <svg
+    class="contours-left"
+    viewBox="0 0 460 620"
+    fill="none"
+    focusable="false"
+  >
+    {curves.map((d) => (
+      <path d={d} />
+    ))}
+  </svg>
+  <svg
+    class="contours-right"
+    viewBox="0 0 460 620"
+    fill="none"
+    focusable="false"
+  >
+    {curves.map((d) => (
+      <path d={d} />
+    ))}
+  </svg>
+</div>
+
+<style>
+  .section-contours {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+    user-select: none;
+    color: #8b9e79;
+    background:
+      radial-gradient(ellipse at -12% 10%, #d5dfc45c, transparent 45%),
+      radial-gradient(ellipse at 112% 100%, #d5dfc45c, transparent 42%);
+  }
+  .section-contours svg {
+    position: absolute;
+    width: clamp(320px, 32vw, 590px);
+    height: calc(100% + 160px);
+    stroke: currentColor;
+    stroke-width: 1.3;
+    opacity: 0.24;
+    mask-image: linear-gradient(to right, #000 12%, #0009 55%, transparent 95%);
+  }
+  .contours-left {
+    left: -170px;
+    top: -125px;
+  }
+  .contours-right {
+    right: -170px;
+    bottom: -145px;
+    transform: rotate(180deg);
+  }
+  .contours-dark {
+    color: #d9ee92;
+    background:
+      radial-gradient(ellipse at -12% 0%, #d9ee920a, transparent 45%),
+      radial-gradient(ellipse at 112% 100%, #d9ee9208, transparent 42%);
+  }
+  .contours-dark svg {
+    opacity: 0.18;
+  }
+  .contours-dark .contours-left {
+    top: -90px;
+    transform: scaleY(-1);
+  }
+  .contours-dark .contours-right {
+    bottom: -100px;
+    transform: scaleX(-1);
+  }
+  @media (max-width: 1350px) {
+    .contours-left {
+      left: -200px;
+    }
+    .contours-right {
+      right: -200px;
+    }
+  }
+  @media (max-width: 900px) {
+    .section-contours svg {
+      width: 300px;
+      height: 560px;
+      opacity: 0.2;
+    }
+    .contours-dark svg {
+      opacity: 0.16;
+    }
+    .contours-left {
+      left: -190px;
+    }
+    .contours-right {
+      right: -190px;
+    }
+  }
+  @media (max-width: 600px) {
+    .section-contours svg {
+      opacity: 0.16;
+    }
+    .contours-dark svg {
+      opacity: 0.13;
+    }
+  }
+</style>

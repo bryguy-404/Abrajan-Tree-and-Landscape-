@@ -1,0 +1,56 @@
+---
+import '@fontsource-variable/manrope';
+import '../styles/global.css';
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>{title} | Abrajan</title>
+    <link rel="icon" href="/favicon.svg" />
+  </head>
+  <body>
+    <main class="policy-page">
+      <a href="/">← Back to Abrajan</a>
+      <p class="eyebrow">ABRAJAN TREE & COMPLETE LANDSCAPING SERVICE</p>
+      <h1>{title}</h1>
+      <p class="updated">Updated October 21, 2026</p>
+      <slot />
+    </main>
+  </body>
+</html>
+<style>
+  .policy-page {
+    max-width: 800px;
+    margin: auto;
+    padding: 55px 28px 100px;
+  }
+  .policy-page > a {
+    display: inline-block;
+    margin-bottom: 60px;
+    padding: 12px 0;
+  }
+  h1 {
+    font-size: clamp(36px, 5vw, 55px);
+    margin: 20px 0;
+  }
+  .updated {
+    font-size: 12px;
+    margin-bottom: 45px;
+  }
+  .policy-page :global(h2) {
+    font-size: 23px;
+    margin: 35px 0 15px;
+  }
+  .policy-page :global(p:not(.eyebrow)) {
+    line-height: 1.9;
+  }
+  .policy-page :global(p a) {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>

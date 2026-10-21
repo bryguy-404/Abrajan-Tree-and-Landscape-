@@ -1,0 +1,490 @@
+---
+import Icon from './Icon.astro';
+const links = [
+  ['Home', 'top'],
+  ['About us', 'about'],
+  ['Services', 'services'],
+  ['Our work', 'our-work'],
+  ['Reviews', 'reviews'],
+  ['Service area', 'service-area'],
+  ['Contact', 'contact'],
+];
+---
+
+<dialog id="mobile-menu" class="mobile-drawer" aria-label="Navigation menu">
+  <div class="drawer-inner">
+    <svg
+      class="drawer-art"
+      viewBox="0 0 360 640"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path d="M360 20C170 60 378 200 243 320S172 545 360 620M392 44C210 80 414 211 276 340S211 551 389 631M420 71C250 100 449 220 310 362S251 561 419 645" />
+    </svg>
+    <div class="drawer-heading">
+      <a class="drawer-brand" href="#top" aria-label="Abrajan home">
+        <span>
+          <img
+            src="/images/abrajan-logo.webp"
+            width="700"
+            height="350"
+            alt="Abrajan Tree & Complete Landscaping Service"
+          />
+        </span>
+      </a>
+      <button
+        type="button"
+        class="drawer-close"
+        aria-label="Close navigation menu"
+        autofocus
+      >
+        <Icon name="close" size={22} />
+      </button>
+    </div>
+    <p class="drawer-eyebrow">A little closer to the outdoors</p>
+    <nav class="drawer-nav" aria-label="Mobile navigation">
+      {links.map(([label, id], index) => (
+        <a
+          href={`#${id}`}
+          data-nav-section={id}
+          style={`--link-order: ${index}`}
+        >
+          <span class="drawer-link-number" aria-hidden="true">
+            {String(index + 1).padStart(2, '0')}
+          </span>
+          <span class="drawer-link-label">{label}</span>
+          <Icon name="diagonal" size={18} />
+        </a>
+      ))}
+    </nav>
+    <div class="drawer-contact">
+      <p>Let’s make something beautiful.</p>
+      <a class="button button-lime" href="#contact">
+        Get a free estimate <Icon name="diagonal" size={18} />
+      </a>
+      <a class="drawer-phone" href="tel:+15742922913">
+        <Icon name="phone" size={19} />
+        574-292-2913
+      </a>
+      <span class="drawer-area">South Bend & the Michiana area</span>
+    </div>
+    <div class="drawer-assurance">
+      <Icon name="shield" size={17} />
+      Licensed & insured. Locally rooted.
+    </div>
+  </div>
+</dialog>
+
+<nav class="mobile-contact-bar" aria-label="Quick contact" hidden>
+  <a class="mobile-call" href="tel:+15742922913">
+    <Icon name="phone" size={18} />
+    <span>Call now</span>
+  </a>
+  <a class="mobile-estimate" href="#contact">
+    <span>Free estimate</span>
+    <Icon name="diagonal" size={18} />
+  </a>
+</nav>
+
+<script>
+  const drawer = document.querySelector<HTMLDialogElement>('#mobile-menu');
+  const menuToggle = document.querySelector<HTMLButtonElement>('.menu-toggle');
+  if (drawer && menuToggle) {
+    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+    let closeTimer: ReturnType<typeof setTimeout> | undefined;
+    const close = (immediate = false) => {
+      if (!drawer.open) return;
+      clearTimeout(closeTimer);
+      if (immediate || reducedMotion.matches) {
+        drawer.close();
+      } else {
+        drawer.classList.add('is-closing');
+        closeTimer = setTimeout(() => drawer.close(), 200);
+      }
+    };
+    menuToggle.addEventListener('click', () => {
+      clearTimeout(closeTimer);
+      drawer.classList.remove('is-closing');
+      drawer.showModal();
+      drawer.scrollTop = 0;
+      menuToggle.setAttribute('aria-expanded', 'true');
+    });
+    drawer
+      .querySelector('.drawer-close')
+      ?.addEventListener('click', () => close());
+    drawer.addEventListener('cancel', (event) => {
+      event.preventDefault();
+      close();
+    });
+    drawer.addEventListener('close', () => {
+      clearTimeout(closeTimer);
+      drawer.classList.remove('is-closing');
+      menuToggle.setAttribute('aria-expanded', 'false');
+    });
+    drawer.addEventListener('keydown', (event) => {
+      if (event.key !== 'Tab') return;
+      const controls = [
+        ...drawer.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled])',
+        ),
+      ];
+      const first = controls[0];
+      const last = controls[controls.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last?.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first?.focus();
+      }
+    });
+    drawer.addEventListener('click', (event) => {
+      if (event.target !== drawer) return;
+      const rect = drawer.getBoundingClientRect();
+      if (
+        event.clientX < rect.left ||
+        event.clientX > rect.right ||
+        event.clientY < rect.top ||
+        event.clientY > rect.bottom
+      )
+        close();
+    });
+    drawer
+      .querySelectorAll<HTMLAnchorElement>('a[href^="#"]')
+      .forEach((link) => {
+        link.addEventListener('click', () => {
+          close(true);
+          const target = document.getElementById(link.hash.slice(1));
+          if (target) {
+            target.setAttribute('tabindex', '-1');
+            target.focus({ preventScroll: true });
+          }
+        });
+      });
+    matchMedia('(min-width: 1101px)').addEventListener('change', (event) => {
+      if (event.matches && drawer.open) close(true);
+    });
+  }
+</script>
+
+<style>
+  .mobile-drawer {
+    position: fixed;
+    inset: 12px 12px 12px auto;
+    width: min(420px, calc(100vw - 36px));
+    height: calc(100vh - 24px);
+    height: calc(100dvh - 24px);
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #ffffff21;
+    border-radius: 24px;
+    background: var(--deep);
+    color: #fff;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    box-shadow: -20px 15px 80px #0005;
+  }
+  .mobile-drawer::backdrop {
+    background: #061b1499;
+    backdrop-filter: blur(8px);
+  }
+  .mobile-drawer[open] {
+    animation: drawer-in 0.36s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+  .mobile-drawer[open]::backdrop {
+    animation: backdrop-in 0.3s ease both;
+  }
+  .mobile-drawer[open].is-closing {
+    animation: drawer-out 0.2s ease both;
+  }
+  .mobile-drawer[open].is-closing::backdrop {
+    animation: backdrop-in 0.2s ease reverse both;
+  }
+  .drawer-inner {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: max(24px, env(safe-area-inset-top)) 26px
+      max(22px, env(safe-area-inset-bottom));
+  }
+  .drawer-art {
+    position: absolute;
+    z-index: -1;
+    pointer-events: none;
+    width: 100%;
+    height: 80%;
+    top: 16%;
+    right: -10%;
+    stroke: var(--lime);
+    stroke-width: 1;
+    opacity: 0.07;
+  }
+  .drawer-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 30px;
+  }
+  .drawer-brand {
+    display: block;
+    width: 158px;
+    padding: 4px 7px;
+    background: white;
+    border-radius: 6px;
+  }
+  .drawer-brand > span {
+    display: block;
+    height: 51px;
+    overflow: hidden;
+  }
+  .drawer-brand img {
+    width: 100%;
+    height: auto;
+  }
+  .drawer-close {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    padding: 0;
+    border: 1px solid #ffffff30;
+    border-radius: 14px;
+    color: #fff;
+    background: #ffffff08;
+    transition:
+      background 0.2s,
+      color 0.2s,
+      transform 0.2s;
+  }
+  .drawer-close:hover {
+    color: var(--deep);
+    background: var(--lime);
+    transform: rotate(90deg);
+  }
+  .drawer-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    color: #b5c6b7;
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .drawer-eyebrow::before {
+    content: '';
+    width: 18px;
+    height: 1px;
+    background: var(--lime);
+    flex-shrink: 0;
+  }
+  .drawer-nav a {
+    display: grid;
+    grid-template-columns: 22px 1fr 18px;
+    align-items: center;
+    gap: 10px;
+    min-height: 52px;
+    padding: 8px 0;
+    border-bottom: 1px solid #ffffff13;
+    transition: color 0.2s;
+  }
+  .mobile-drawer[open]:not(.is-closing) .drawer-nav a {
+    animation: link-in 0.35s both;
+    animation-delay: calc(60ms + var(--link-order) * 28ms);
+  }
+  .drawer-link-number {
+    color: #9daf9f;
+    font-size: 9px;
+    font-variant-numeric: tabular-nums;
+  }
+  .drawer-link-label {
+    font-size: 25px;
+    font-weight: 450;
+    letter-spacing: -0.8px;
+    line-height: 1.25;
+    transition: transform 0.2s;
+  }
+  .drawer-nav a :global(svg) {
+    color: #b5c6b7;
+    opacity: 0.55;
+    transition:
+      transform 0.2s,
+      opacity 0.2s;
+  }
+  .drawer-nav a:hover,
+  .drawer-nav a[aria-current] {
+    color: var(--lime);
+  }
+  .drawer-nav a:hover .drawer-link-label {
+    transform: translateX(3px);
+  }
+  .drawer-nav a[aria-current] .drawer-link-number,
+  .drawer-nav a[aria-current] :global(svg) {
+    color: var(--lime);
+    opacity: 1;
+  }
+  .drawer-nav a:hover :global(svg) {
+    transform: translate(2px, -2px);
+    opacity: 1;
+  }
+  .drawer-contact {
+    padding: 28px 0 20px;
+    margin-top: auto;
+  }
+  .drawer-contact p {
+    color: #bdcdbf;
+    font-size: 11px;
+    margin-bottom: 12px;
+  }
+  .drawer-phone {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    min-height: 44px;
+    margin-top: 10px;
+    font-size: 13px;
+    font-weight: 550;
+  }
+  .drawer-area {
+    display: block;
+    text-align: center;
+    font-size: 9px;
+    color: #b3c4b6;
+  }
+  .drawer-phone :global(svg) {
+    color: var(--lime);
+  }
+  .drawer-contact .button {
+    font-size: 12px;
+    min-height: 51px;
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+    width: 100%;
+    padding-inline: 21px;
+  }
+  .drawer-assurance {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    justify-content: center;
+    padding-top: 16px;
+    border-top: 1px solid #ffffff18;
+    color: #b3c4b6;
+    font-size: 8px;
+  }
+  .drawer-assurance :global(svg) {
+    color: var(--lime);
+  }
+  .mobile-contact-bar {
+    display: none;
+  }
+  @keyframes drawer-in {
+    from {
+      transform: translateX(36px);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  @keyframes drawer-out {
+    to {
+      transform: translateX(24px);
+      opacity: 0;
+    }
+  }
+  @keyframes backdrop-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes link-in {
+    from {
+      opacity: 0;
+      transform: translate(0, 8px);
+    }
+    to {
+      opacity: 1;
+      transform: translate(0, 0);
+    }
+  }
+  @media (max-width: 600px) {
+    .mobile-contact-bar:not([hidden]) {
+      display: grid;
+      grid-template-columns: 1fr 1.12fr;
+      position: fixed;
+      z-index: 25;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      gap: 8px;
+      padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+      background: #0c2d22f5;
+      border-top: 1px solid #ffffff26;
+      box-shadow: 0 -6px 28px #08221620;
+    }
+    .mobile-contact-bar a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 45px;
+      font-size: 12px;
+      font-weight: 650;
+      border-radius: 100px;
+    }
+    .mobile-call {
+      color: #fff;
+      border: 1px solid #ffffff57;
+    }
+    .mobile-estimate {
+      color: var(--deep);
+      background: var(--lime);
+    }
+    :global(body:has(dialog[open])) .mobile-contact-bar {
+      display: none;
+    }
+  }
+  @media (max-width: 360px) {
+    .drawer-inner {
+      padding-inline: 20px;
+    }
+    .drawer-heading {
+      gap: 12px;
+    }
+    .drawer-brand {
+      width: 140px;
+    }
+    .drawer-brand > span {
+      height: 45px;
+    }
+    .drawer-link-label {
+      font-size: 23px;
+    }
+    .drawer-eyebrow {
+      font-size: 7px;
+      letter-spacing: 1px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mobile-drawer[open],
+    .mobile-drawer[open]::backdrop,
+    .mobile-drawer[open] .drawer-nav a {
+      animation: none;
+    }
+  }
+</style>

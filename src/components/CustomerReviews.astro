@@ -1,0 +1,376 @@
+---
+import Icon from './Icon.astro';
+import { googleProfileUrl } from '../data/business';
+---
+
+<section
+  class="reviews-section"
+  id="reviews"
+  aria-labelledby="reviews-title"
+  data-google-reviews
+>
+  <div class="container">
+    <div class="reviews-heading">
+      <div class="reviews-intro reveal">
+        <p class="eyebrow">
+          <span class="eyebrow-line"></span> FROM OUR COMMUNITY
+        </p>
+        <h2 id="reviews-title">
+          Local care.
+          <br />A reputation that grows.
+        </h2>
+        <p>
+          Choosing a crew is personal. Hear from the people who have welcomed
+          Abrajan into their yards.
+        </p>
+      </div>
+      <div class="reviews-source">
+        <img
+          class="google-attribution"
+          src="/images/google-maps-attribution.svg"
+          alt="Google Maps"
+          width="99"
+          height="19"
+        />
+        <div class="rating-summary" data-review-summary hidden>
+          <strong data-review-rating></strong>
+          <div>
+            <span class="rating-stars" data-rating-stars role="img"></span>
+            <p data-review-count></p>
+          </div>
+        </div>
+        <a href={googleProfileUrl} target="_blank" rel="noopener noreferrer">
+          Read all Google reviews <Icon name="diagonal" size={18} />
+        </a>
+      </div>
+    </div>
+    <div class="review-content">
+      <p class="reviews-status" role="status" data-review-status>
+        Customer stories are loading. You can also read all reviews on Google.
+      </p>
+      <div
+        class="review-rail"
+        id="review-rail"
+        aria-label="Selected five-star customer reviews"
+        tabindex="0"
+        data-review-rail
+        hidden
+      ></div>
+      <div class="reviews-bottom">
+        <div>
+          <p class="reviews-selection">
+            Selected five-star written reviews, newest first within the
+            selection supplied by <span translate="no">Google Maps</span>.
+          </p>
+          <p class="reviews-policy">
+            <a href="/terms/">Terms of use</a>
+            <span aria-hidden="true"> · </span>
+            <a href="/privacy/">Privacy</a>
+          </p>
+          <p data-provider-attributions hidden></p>
+        </div>
+        <div class="review-controls" data-review-controls hidden>
+          <button
+            type="button"
+            data-review-previous
+            aria-label="Previous reviews"
+            aria-controls="review-rail"
+          >
+            <span aria-hidden="true">←</span>
+          </button>
+          <button
+            type="button"
+            data-review-next
+            aria-label="Next reviews"
+            aria-controls="review-rail"
+          >
+            <span aria-hidden="true">→</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <noscript>
+      <p>
+        Read customer stories on <a href={googleProfileUrl}>Google Maps</a>.
+      </p>
+    </noscript>
+  </div>
+</section>
+<script>
+  import '../scripts/google-reviews';
+</script>
+<style>
+  .reviews-section {
+    padding: 40px 0 105px;
+  }
+  .reviews-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 60px;
+    margin-bottom: 40px;
+  }
+  .reviews-intro h2 {
+    font-size: clamp(35px, 3.5vw, 48px);
+  }
+  .reviews-intro > p:not(.eyebrow) {
+    font-size: 13px;
+    line-height: 1.9;
+    max-width: 430px;
+    margin-top: 22px;
+  }
+  .reviews-source {
+    min-width: 245px;
+    border-left: 1px solid #dce2d3;
+    padding: 18px 0 18px 42px;
+  }
+  .google-attribution {
+    display: block;
+    width: auto;
+    height: 19px;
+    margin: 10px 10px 16px;
+  }
+  .reviews-source > a {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    min-height: 44px;
+    font-size: 12px;
+    font-weight: 650;
+  }
+  .rating-summary {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    margin: 12px 0;
+  }
+  .rating-summary strong {
+    font-size: 56px;
+    font-weight: 500;
+    letter-spacing: -2px;
+    line-height: 1;
+  }
+  .rating-stars {
+    font-size: 21px;
+    letter-spacing: 2px;
+    color: #ac7616;
+  }
+  .rating-summary p {
+    font-size: 11px;
+    margin-top: 3px;
+  }
+  .review-content {
+    border-top: 1px solid #e4e8dc;
+    padding-top: 25px;
+  }
+  .reviews-status {
+    border: 1px solid #e1e6d8;
+    border-radius: 5px;
+    background: var(--cream);
+    padding: 35px;
+    font-size: 14px;
+  }
+  .review-rail {
+    display: flex;
+    gap: 22px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding: 1px;
+    scrollbar-width: thin;
+    scrollbar-color: #c7d4b4 transparent;
+    padding: 1px 1px 17px;
+  }
+  .review-rail:focus-visible {
+    outline-offset: 5px;
+  }
+  .review-rail :global(.review-card) {
+    flex: 0 0 calc((100% - 44px) / 3);
+    min-width: 0;
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 30px;
+    border: 1px solid #e0e5d6;
+    border-radius: 5px;
+    background: var(--cream);
+  }
+  .review-rail :global(.review-card-stars) {
+    color: #a87314;
+    font-size: 19px;
+    letter-spacing: 3px;
+    margin-bottom: 21px;
+  }
+  .review-rail :global(.review-quote) {
+    color: var(--pine);
+    font-size: 14px;
+    line-height: 1.85;
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+    margin: 0 0 15px;
+  }
+  .review-rail :global(.review-quote.is-collapsed) {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 5;
+    overflow: hidden;
+  }
+  .review-rail :global(.review-expand) {
+    border: 0;
+    padding: 0 0 12px;
+    min-height: 44px;
+    background: none;
+    color: var(--pine);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    font: inherit;
+    font-size: 11px;
+    cursor: pointer;
+  }
+  .review-rail :global(.review-author) {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: auto;
+    padding-top: 25px;
+    width: 100%;
+  }
+  .review-rail :global(.review-avatar) {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    object-fit: cover;
+    border-radius: 50%;
+    background: #e4ebd9;
+    display: grid;
+    place-items: center;
+    font-size: 14px;
+  }
+  .review-rail :global(.review-author-name) {
+    color: var(--pine);
+    font-size: 12px;
+    font-weight: 700;
+    display: block;
+    line-height: 1.5;
+  }
+  .review-rail :global(time) {
+    font-size: 10px;
+    color: #646d62;
+    display: block;
+    margin-top: 3px;
+  }
+  .review-rail :global(.review-source-link) {
+    font-size: 10px;
+    color: #566449;
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .reviews-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 25px;
+    margin-top: 20px;
+  }
+  .reviews-selection {
+    font-size: 11px;
+    max-width: 680px;
+    line-height: 1.8;
+  }
+  .reviews-selection span {
+    white-space: nowrap;
+    color: #5e5e5e;
+    font-weight: 400;
+    font-size: 12px;
+  }
+  .reviews-policy {
+    font-size: 10px;
+    margin-top: 8px;
+  }
+  .reviews-policy a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    display: inline-block;
+    padding: 7px 0;
+  }
+  [data-provider-attributions] {
+    font-size: 11px;
+    margin-top: 8px;
+  }
+  .review-controls {
+    display: flex;
+    gap: 9px;
+    flex-shrink: 0;
+  }
+  .review-controls button {
+    width: 46px;
+    height: 46px;
+    border: 1px solid #b9c9a5;
+    border-radius: 50%;
+    color: var(--pine);
+    background: transparent;
+    font-size: 23px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .review-controls button:hover:not(:disabled) {
+    background: var(--lime);
+  }
+  .review-controls button:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+  [hidden] {
+    display: none !important;
+  }
+  @media (max-width: 1000px) {
+    .review-rail :global(.review-card) {
+      flex-basis: calc((100% - 22px) / 2);
+    }
+  }
+  @media (max-width: 700px) {
+    .reviews-section {
+      padding: 20px 0 70px;
+    }
+    .reviews-heading {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 25px;
+      margin-bottom: 24px;
+    }
+    .reviews-intro h2 {
+      font-size: 37px;
+    }
+    .reviews-source {
+      padding: 0;
+      border: 0;
+      min-width: 0;
+    }
+    .google-attribution {
+      margin-left: 0;
+    }
+    .review-rail {
+      gap: 14px;
+    }
+    .review-rail :global(.review-card) {
+      flex-basis: 90%;
+      padding: 26px;
+    }
+    .reviews-bottom {
+      align-items: flex-start;
+      flex-direction: column-reverse;
+      gap: 12px;
+    }
+    .review-controls {
+      align-self: flex-end;
+    }
+    .reviews-status {
+      padding: 25px;
+    }
+  }
+</style>

@@ -1,0 +1,43 @@
+{
+  "tool": "Built-in ImageGen",
+  "purpose": "Illustrative service comparisons, not actual Abrajan projects",
+  "after": [
+    {
+      "key": "tree",
+      "prompt": "Use case: photorealistic-natural. Create ONE photorealistic landscape 1536x1024 photograph for the AFTER state of an illustrative tree-removal before/after website slider. An ordinary attractive Midwestern residential backyard, level eye-height camera from a patio at the edge of the yard, a small white clapboard home at far right, weathered cedar privacy fence running across the background, one healthy mature leafy maple at far left, a clean open green lawn across the center. In the exact center foreground-midground is a subtle 1.5 meter round area of freshly leveled dark earth where a large damaged tree and stump have just been removed; no stump and no debris. The rest of the lawn is healthy and natural. The central open space should be the obvious subject; room above it will later contain a tall tree in the before version. Overcast bright early summer daylight, same even lighting across frame, realistic suburban landscaping, editorial property photography, moderate wide lens, no exaggerated colors. View framed to show sky, fence, ground and whole small house facade at right. It should feel professionally cleaned up yet believable. No people, tools, vehicles, text, logos, split views or watermark. This is a fictional illustrative property, not a real client project."
+    },
+    {
+      "key": "lawn",
+      "prompt": "Use case: photorealistic-natural. Create ONE photorealistic landscape 1536x1024 photograph for the AFTER state of an illustrative lawn-maintenance before/after website slider. An attractive but ordinary Indiana suburban backyard viewed from a fixed camera at eye level looking lengthwise over a broad green lawn, with a modest pale gray ranch house and small white-railed back porch in the far background, medium mature trees at far left and a straight hedge at far right. A simple pale concrete walkway follows the right side of the yard. The lawn is freshly and evenly mowed with crisp natural diagonal mowing stripes and neatly edged borders, healthy grass with realistic individual blades and slight variation. Most of the image is the lawn; house remains background. Bright softly overcast early summer daylight, believable editorial garden photography, 28mm lens, no overprocessed saturated green. Tidy achievable maintenance, not a luxury estate. No people, tools, vehicles, flowers planted across the lawn, text, logos, split views or watermark. This is a fictional illustrative property, not a real client project."
+    },
+    {
+      "key": "landscape",
+      "prompt": "Use case: photorealistic-natural. Create ONE photorealistic landscape 1536x1024 photograph for the AFTER state of an illustrative planting-bed refresh before/after website slider. Beautiful but attainable landscaping in front of an ordinary red-brown brick ranch house in Indiana. Fixed camera from near the driveway, eye level looking diagonally across the front garden, house facade with two white-framed windows across background. A wide gently curved garden bed spans foreground and middle, freshly covered with rich dark brown mulch, with neat rounded green boxwood shrubs, a few white flowering hydrangeas and ornamental grasses arranged in a sensible lush but not overcrowded landscape. Clean dark metal edging separates the curved bed from fresh green lawn at the lower right. A short gray concrete path leads to the front door at far left. Retain believable imperfect natural plant textures and ordinary house details. Bright softly overcast summer daylight, restrained warm greens, editorial real estate garden photography, 28mm lens, no unnatural glow. No people, tools, vehicles, text, logos, split views or watermark. This is a fictional illustrative property, not a real client project."
+    }
+  ],
+  "before": [
+    {
+      "key": "tree",
+      "reference": "source-assets/comparisons/tree-after.png",
+      "prompt": "Use case: precise-object-edit. This supplied photograph is the AFTER state of an illustrative tree-removal comparison. Create the BEFORE state of this EXACT same photograph. Change only the central cleared dirt patch: put back a large mature damaged deciduous tree growing from that patch, with its thick rough trunk slightly to the left of the patch center, and its irregular partly bare crown rising well above the fence across the central sky. A few broken limbs and scattered branches lie near its base on the patch and adjacent grass. The tree is visibly in poor condition with bare branches and a sparse uneven crown, not a healthy tree. Keep the healthy leafy tree at far left completely unchanged. Crucially lock the exact original camera, perspective, framing, house, fence boards, all background trees, sky/clouds, lawn outside the central tree area, walkway and every existing shrub in place. Pixel-aligned background is essential because these two images will be overlaid in a draggable comparison; no reframing, no zoom, no time-of-day or color changes. Keep dimensions and composition identical. Photorealistic believable tree, no people, text, labels, logos, split panels or watermarks."
+    },
+    {
+      "key": "lawn",
+      "reference": "source-assets/comparisons/lawn-after.png",
+      "prompt": "Use case: precise-object-edit. This supplied photograph is the AFTER state of an illustrative mowing and edging comparison. Create the BEFORE state of this EXACT same photograph. Change ONLY the lawn and its immediate edge: turn the short striped lawn into neglected overgrown grass roughly 8-12 inches tall, with uneven tufts, scattered dandelions and clover, some longer seed heads, and slightly untidy grass growing over the right concrete walkway edge. Remove all mowing stripes. Keep grass mostly living green rather than brown dead turf, since this transformation is lawn maintenance. Retain a realistic summer feel and make the maintenance difference very apparent. Lock exact original camera, perspective, framing, lighting, colors, house windows and roof, porch, fence, left mature tree, shrubs, right hedge, background, clouds and hardscape geometry. No changes to garden beds or architecture. Pixel-aligned background is essential because the two images will be overlaid in a draggable comparison; no reframing, no zoom, no time-of-day changes. Keep dimensions identical. No people, text, labels, logos, split panels or watermarks."
+    },
+    {
+      "key": "landscape",
+      "reference": "source-assets/comparisons/landscape-after.png",
+      "prompt": "Use case: precise-object-edit. This supplied photograph is the AFTER state of an illustrative mulch and garden-bed refresh. Create the BEFORE state of this EXACT photograph. Change ONLY the garden bed: replace the fresh dark brown mulch with sparse faded gray-brown old mulch, exposed dry soil, scattered small dead leaves and visible weeds. Make the same boxwood shrubs loose and shaggy with uneven shoots, the same ornamental grasses untidy, and the hydrangeas less tidy with some spent flowers. Grass and weeds creep over the curved bed edge. Keep the same plant locations and enough unchanged plant structure for a direct visual comparison; do not introduce different large plants or remove the original bushes. Lock the exact camera, perspective, framing, brick wall details, windows, black door, steps, concrete walkway, roofline, nearby house, lighting, sky and background. Keep the lawn beyond the bed unchanged. Pixel-aligned background is essential because the images will be overlaid in a slider; no reframing, no zoom, no color grading or time-of-day changes. Keep dimensions identical. Natural photographic realism, no people, tools, text, labels, logos, split panels or watermarks."
+    }
+  ],
+  "outputs": [
+    "public/images/comparisons/tree-before.webp",
+    "public/images/comparisons/tree-after.webp",
+    "public/images/comparisons/lawn-before.webp",
+    "public/images/comparisons/lawn-after.webp",
+    "public/images/comparisons/landscape-before.webp",
+    "public/images/comparisons/landscape-after.webp"
+  ]
+}

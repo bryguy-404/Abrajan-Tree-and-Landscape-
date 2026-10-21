@@ -1,0 +1,245 @@
+---
+interface Props {
+  id: string;
+  label: string;
+  beforeAlt: string;
+  afterAlt: string;
+  expanded?: boolean;
+}
+
+const { id, label, beforeAlt, afterAlt, expanded = false } = Astro.props;
+const sizes = expanded
+  ? '(max-width: 1132px) calc(100vw - 32px), 1100px'
+  : '(max-width: 800px) 100vw, 33.33vw';
+---
+
+<div
+  class:list={['comparison-stage', { expanded }]}
+  style="--split: 50%"
+  data-comparison-stage={id}
+>
+  <img
+    class="comparison-photo comparison-after"
+    src={`/images/comparisons/${id}-after.webp`}
+    srcset={`/images/comparisons/${id}-after-768.webp 768w, /images/comparisons/${id}-after.webp 1536w`}
+    sizes={sizes}
+    alt={afterAlt}
+    width="1536"
+    height="1024"
+    loading="lazy"
+    decoding="async"
+    draggable="false"
+  />
+  <img
+    class="comparison-photo comparison-before"
+    src={`/images/comparisons/${id}-before.webp`}
+    srcset={`/images/comparisons/${id}-before-768.webp 768w, /images/comparisons/${id}-before.webp 1536w`}
+    sizes={sizes}
+    alt={beforeAlt}
+    width="1536"
+    height="1024"
+    loading="lazy"
+    decoding="async"
+    draggable="false"
+  />
+  <div class="comparison-shade" aria-hidden="true"></div>
+  <span class="comparison-label comparison-label-before" aria-hidden="true">
+    Before
+  </span>
+  <span class="comparison-label comparison-label-after" aria-hidden="true">
+    After
+  </span>
+  <span class="comparison-divider" aria-hidden="true"></span>
+  <span class="comparison-handle" aria-hidden="true">
+    <svg
+      width="24"
+      height="20"
+      viewBox="0 0 24 20"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.7"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path d="m8 6-4 4 4 4m8-8 4 4-4 4" />
+    </svg>
+  </span>
+  <input
+    class="comparison-range"
+    type="range"
+    min="0"
+    max="100"
+    step="1"
+    value="50"
+    aria-label={`${label} before and after comparison${expanded ? ', expanded view' : ''}`}
+    aria-describedby={
+      expanded
+        ? `expanded-instruction-${id} expanded-disclosure-${id}`
+        : `comparison-instruction-${id} comparison-disclosure`
+    }
+    aria-valuetext="50% before, 50% after"
+  />
+  <slot />
+</div>
+
+<style>
+  .comparison-stage {
+    position: relative;
+    width: 100%;
+    height: clamp(390px, 27vw, 540px);
+    overflow: hidden;
+    isolation: isolate;
+    background: var(--cream);
+  }
+  .comparison-photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    pointer-events: none;
+    user-select: none;
+  }
+  .comparison-before {
+    clip-path: inset(0 calc(100% - var(--split)) 0 0);
+  }
+  .comparison-shade {
+    position: absolute;
+    inset: 40% 0 0;
+    background: linear-gradient(transparent, #06170ec9);
+    pointer-events: none;
+  }
+  .comparison-label {
+    position: absolute;
+    z-index: 2;
+    top: 20px;
+    padding: 7px 12px;
+    border-radius: 2px;
+    font-size: 9px;
+    letter-spacing: 1px;
+    font-weight: 750;
+    line-height: 1.5;
+    text-transform: uppercase;
+    pointer-events: none;
+    transition: opacity 0.15s;
+  }
+  .comparison-label-before {
+    left: 20px;
+    background: #10251fe6;
+    color: #fff;
+  }
+  .comparison-label-after {
+    right: 20px;
+    background: var(--lime);
+    color: var(--deep);
+  }
+  .showing-after .comparison-label-before,
+  .showing-before .comparison-label-after {
+    opacity: 0;
+  }
+  .comparison-divider {
+    position: absolute;
+    inset-block: 0;
+    width: 2px;
+    left: var(--split);
+    transform: translateX(-50%);
+    background: #fff;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .comparison-handle {
+    position: absolute;
+    left: clamp(23px, var(--split), calc(100% - 23px));
+    top: 45%;
+    transform: translate(-50%, -50%);
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: var(--lime);
+    color: var(--deep);
+    display: grid;
+    place-items: center;
+    z-index: 3;
+    pointer-events: none;
+    transition: box-shadow 0.2s;
+  }
+  .comparison-stage:has(.comparison-range:focus-visible) {
+    outline: 3px solid var(--lime);
+    outline-offset: -4px;
+  }
+  .comparison-stage:hover .comparison-handle,
+  .comparison-stage:focus-within .comparison-handle {
+    box-shadow: 0 0 0 6px #ffffff30;
+  }
+  .comparison-range {
+    position: absolute;
+    z-index: 4;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: ew-resize;
+    touch-action: pan-y;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .comparison-range::-webkit-slider-runnable-track {
+    height: 100%;
+    background: transparent;
+  }
+  .comparison-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 1px;
+    height: 100%;
+    border: 0;
+    background: transparent;
+  }
+  .comparison-range::-moz-range-track {
+    height: 100%;
+    background: transparent;
+  }
+  .comparison-range::-moz-range-thumb {
+    width: 1px;
+    height: 100%;
+    border: 0;
+    background: transparent;
+  }
+  .expanded {
+    height: auto;
+    aspect-ratio: 3 / 2;
+    max-height: 66vh;
+    max-height: 66dvh;
+  }
+  .expanded .comparison-shade {
+    display: none;
+  }
+  .expanded .comparison-handle {
+    top: 50%;
+  }
+  @media (max-width: 800px) {
+    .comparison-stage:not(.expanded) {
+      height: auto;
+      aspect-ratio: 1.25 / 1;
+      max-height: 540px;
+    }
+  }
+  @media (max-width: 420px) {
+    .comparison-stage:not(.expanded) {
+      aspect-ratio: 1 / 1.08;
+    }
+    .comparison-label {
+      top: 18px;
+    }
+    .comparison-label-before {
+      left: 18px;
+    }
+    .comparison-label-after {
+      right: 18px;
+    }
+    .expanded {
+      aspect-ratio: 1 / 1.1;
+    }
+  }
+</style>

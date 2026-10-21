@@ -1,0 +1,3 @@
+# Client review build. Remove this block when the approved website launches.
+User-agent: *
+Disallow: /

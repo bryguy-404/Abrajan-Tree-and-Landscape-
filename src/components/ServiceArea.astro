@@ -1,0 +1,252 @@
+---
+import Icon from './Icon.astro';
+---
+
+<section
+  class="service-area-section"
+  id="service-area"
+  aria-labelledby="area-title"
+>
+  <div class="container area-layout">
+    <div
+      class="area-illustration"
+      role="img"
+      aria-label="Illustration representing South Bend and the surrounding Michiana region, not an exact coverage map"
+    >
+      <svg
+        class="region-art"
+        viewBox="0 0 620 440"
+        fill="none"
+        aria-hidden="true"
+      >
+        <rect width="620" height="440" fill="#e9eddf" />
+        <path
+          d="M-20 75C140 25 209 150 320 128S481 27 654 83M-23 270C112 217 204 268 303 251S518 174 652 213M99-20C173 122 107 224 150 454M445-20C376 94 415 183 395 281S358 390 395 470"
+          stroke="#d5dfca"
+          stroke-width="30"
+        />
+        <path
+          d="M-20 75C140 25 209 150 320 128S481 27 654 83M-23 270C112 217 204 268 303 251S518 174 652 213M99-20C173 122 107 224 150 454M445-20C376 94 415 183 395 281S358 390 395 470"
+          stroke="#f7f8f1"
+          stroke-width="15"
+        />
+        <path
+          d="M250-30C174 45 299 97 254 175S196 259 284 320 289 384 253 470"
+          stroke="#b9d1c8"
+          stroke-width="24"
+        />
+        <path
+          d="M250-30C174 45 299 97 254 175S196 259 284 320 289 384 253 470"
+          stroke="#d0e2db"
+          stroke-width="11"
+        />
+        <path
+          d="m-40 365 700-220M-20 153 660 167M28-20 535 470M550-20 458 470"
+          stroke="#ffffffa6"
+          stroke-width="4"
+        />
+        <circle
+          cx="320"
+          cy="225"
+          r="103"
+          fill="#b7cf8d20"
+          stroke="#8ba96c"
+          stroke-opacity=".3"
+          stroke-dasharray="4 8"
+        />
+        <circle cx="320" cy="225" r="66" fill="#b7cf8d25" />
+        <circle cx="320" cy="225" r="20" fill="#123c2c" />
+        <circle cx="320" cy="225" r="6" fill="#d9ee92" />
+      </svg>
+      <span class="region-label">MICHIANA</span>
+      <div class="region-place">
+        <Icon name="leaf" size={17} />
+        South Bend
+      </div>
+      <span class="region-caption">Our local roots. Your outdoor space.</span>
+      <span class="region-compass" aria-hidden="true">
+        N<Icon name="arrow" size={19} />
+      </span>
+    </div>
+    <div class="area-copy reveal">
+      <p class="eyebrow">
+        <span class="eyebrow-line"></span> RIGHT HERE, CLOSE TO HOME
+      </p>
+      <h2 id="area-title">
+        Your local team.
+        <br />
+        <span>Your corner of Michiana.</span>
+      </h2>
+      <p>
+        We care for homes and businesses in South Bend and the surrounding
+        Michiana area, bringing dependable attention to the places you live and
+        work.
+      </p>
+      <div class="area-tags">
+        <span>
+          <Icon name="pin" size={15} />
+          South Bend
+        </span>
+        <span>Surrounding Michiana area</span>
+      </div>
+      <p class="area-help">
+        Wondering if we come to your neighborhood? Tell us where your property
+        is. We’ll help you plan the next step.
+      </p>
+      <a class="text-link" href="#contact">
+        Let’s talk about your property <Icon name="diagonal" size={20} />
+      </a>
+      <p class="area-note">
+        Illustrative regional graphic. Contact us to confirm service at your
+        location.
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .service-area-section {
+    background: var(--cream);
+    padding: 80px 0;
+  }
+  .area-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 75px;
+    align-items: center;
+  }
+  .area-illustration {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+    min-height: 400px;
+    aspect-ratio: 1.3;
+    overflow: hidden;
+    border-radius: 5px;
+    border: 1px solid #dce3d2;
+  }
+  .region-art {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .region-label {
+    position: absolute;
+    left: 30px;
+    top: 25px;
+    font-size: 11px;
+    letter-spacing: 3px;
+    font-weight: 700;
+    color: #69805b;
+  }
+  .region-place {
+    position: absolute;
+    top: 60%;
+    left: 51.6%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    background: #fff;
+    color: var(--pine);
+    padding: 9px 15px;
+    border-radius: 3px;
+    box-shadow: 0 4px 15px #123c2c13;
+    font-size: 12px;
+    font-weight: 650;
+  }
+  .region-caption {
+    position: absolute;
+    bottom: 25px;
+    left: 30px;
+    font-size: 10px;
+    color: #596e50;
+  }
+  .region-compass {
+    position: absolute;
+    top: 23px;
+    right: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    font-size: 8px;
+    color: #69805b;
+  }
+  .region-compass :global(svg) {
+    transform: rotate(-90deg);
+  }
+  .area-copy h2 {
+    font-size: clamp(34px, 3.2vw, 45px);
+  }
+  .area-copy h2 span {
+    color: #5b752f;
+  }
+  .area-copy > p:not(.eyebrow) {
+    font-size: 12px;
+    line-height: 1.9;
+    margin-top: 22px;
+  }
+  .area-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 23px;
+  }
+  .area-tags span {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 11px;
+    border: 1px solid #ced9bf;
+    border-radius: 50px;
+    font-size: 10px;
+  }
+  .area-copy .text-link {
+    margin-top: 20px;
+    font-size: 12px;
+  }
+  .area-copy > .area-note {
+    font-size: 9px !important;
+    color: #777f70;
+    margin-top: 20px !important;
+  }
+  @media (max-width: 1100px) {
+    .area-layout {
+      gap: 40px;
+    }
+    .area-illustration {
+      min-height: 380px;
+    }
+  }
+  @media (max-width: 800px) {
+    .area-layout {
+      grid-template-columns: 1fr;
+      gap: 35px;
+    }
+    .area-copy {
+      grid-row: 1;
+    }
+    .area-illustration {
+      min-height: 300px;
+      max-height: 400px;
+    }
+    .service-area-section {
+      padding: 65px 0;
+    }
+  }
+  @media (max-width: 400px) {
+    .region-label,
+    .region-caption {
+      left: 20px;
+    }
+    .region-caption {
+      font-size: 9px;
+    }
+    .area-illustration {
+      min-height: 280px;
+    }
+  }
+</style>

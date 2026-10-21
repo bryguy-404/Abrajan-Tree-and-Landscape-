@@ -1,0 +1,451 @@
+---
+import Icon from './Icon.astro';
+import ComparisonStage from './ComparisonStage.astro';
+
+const comparisons = [
+  {
+    id: 'tree',
+    label: 'Tree care',
+    category: 'Tree & stump removal',
+    title: 'Room for a fresh start.',
+    description:
+      'Imagine the possibilities when a damaged tree and its stump are cleared away, opening up room to enjoy your yard again.',
+    beforeAlt:
+      'Illustrative before: a damaged tree and fallen branches occupy a residential backyard',
+    afterAlt:
+      'Illustrative after: the same backyard with the damaged tree and stump removed and the area cleared',
+    service: 'Tree care & removal',
+  },
+  {
+    id: 'lawn',
+    label: 'Lawn care',
+    category: 'Lawn mowing & edging',
+    title: 'A yard ready to enjoy.',
+    description:
+      'An even cut, crisp edges, and attention to the little things. See how regular lawn care can give the whole yard a fresh feeling.',
+    beforeAlt:
+      'Illustrative before: a suburban lawn with tall uneven grass and overgrown walkway edges',
+    afterAlt:
+      'Illustrative after: the same lawn freshly mowed with neat stripes and clean walkway edges',
+    service: 'Lawn & property care',
+  },
+  {
+    id: 'landscape',
+    label: 'Landscaping',
+    category: 'Mulch & garden bed refresh',
+    title: 'A little room to grow.',
+    description:
+      'Fresh mulch, tidy shrubs, and well-defined garden beds bring a welcoming finish to the place you call home.',
+    beforeAlt:
+      'Illustrative before: an untidy garden bed in front of a brick house with weeds, uneven shrubs, and sparse mulch',
+    afterAlt:
+      'Illustrative after: the same garden bed with fresh dark mulch, shaped shrubs, flowers, and clean edging',
+    service: 'Landscaping & mulch',
+  },
+];
+---
+
+<div class="comparison-gallery" data-comparison-gallery>
+  <div class="comparison-grid">
+    {comparisons.map((comparison) => (
+      <article
+        class="comparison-card"
+        aria-labelledby={`comparison-title-${comparison.id}`}
+      >
+        <ComparisonStage {...comparison}>
+          <div class="comparison-caption">
+            <p>{comparison.category}</p>
+            <h3 id={`comparison-title-${comparison.id}`}>{comparison.title}</h3>
+          </div>
+          <button
+            type="button"
+            class="comparison-expand"
+            data-expand-comparison={comparison.id}
+            aria-label={`Expand ${comparison.label.toLowerCase()} before and after`}
+            aria-haspopup="dialog"
+            aria-controls={`comparison-dialog-${comparison.id}`}
+          >
+            <svg
+              width="21"
+              height="21"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M8 3H3v5m0-5 6 6m7-6h5v5m0-5-6 6M3 16v5h5m-5 0 6-6m7 6h5v-5m0 5-6-6" />
+            </svg>
+          </button>
+        </ComparisonStage>
+        <p
+          class="comparison-instruction"
+          id={`comparison-instruction-${comparison.id}`}
+        >
+          Drag to see the difference
+        </p>
+      </article>
+    ))}
+  </div>
+  <div class="comparison-footer container">
+    <a class="comparison-footer-link" href="#contact">
+      LET’S TRANSFORM YOUR YARD <Icon name="arrow" size={19} />
+    </a>
+    <p class="comparison-disclosure" id="comparison-disclosure">
+      AI-generated examples to help you picture the possibilities. Actual
+      project photos coming soon.
+    </p>
+  </div>
+  {comparisons.map((comparison) => (
+    <dialog
+      class="comparison-dialog"
+      id={`comparison-dialog-${comparison.id}`}
+      aria-labelledby={`expanded-title-${comparison.id}`}
+      data-comparison-dialog={comparison.id}
+    >
+      <div class="comparison-dialog-heading">
+        <div>
+          <p>{comparison.category}</p>
+          <h3 id={`expanded-title-${comparison.id}`}>{comparison.title}</h3>
+        </div>
+        <button
+          type="button"
+          class="comparison-close"
+          data-close-comparison
+          aria-label="Close expanded comparison"
+          autofocus
+        >
+          <Icon name="close" size={22} />
+        </button>
+      </div>
+      <ComparisonStage {...comparison} expanded />
+      <div class="comparison-dialog-footer">
+        <div>
+          <p
+            id={`expanded-instruction-${comparison.id}`}
+            class="expanded-instruction"
+          >
+            Drag to compare · Use arrow keys when the slider is focused
+          </p>
+          <p class="expanded-description">{comparison.description}</p>
+          <p
+            class="expanded-disclosure"
+            id={`expanded-disclosure-${comparison.id}`}
+          >
+            AI-generated example. Actual project photos coming soon.
+          </p>
+        </div>
+        <a
+          class="comparison-estimate"
+          href="#contact"
+          data-service={comparison.service}
+          data-close-comparison
+        >
+          Get a free estimate <Icon name="arrow" size={18} />
+        </a>
+      </div>
+    </dialog>
+  ))}
+  <noscript>
+    <p class="comparison-disclosure">
+      Enable JavaScript to drag the sliders and expand the comparisons.
+    </p>
+  </noscript>
+</div>
+
+<script>
+  document
+    .querySelectorAll<HTMLElement>('[data-comparison-gallery]')
+    .forEach((gallery) => {
+      const stages = [
+        ...gallery.querySelectorAll<HTMLElement>('[data-comparison-stage]'),
+      ];
+      const updateStage = (stage: HTMLElement, value: number) => {
+        const range =
+          stage.querySelector<HTMLInputElement>('.comparison-range');
+        if (!range) return;
+        range.value = String(value);
+        stage.style.setProperty('--split', `${value}%`);
+        range.setAttribute(
+          'aria-valuetext',
+          `${value}% before, ${100 - value}% after`,
+        );
+        stage.classList.toggle('showing-after', value < 12);
+        stage.classList.toggle('showing-before', value > 88);
+      };
+      stages.forEach((stage) => {
+        const range =
+          stage.querySelector<HTMLInputElement>('.comparison-range');
+        if (!range) return;
+        range.addEventListener('input', () => {
+          stages
+            .filter(
+              (other) =>
+                other.dataset.comparisonStage === stage.dataset.comparisonStage,
+            )
+            .forEach((other) => updateStage(other, Number(range.value)));
+        });
+        updateStage(stage, Number(range.value));
+      });
+      gallery
+        .querySelectorAll<HTMLDialogElement>('[data-comparison-dialog]')
+        .forEach((dialog) => {
+          const trigger = gallery.querySelector<HTMLButtonElement>(
+            `[data-expand-comparison="${dialog.dataset.comparisonDialog}"]`,
+          );
+          trigger?.addEventListener('click', () => dialog.showModal());
+          dialog
+            .querySelectorAll<HTMLElement>('[data-close-comparison]')
+            .forEach((close) => {
+              close.addEventListener('click', () => dialog.close());
+            });
+          dialog.addEventListener('click', (event) => {
+            if (event.target !== dialog) return;
+            const bounds = dialog.getBoundingClientRect();
+            if (
+              event.clientX < bounds.left ||
+              event.clientX > bounds.right ||
+              event.clientY < bounds.top ||
+              event.clientY > bounds.bottom
+            )
+              dialog.close();
+          });
+        });
+    });
+</script>
+
+<style>
+  .comparison-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 4px;
+  }
+  .comparison-card {
+    min-width: 0;
+  }
+  .comparison-caption {
+    position: absolute;
+    left: clamp(20px, 1.6vw, 34px);
+    right: 80px;
+    bottom: 28px;
+    z-index: 3;
+    pointer-events: none;
+    color: #fff;
+  }
+  .comparison-caption > p {
+    color: #ffffffe0;
+    font-size: 11px;
+    letter-spacing: 0.6px;
+    margin-bottom: 10px;
+  }
+  .comparison-caption h3 {
+    font-size: clamp(21px, 1.5vw, 28px);
+    font-weight: 650;
+    line-height: 1.35;
+    letter-spacing: -0.6px;
+  }
+  .comparison-expand,
+  .comparison-close {
+    width: 44px;
+    height: 44px;
+    border: 1px solid #ffffff80;
+    border-radius: 50%;
+    background: #ffffff08;
+    color: #fff;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    transition:
+      background 0.2s,
+      color 0.2s;
+  }
+  .comparison-expand {
+    position: absolute;
+    right: 23px;
+    bottom: 28px;
+    z-index: 5;
+  }
+  .comparison-expand:hover,
+  .comparison-close:hover {
+    background: var(--lime);
+    border-color: var(--lime);
+    color: var(--pine);
+  }
+  .comparison-instruction {
+    display: grid;
+    place-items: center;
+    min-height: 64px;
+    background: var(--deep);
+    color: #ffffffe0;
+    font-size: 11px;
+    letter-spacing: 0.1px;
+  }
+  .comparison-footer {
+    padding-block: 29px 0;
+    text-align: center;
+  }
+  .comparison-footer-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    min-height: 44px;
+    font-size: 11px;
+    letter-spacing: 1.4px;
+    font-weight: 750;
+  }
+  .comparison-footer-link :global(svg) {
+    transition: transform 0.2s;
+  }
+  .comparison-footer-link:hover :global(svg) {
+    transform: translateX(5px);
+  }
+  .comparison-disclosure {
+    font-size: 10px;
+    line-height: 1.7;
+    color: #6b7565;
+    margin-top: 12px;
+    text-align: center;
+  }
+  .comparison-dialog {
+    border: 0;
+    padding: 0;
+    margin: auto;
+    width: min(1100px, calc(100vw - 32px));
+    max-width: none;
+    max-height: calc(100vh - 32px);
+    max-height: calc(100dvh - 32px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: var(--deep);
+    color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 24px 100px #0006;
+  }
+  .comparison-dialog::backdrop {
+    background: #05140de6;
+    backdrop-filter: blur(6px);
+  }
+  .comparison-dialog-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 20px 26px;
+  }
+  .comparison-dialog-heading p {
+    color: var(--lime);
+    font-size: 10px;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+  }
+  .comparison-dialog-heading h3 {
+    font-size: 24px;
+  }
+  .comparison-close {
+    flex-shrink: 0;
+  }
+  .comparison-dialog-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    padding: 22px 26px;
+  }
+  .expanded-instruction {
+    font-size: 11px;
+    color: var(--lime);
+    margin-bottom: 10px;
+  }
+  .expanded-description {
+    color: #e5ebe2;
+    font-size: 12px;
+    max-width: 610px;
+  }
+  .expanded-disclosure {
+    font-size: 10px;
+    color: #bdcaba;
+    margin-top: 8px;
+  }
+  .comparison-estimate {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    white-space: nowrap;
+    color: var(--lime);
+    font-size: 12px;
+    min-height: 44px;
+  }
+  .comparison-estimate:hover {
+    text-decoration: underline;
+  }
+  @media (max-width: 1100px) and (min-width: 801px) {
+    .comparison-caption {
+      right: 65px;
+      left: 20px;
+    }
+    .comparison-caption h3 {
+      font-size: 20px;
+    }
+    .comparison-caption > p {
+      font-size: 10px;
+    }
+    .comparison-expand {
+      right: 16px;
+    }
+  }
+  @media (max-width: 800px) {
+    .comparison-grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    .comparison-caption h3 {
+      font-size: 25px;
+    }
+    .comparison-caption {
+      left: 24px;
+    }
+    .comparison-instruction {
+      min-height: 55px;
+    }
+    .comparison-dialog-footer {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 14px;
+    }
+  }
+  @media (max-width: 420px) {
+    .comparison-caption {
+      left: 20px;
+      bottom: 23px;
+      right: 78px;
+    }
+    .comparison-caption h3 {
+      font-size: 23px;
+    }
+    .comparison-caption > p {
+      font-size: 10px;
+    }
+    .comparison-expand {
+      right: 19px;
+      bottom: 23px;
+    }
+    .comparison-footer-link {
+      font-size: 10px;
+      letter-spacing: 1px;
+      gap: 13px;
+    }
+    .comparison-dialog-heading {
+      padding: 18px;
+      gap: 12px;
+    }
+    .comparison-dialog-heading h3 {
+      font-size: 20px;
+    }
+    .comparison-dialog-footer {
+      padding: 18px;
+    }
+  }
+</style>
