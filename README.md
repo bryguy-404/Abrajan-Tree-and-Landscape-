@@ -1,10 +1,10 @@
 # Abrajan homepage
 
-An Astro homepage for **Abrajan Tree & Complete Landscaping Service**, inspired by the Gardenx reference supplied by Bryan. Built for client design review, with static output and a separate Cloudflare Worker for the future Resend contact endpoint.
+An Astro homepage for **Abrajan Tree & Complete Landscaping Service**, inspired by the Gardenx reference supplied by Bryan. Built for client design review, with static Cloudflare Pages hosting and a private Cloudflare Worker for Google reviews and the future Resend contact endpoint.
 
 ## Run locally
 
-Requires Node.js 22.22 or later.
+Requires Node.js 22.22 or later. `.node-version` pins 22.22.2 for Cloudflare's build environment; its default 22.16 cannot build this Astro version.
 
 ```sh
 npm install
@@ -33,19 +33,28 @@ The website is generated into `dist/`. Fonts and images are served locally. No R
 
 ## Cloudflare hosting
 
-The tracked `wrangler.jsonc` serves `dist/` through Cloudflare Workers Static Assets and routes `/api/*` through `workers/index.js`. Astro produces plain static HTML; no server adapter is necessary for this architecture.
+The root `wrangler.jsonc` configures the existing **abrajan-tree-and-landscape** Pages project, with build command `npm run build`, output directory `dist`, and production branch `main`. Astro produces static HTML. `functions/api/[[path]].js` forwards API requests through the private `SITE_API` service binding to **abrajan-site-api**.
+
+`wrangler.api.jsonc` configures that private API Worker, including its Google request rate-limit binding. It has no public workers.dev or preview URL. Pages does not support the same native rate-limit binding, so the API remains in a Worker rather than dropping the protection during migration. Both resources must be in the same Cloudflare account. Deploy the API service before the first Pages deployment:
+
+```sh
+npm run deploy:api
+npx wrangler secret put GOOGLE_PLACES_API_KEY -c wrangler.api.jsonc
+```
+
+The verified public Place ID is configured in `wrangler.api.jsonc`. Keep the actual Google key in Cloudflare secrets. Use the authorized Cloudflare account/profile; do not rely on a global CLI login from another agency. Subsequent API code changes require `npm run deploy:api`; the Pages Git integration deploys frontend changes from `main` automatically.
 
 ```sh
 npm run preview:cloudflare
 ```
 
-After approving the homepage and choosing the Cloudflare account/project:
+For an explicitly authorized manual Pages deployment:
 
 ```sh
 npm run deploy
 ```
 
-No public deployment has been performed. The static `dist/` folder can also be hosted on Cloudflare Pages, but the included email Worker is configured for Workers and would need a Pages Function equivalent or a separate Worker route if Pages is chosen.
+`npm run preview:cloudflare` runs Pages and the private API together locally. The original all-in-one Workers deployment remains available through `wrangler.workers.jsonc` and `npm run deploy:workers`. Do not deploy that alternate target when updating the Pages project.
 
 ## Connect Resend when ready
 
@@ -54,9 +63,9 @@ Keep `PUBLIC_CONTACT_FORM_ENABLED=false` during design review. The server endpoi
 Configure secrets through Cloudflare's encrypted secret settings or these interactive commands (never place the key in source or a `PUBLIC_` variable):
 
 ```sh
-npx wrangler secret put RESEND_API_KEY
-npx wrangler secret put CONTACT_FROM_EMAIL
-npx wrangler secret put CONTACT_TO_EMAIL
+npx wrangler secret put RESEND_API_KEY -c wrangler.api.jsonc
+npx wrangler secret put CONTACT_FROM_EMAIL -c wrangler.api.jsonc
+npx wrangler secret put CONTACT_TO_EMAIL -c wrangler.api.jsonc
 ```
 
 `CONTACT_FROM_EMAIL` must use a sender/domain verified with Resend. `CONTACT_TO_EMAIL` is the client's chosen recipient. The visitor's email is used only for Reply-To; the recipient is never taken from the form. Messages are sent as plain text.
@@ -92,7 +101,7 @@ The exact generation prompt is saved in `source-assets/hero-prompt.txt`.
 
 ## Verification
 
-Astro check, production build, and nine email-handler tests pass. Tests mock Resend and do not send messages. The Worker passes a Wrangler deployment dry run. Browser review covers desktop, phone, and tablet layouts, navigation, service preselection, form preview feedback, FAQ disclosures, and the original photo viewer. The new comparison feature has separate browser verification below. No real email or public deployment has been tested.
+Astro check, production build, and nine email-handler tests pass. Tests mock Resend and do not send messages. The Worker passes a Wrangler deployment dry run. Browser review covers desktop, phone, and tablet layouts, navigation, service preselection, form preview feedback, FAQ disclosures, and the original photo viewer. The new comparison feature has separate browser verification below. Email delivery remains unconfigured; these checks do not send real messages.
 
 Technical references: [Astro + Cloudflare](https://docs.astro.build/en/guides/deploy/cloudflare/), [Cloudflare asset routing](https://developers.cloudflare.com/workers/static-assets/routing/worker-script/), [Resend send-email API](https://resend.com/docs/api-reference/emails/send-email).
 
@@ -137,8 +146,8 @@ Navigation verification: browser checks passed for transparent/compact header st
 
 The browser lazily requests `/api/google-reviews` once per page visit as the section approaches view. Cards include author attribution, dates, direct Google Maps links, an expand control for long reviews, and horizontal scrolling with accessible previous/next buttons. Google's official unmodified attribution logo is served from `public/images/google-maps-attribution.svg`. Its source is the [official attribution asset bundle](https://developers.google.com/static/maps/documentation/images/Google_Maps_Attribution_Assets.zip). Terms and privacy pages describe the reviews feature and current contact-form preview behavior; review these with the client before launch.
 
-Local credentials are already configured in ignored `.dev.vars`. On another machine, copy `.dev.vars.example` to `.dev.vars`, add the private key and verified Place ID securely, and run `npm run dev:api` alongside `npm run dev`. Restart the Worker after adding or changing local credentials. The Astro development proxy forwards only the review route to the local Worker at port 8787. Rebuild before `npm run preview:cloudflare` to check the full production output. Never put the key in a `PUBLIC_` variable. Before deployment, bind `GOOGLE_PLACES_API_KEY` as a Cloudflare secret and `GOOGLE_PLACE_ID` as a runtime variable, and verify the actual hosting account and Worker.
+Local credentials are already configured in ignored `.dev.vars`. On another machine, copy `.dev.vars.example` to `.dev.vars`, add the private key and verified Place ID securely, and run `npm run dev:api` alongside `npm run dev`. Restart the Worker after adding or changing local credentials. The Astro development proxy forwards only the review route to the local Worker at port 8787. `npm run preview:cloudflare` builds and checks the complete Pages/service-binding setup. Never put the key in a `PUBLIC_` variable. The live key belongs to the **abrajan-site-api** Worker, not the Pages build environment.
 
 The Worker requires its rate-limit binding and fails closed without it. The binding allows approximately 10 requests per minute **per Cloudflare location**, not globally. It is an abuse control, not a spending cap. Confirm the namespace ID is unique in the chosen Cloudflare account before launch. Google currently enforces 20 GetPlaceRequest calls per day and 10 per minute for this preview project; this is a daily limit, not a monthly budget or a promise that all usage is free. Choose an ongoing usage allowance before publishing. Free usage is shared across projects under the same billing account; budget alerts alone are not spending caps.
 
-Verification on October 21, 2026: Astro check and build pass; 17 handler tests pass (9 existing email tests and 8 review tests). Tests cover filtering/order, original text, unsafe links, provider attribution, missing configuration, fixed upstream, timeout/redirect options, rate limiting, empty data, errors, and Worker routing. Three successful real Google test requests verified five eligible five-star written reviews and an overall 4.6 rating from 22 reviews. Desktop and 390px phone browser checks confirmed avatars, author/source links, chronological ordering, horizontal controls, long-review expansion, and no page overflow. The live Worker test also caught and fixed an unsupported redirect mode: Workers uses `manual`, and the handler rejects redirect responses without following them. Synthetic fixtures remain excluded from the production build. No public deployment or real email was sent.
+Verification on October 21, 2026: Astro check and build pass; 19 handler tests pass (9 email tests, 8 review tests, and 2 Pages/service routing tests). Tests cover filtering/order, original text, unsafe links, provider attribution, missing configuration, fixed upstream, timeout/redirect options, rate limiting, empty data, errors, and Worker routing. Three successful real Google test requests verified five eligible five-star written reviews and an overall 4.6 rating from 22 reviews. Desktop and 390px phone browser checks confirmed avatars, author/source links, chronological ordering, horizontal controls, long-review expansion, and no page overflow. The live Worker test also caught and fixed an unsupported redirect mode: Workers uses `manual`, and the handler rejects redirect responses without following them. Synthetic fixtures remain excluded from the production build. The Pages setup also passed a local end-to-end check through its private service binding, returning the homepage and all five eligible reviews. No real email was sent.

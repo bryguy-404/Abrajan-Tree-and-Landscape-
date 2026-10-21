@@ -1,0 +1,18 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "abrajan-site-api",
+  "main": "workers/api.js",
+  "compatibility_date": "2026-10-20",
+  "workers_dev": false,
+  "preview_urls": false,
+  "vars": {
+    "GOOGLE_PLACE_ID": "ChIJtdYJBB8V5gwR7LrA79dhelc",
+  },
+  "ratelimits": [
+    {
+      "name": "GOOGLE_REVIEWS_LIMITER",
+      "namespace_id": "202610211315",
+      "simple": { "limit": 10, "period": 60 },
+    },
+  ],
+}
