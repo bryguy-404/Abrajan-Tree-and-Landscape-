@@ -4,18 +4,19 @@ import {
   serviceNavigation,
   primaryLocation,
   serviceRegion,
+  estimateHref,
 } from '../data/business';
 const isHome = Astro.url.pathname === '/';
 const homeLink = (id: string) => `${isHome ? '' : '/'}#${id}`;
 const isServicePage = Astro.url.pathname.startsWith('/services/');
 const links = [
-  ['Home', 'top'],
-  ['Services', 'services'],
-  ['About Us', 'about'],
-  ['Our Work', 'our-work'],
-  ['Reviews', 'reviews'],
-  ['Service Area', 'service-area'],
-  ['Contact', 'contact'],
+  ['Home', 'top', isHome ? '#top' : '/'],
+  ['Services', 'services', '/services/tree-services/'],
+  ['About Us', 'about', '/about/'],
+  ['Our Work', 'our-work', homeLink('our-work')],
+  ['Reviews', 'reviews', '/reviews/'],
+  ['Service Area', 'service-area', homeLink('service-area')],
+  ['Contact', 'contact', '/contact/'],
 ];
 ---
 
@@ -55,7 +56,7 @@ const links = [
     </div>
     <p class="drawer-eyebrow">Serving Michiana since 2000</p>
     <nav class="drawer-nav" aria-label="Mobile navigation">
-      {links.map(([label, id], index) =>
+      {links.map(([label, id, href], index) =>
         id === 'services' ? (
           <details class="drawer-services" open={isServicePage}>
             <summary
@@ -91,8 +92,12 @@ const links = [
           </details>
         ) : (
           <a
-            href={homeLink(id)}
-            data-nav-section={id}
+            href={href}
+            data-nav-section={
+              ['top', 'our-work', 'service-area'].includes(id) ? id : undefined
+            }
+            aria-current={Astro.url.pathname === href ? 'page' : undefined}
+            class:list={{ active: Astro.url.pathname === href }}
             style={`--link-order: ${index}`}
           >
             <span class="drawer-link-number" aria-hidden="true">
@@ -106,7 +111,7 @@ const links = [
     </nav>
     <div class="drawer-contact">
       <p>Local roots. Experienced tree care.</p>
-      <a class="button button-lime" href={homeLink('contact')}>
+      <a class="button button-lime" href={estimateHref()}>
         Get a Free Estimate <Icon name="diagonal" size={18} />
       </a>
       <span class="drawer-area">
@@ -121,7 +126,7 @@ const links = [
 </dialog>
 
 <nav class="mobile-contact-bar" aria-label="Quick contact" hidden>
-  <a class="mobile-estimate" href={homeLink('contact')}>
+  <a class="mobile-estimate" href={estimateHref()}>
     <span>Free Estimate</span>
     <Icon name="diagonal" size={18} />
   </a>

@@ -9,6 +9,7 @@ interface Props {
   image?: string;
   imageSrcSet?: string;
   imageSizes?: string;
+  preloadImage?: boolean;
 }
 const {
   title,
@@ -16,6 +17,7 @@ const {
   image = '/images/tree-care.webp',
   imageSrcSet,
   imageSizes,
+  preloadImage = true,
 } = Astro.props;
 ---
 
@@ -33,13 +35,15 @@ const {
     <meta property="og:image" content={image} />
     <title>{title}</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link
-      rel="preload"
-      as="image"
-      href={image}
-      imagesrcset={imageSrcSet}
-      imagesizes={imageSizes}
-    />
+    {preloadImage && (
+      <link
+        rel="preload"
+        as="image"
+        href={image}
+        imagesrcset={imageSrcSet}
+        imagesizes={imageSizes}
+      />
+    )}
   </head>
   <body id="top">
     <SiteHeader />

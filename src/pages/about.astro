@@ -1,0 +1,177 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import Icon from '../components/Icon.astro';
+import ServiceCallout from '../components/ServiceCallout.astro';
+import { locationLabel, estimateHref } from '../data/business';
+import '../styles/services.css';
+import '../styles/interior.css';
+const values = [
+  {
+    number: '01',
+    icon: 'leaf',
+    title: 'Rooted in the Community',
+    text: 'Serving Michiana since 2000, with a focus on the trees, yards, and properties that make this area home.',
+  },
+  {
+    number: '02',
+    icon: 'shield',
+    title: 'Clear From the Start',
+    text: 'A free estimate gives us time to understand your property, discuss the work, and talk through the details with you.',
+  },
+  {
+    number: '03',
+    icon: 'tree',
+    title: 'Care Beyond the Tree',
+    text: 'From tree removal to the landscape around it, we consider how you want to use and enjoy your outdoor space.',
+  },
+];
+---
+
+<SiteLayout
+  title={`About Abrajan | Tree Care in ${locationLabel}`}
+  description={`Meet Abrajan, serving Michiana since 2000. Licensed and insured tree services, tree removal, and property care for homes and businesses in ${locationLabel}.`}
+  image="/images/abrajan-crew.webp"
+>
+  <main id="main" class="interior-page about-page">
+    <section
+      class="interior-hero about-hero"
+      data-page-hero
+      aria-labelledby="page-title"
+    >
+      <div class="container">
+        <nav class="interior-breadcrumb" aria-label="Breadcrumb">
+          <a href="/">Home</a>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page">About Us</span>
+        </nav>
+        <div class="about-intro-grid">
+          <div class="interior-intro">
+            <p class="eyebrow">
+              <span class="eyebrow-line"></span> THE PEOPLE BEHIND THE WORK
+            </p>
+            <h1 id="page-title">
+              Local Roots.
+              <br />
+              <span>Experienced Hands.</span>
+            </h1>
+            <p class="interior-lead">
+              Your trees are part of your home. The people caring for them
+              should feel local, too.
+            </p>
+            <p>
+              We’re Abrajan Tree & Complete Landscaping Service. Since 2000,
+              we’ve helped Michiana homeowners and businesses care for their
+              trees and the outdoor spaces around them.
+            </p>
+            <a class="button button-green" href={estimateHref()}>
+              Let’s Talk About Your Property <Icon name="diagonal" size={20} />
+            </a>
+          </div>
+          <figure class="about-team">
+            <img
+              src="/images/abrajan-crew.webp"
+              alt="The Abrajan Tree & Complete Landscaping Service crew"
+              width="800"
+              height="553"
+              fetchpriority="high"
+            />
+            <figcaption>
+              <span class="status-dot"></span> YOUR LOCAL ABRAJAN CREW
+            </figcaption>
+            <div class="team-year">
+              <Icon name="leaf" size={28} />
+              <span>
+                Serving Michiana<strong>Since 2000.</strong>
+              </span>
+            </div>
+          </figure>
+        </div>
+        <div class="interior-assurances">
+          <span>
+            <Icon name="shield" size={19} /> Licensed & Insured
+          </span>
+          <span>
+            <Icon name="check" size={19} /> Free Estimates
+          </span>
+          <span>
+            <Icon name="home" size={19} /> Homes & Businesses
+          </span>
+        </div>
+      </div>
+    </section>
+    <section class="section" aria-labelledby="approach-title">
+      <div class="container">
+        <div class="interior-section-heading">
+          <div>
+            <p class="eyebrow">
+              <span class="eyebrow-line"></span> HOW WE APPROACH THE WORK
+            </p>
+            <h2 id="approach-title">
+              Your Property.
+              <br />
+              Our Full Attention.
+            </h2>
+          </div>
+          <p>
+            A tree that needs to come down. Branches that need room. A yard
+            ready for a fresh start. Every project begins with listening.
+          </p>
+        </div>
+        <div class="about-values">
+          {values.map((value) => (
+            <article class="reveal">
+              <div class="value-top">
+                <Icon name={value.icon} size={30} />
+                <span>{value.number}</span>
+              </div>
+              <h3>{value.title}</h3>
+              <p>{value.text}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+    <section class="about-tree-story" aria-labelledby="tree-story-title">
+      <div class="container about-story-grid">
+        <figure class="reveal">
+          <img
+            src="/images/tree-care.webp"
+            alt="Abrajan crew member carrying out tree work"
+            width="720"
+            height="900"
+            loading="lazy"
+          />
+          <figcaption>TREE WORK IS AT OUR ROOTS</figcaption>
+        </figure>
+        <div class="reveal">
+          <p class="eyebrow light">
+            <span class="eyebrow-line"></span> TREES FIRST. YOUR WHOLE PROPERTY
+            IN MIND.
+          </p>
+          <h2 id="tree-story-title">
+            From the Canopy
+            <br />
+            <span>to the Ground Below.</span>
+          </h2>
+          <p>
+            Tree removal, trimming, stump grinding, and 24/7 emergency tree
+            service are at the heart of what we do. We’ll talk through your
+            concerns and the work your property needs.
+          </p>
+          <p>
+            And there’s more to a property than its trees. Landscaping, lawn
+            care, land clearing, and seasonal cleanups are part of the
+            conversation, too.
+          </p>
+          <a class="button button-lime" href="/services/tree-services/">
+            Explore Our Tree Services <Icon name="diagonal" size={20} />
+          </a>
+        </div>
+      </div>
+    </section>
+    <ServiceCallout
+      title="Let’s Care for Your Corner of Michiana."
+      text="Tell us what you have in mind. We’ll start with a conversation and a free estimate for your trees or property."
+    />
+  </main>
+</SiteLayout>

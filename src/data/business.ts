@@ -29,8 +29,8 @@ export const serviceNavigation = [
 
 export function estimateHref(service?: string) {
   return service
-    ? `/?service=${encodeURIComponent(service)}#contact`
-    : '/#contact';
+    ? `/contact/?service=${encodeURIComponent(service)}#estimate`
+    : '/contact/#estimate';
 }
 
 // Public listing matched by business name, website, and phone on October 21, 2026.

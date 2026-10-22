@@ -1,7 +1,7 @@
 const header = document.querySelector<HTMLElement>('.site-header');
 const hero = document.querySelector<HTMLElement>('.hero, [data-page-hero]');
 const contact = document.querySelector<HTMLElement>(
-  '#contact, #service-estimate',
+  '#contact, #estimate, #service-estimate',
 );
 const quickContact = document.querySelector<HTMLElement>('.mobile-contact-bar');
 const navLinks = [
@@ -46,7 +46,11 @@ function updateNavigation() {
     const contactReached = contact
       ? contact.getBoundingClientRect().top < window.innerHeight
       : false;
-    const show = phoneScreen.matches && afterHero && !contactReached;
+    const show =
+      phoneScreen.matches &&
+      afterHero &&
+      !contactReached &&
+      window.location.pathname !== '/contact/';
     quickContact.hidden = !show;
     document.documentElement.classList.toggle('has-contact-bar', show);
   }

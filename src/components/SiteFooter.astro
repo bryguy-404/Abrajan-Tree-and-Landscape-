@@ -32,12 +32,61 @@ import Icon from './Icon.astro';
       © {new Date().getFullYear()} Abrajan Tree & Complete Landscaping Service.
     </span>
     <nav aria-label="Footer navigation">
-      <a href="/#about">About</a>
+      <a href="/about/">About</a>
       <a href="/services/tree-services/">Services</a>
       <a href="/#our-work">Our Work</a>
-      <a href="/#contact">Contact</a>
+      <a href="/reviews/">Reviews</a>
+      <a href="/contact/">Contact</a>
       <a href="/privacy/">Privacy</a>
       <a href="/terms/">Terms</a>
     </nav>
   </div>
+  <div class="container footer-credit">
+    <span>Designed By:</span>
+    <a
+      href="https://bryandevelops.com/"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Bryan Develops <Icon name="diagonal" size={16} />
+    </a>
+  </div>
 </footer>
+
+<style>
+  .footer-credit {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding-top: 22px;
+    font-size: 11px;
+    color: #a1b7aa;
+  }
+  .footer-credit a {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    min-height: 40px;
+    padding: 8px 14px;
+    border: 1px solid #d9ef9838;
+    border-radius: 999px;
+    background: #d9ef980b;
+    color: var(--lime);
+    font-size: 13px;
+    font-weight: 700;
+    transition:
+      background 0.2s,
+      color 0.2s;
+  }
+  .footer-credit a:hover {
+    color: var(--deep);
+    background: var(--lime);
+  }
+  @media (max-width: 760px) {
+    .footer-credit {
+      justify-content: flex-start;
+    }
+  }
+</style>

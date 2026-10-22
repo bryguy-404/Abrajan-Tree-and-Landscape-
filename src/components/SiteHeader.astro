@@ -5,15 +5,16 @@ import {
   serviceNavigation,
   primaryLocation,
   serviceRegion,
+  estimateHref,
 } from '../data/business';
 const isHome = Astro.url.pathname === '/';
 const homeLink = (id: string) => `${isHome ? '' : '/'}#${id}`;
 const isServicePage = Astro.url.pathname.startsWith('/services/');
 const links = [
-  ['About Us', 'about'],
-  ['Our Work', 'our-work'],
-  ['Reviews', 'reviews'],
-  ['Contact', 'contact'],
+  ['About Us', 'about', '/about/'],
+  ['Our Work', 'our-work', homeLink('our-work')],
+  ['Reviews', 'reviews', '/reviews/'],
+  ['Contact', 'contact', '/contact/'],
 ];
 ---
 
@@ -107,13 +108,18 @@ const links = [
           </a>
         </div>
       </details>
-      {links.map(([label, id]) => (
-        <a href={homeLink(id)} data-nav-section={id}>
+      {links.map(([label, id, href]) => (
+        <a
+          href={href}
+          data-nav-section={id === 'our-work' ? id : undefined}
+          aria-current={Astro.url.pathname === href ? 'page' : undefined}
+          class:list={{ active: Astro.url.pathname === href }}
+        >
           {label}
         </a>
       ))}
     </nav>
-    <a class="button button-lime nav-cta" href={homeLink('contact')}>
+    <a class="button button-lime nav-cta" href={estimateHref()}>
       Get a Free Estimate <Icon name="diagonal" size={19} />
     </a>
     <button
@@ -141,13 +147,43 @@ const links = [
   const dropdown =
     document.querySelector<HTMLDetailsElement>('.services-dropdown');
   if (dropdown) {
+    const hoverPointer = matchMedia(
+      '(min-width: 1101px) and (hover: hover) and (pointer: fine)',
+    );
+    let closeTimer: ReturnType<typeof setTimeout> | undefined;
+    let openedByHover = false;
+    const closeDropdown = () => {
+      clearTimeout(closeTimer);
+      dropdown.open = false;
+      openedByHover = false;
+    };
+    dropdown.addEventListener('pointerenter', (event) => {
+      if (!hoverPointer.matches || event.pointerType === 'touch') return;
+      clearTimeout(closeTimer);
+      if (!dropdown.open) openedByHover = true;
+      dropdown.open = true;
+    });
+    dropdown.addEventListener('pointerleave', () => {
+      if (!hoverPointer.matches) return;
+      clearTimeout(closeTimer);
+      closeTimer = setTimeout(() => {
+        if (!dropdown.matches(':focus-within')) closeDropdown();
+      }, 350);
+    });
+    dropdown.querySelector('summary')?.addEventListener('click', (event) => {
+      // A click after hovering keeps the revealed panel available.
+      if (openedByHover && dropdown.open) {
+        event.preventDefault();
+        openedByHover = false;
+      }
+    });
     document.addEventListener('click', (event) => {
       if (event.target instanceof Node && !dropdown.contains(event.target))
-        dropdown.open = false;
+        closeDropdown();
     });
     dropdown.addEventListener('keydown', (event) => {
       if (event.key === 'Escape' && dropdown.open) {
-        dropdown.open = false;
+        closeDropdown();
         dropdown.querySelector('summary')?.focus();
         event.preventDefault();
       }
@@ -157,15 +193,15 @@ const links = [
         event.relatedTarget instanceof Node &&
         !dropdown.contains(event.relatedTarget)
       )
-        dropdown.open = false;
+        closeDropdown();
     });
     dropdown.querySelectorAll('a').forEach((link) =>
       link.addEventListener('click', () => {
-        dropdown.open = false;
+        closeDropdown();
       }),
     );
     matchMedia('(max-width: 1100px)').addEventListener('change', () => {
-      dropdown.open = false;
+      closeDropdown();
     });
   }
 </script>

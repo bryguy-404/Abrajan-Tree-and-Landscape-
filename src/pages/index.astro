@@ -7,9 +7,7 @@ import BeforeAfterGallery from '../components/BeforeAfterGallery.astro';
 import CustomerReviews from '../components/CustomerReviews.astro';
 import ServiceArea from '../components/ServiceArea.astro';
 import TreeServices from '../components/TreeServices.astro';
-import { estimateServiceOptions } from '../data/services';
-
-const formEnabled = import.meta.env.PUBLIC_CONTACT_FORM_ENABLED === 'true';
+import EstimateForm from '../components/EstimateForm.astro';
 const faqs = [
   {
     question: 'Can I get a free estimate?',
@@ -170,8 +168,8 @@ const faqs = [
               <Icon name="check" size={18} /> Care That Fits Your Property
             </span>
           </div>
-          <a class="text-link" href="#contact">
-            Let’s Talk About Your Trees <Icon name="diagonal" size={22} />
+          <a class="text-link" href="/about/">
+            Meet Your Local Tree Crew <Icon name="diagonal" size={22} />
           </a>
         </div>
       </div>
@@ -372,191 +370,8 @@ const faqs = [
             Michiana.
           </div>
         </div>
-        <form
-          class="estimate-form reveal"
-          action="/api/estimate"
-          method="post"
-          data-enabled={String(formEnabled)}
-        >
-          <h3>Let’s Talk About Your Project.</h3>
-          <p class="form-intro">
-            Tree work and property care, planned around you.
-          </p>
-          <div class="form-row">
-            <div class="field">
-              <label for="name">
-                Your Name <span>*</span>
-              </label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                placeholder="First and last name"
-                autocomplete="name"
-                maxlength="100"
-                required
-              />
-            </div>
-            <div class="field">
-              <label for="phone">
-                Phone Number <span>*</span>
-              </label>
-              <input
-                id="phone"
-                name="phone"
-                type="tel"
-                placeholder="Your preferred contact number"
-                autocomplete="tel"
-                minlength="7"
-                maxlength="30"
-                required
-              />
-            </div>
-          </div>
-          <div class="field">
-            <label for="email">
-              Email Address <span>*</span>
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              placeholder="you@example.com"
-              autocomplete="email"
-              maxlength="254"
-              required
-            />
-          </div>
-          <div class="field">
-            <label for="service">
-              How Can We Help? <span>*</span>
-            </label>
-            <select id="service" name="service" required>
-              <option value="" disabled selected>
-                Select a Service
-              </option>
-              {estimateServiceOptions.map(({ value, label }) => (
-                <option value={value}>{label}</option>
-              ))}
-            </select>
-          </div>
-          <div class="field">
-            <label for="message">
-              A Little About Your Project <span>*</span>
-            </label>
-            <textarea
-              id="message"
-              name="message"
-              rows="3"
-              placeholder="Tell us about your trees or property, and include your city or neighborhood."
-              maxlength="3000"
-              required
-            ></textarea>
-          </div>
-          <div class="honey" aria-hidden="true">
-            <label for="website">Leave this field empty</label>
-            <input
-              id="website"
-              name="website"
-              type="text"
-              tabindex="-1"
-              autocomplete="off"
-            />
-          </div>
-          <button class="button button-green form-submit" type="submit">
-            Request My Free Estimate <Icon name="diagonal" size={20} />
-          </button>
-          <p class="form-note">
-            {formEnabled
-              ? 'Your details are only used to respond to your request.'
-              : 'Design preview — online requests are not enabled yet.'}
-          </p>
-          <p
-            class="form-status"
-            role="status"
-            aria-live="polite"
-            tabindex="-1"
-            hidden
-          ></p>
-          <noscript>
-            <p>
-              This form requires JavaScript. Online requests are not available
-              while the site is in preview mode.
-            </p>
-          </noscript>
-        </form>
+        <EstimateForm />
       </div>
     </section>
   </main>
-  <script>
-    document
-      .querySelectorAll<HTMLAnchorElement>('[data-service]')
-      .forEach((link) =>
-        link.addEventListener('click', () => {
-          const select = document.querySelector<HTMLSelectElement>('#service');
-          if (select) select.value = link.dataset.service || '';
-        }),
-      );
-    const requestedService = new URLSearchParams(window.location.search).get(
-      'service',
-    );
-    const serviceSelect = document.querySelector<HTMLSelectElement>('#service');
-    if (
-      serviceSelect &&
-      [...serviceSelect.options].some(
-        (option) => option.value === requestedService,
-      )
-    ) {
-      serviceSelect.value = requestedService!;
-    }
-    const form = document.querySelector<HTMLFormElement>('.estimate-form');
-    form?.addEventListener('submit', async (event) => {
-      event.preventDefault();
-      const status = form.querySelector<HTMLElement>('.form-status');
-      const submit = form.querySelector<HTMLButtonElement>('[type="submit"]');
-      if (!status || !submit) return;
-      const announce = (message: string, success = false) => {
-        status.textContent = message;
-        status.classList.toggle('success', success);
-        status.hidden = false;
-        status.focus();
-      };
-      if (form.dataset.enabled !== 'true') {
-        announce(
-          'This preview does not send requests. Your information has not been sent or saved.',
-        );
-        return;
-      }
-      submit.disabled = true;
-      submit.setAttribute('aria-busy', 'true');
-      try {
-        const response = await fetch('/api/estimate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(Object.fromEntries(new FormData(form))),
-        });
-        if (!response.ok) {
-          const result = await response.json().catch(() => ({}));
-          throw new Error(
-            result.error ||
-              'We couldn’t send your request. Please try again later.',
-          );
-        }
-        form.reset();
-        announce(
-          'Thank you! Your request has been sent. Our team will be in touch to talk about your project.',
-          true,
-        );
-      } catch (error) {
-        announce(
-          error instanceof Error
-            ? error.message
-            : 'We couldn’t send your request. Please try again later.',
-        );
-      } finally {
-        submit.disabled = false;
-        submit.removeAttribute('aria-busy');
-      }
-    });
-  </script>
 </SiteLayout>

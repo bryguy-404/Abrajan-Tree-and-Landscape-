@@ -1,6 +1,10 @@
 ---
 import Icon from './Icon.astro';
 import { googleProfileUrl } from '../data/business';
+interface Props {
+  layout?: 'rail' | 'grid';
+}
+const { layout = 'rail' } = Astro.props;
 ---
 
 <section
@@ -8,6 +12,7 @@ import { googleProfileUrl } from '../data/business';
   id="reviews"
   aria-labelledby="reviews-title"
   data-google-reviews
+  data-review-layout={layout}
 >
   <div class="container">
     <div class="reviews-heading">
@@ -16,8 +21,9 @@ import { googleProfileUrl } from '../data/business';
           <span class="eyebrow-line"></span> FROM OUR COMMUNITY
         </p>
         <h2 id="reviews-title">
-          Local Care.
-          <br />A Reputation That Grows.
+          {layout === 'grid' ? 'Words From' : 'Local Care.'}
+          <br />
+          {layout === 'grid' ? 'Our Neighbors.' : 'A Reputation That Grows.'}
         </h2>
         <p>
           Choosing a crew is personal. Hear from the people who have welcomed
@@ -52,7 +58,7 @@ import { googleProfileUrl } from '../data/business';
         class="review-rail"
         id="review-rail"
         aria-label="Selected five-star customer reviews"
-        tabindex="0"
+        tabindex={layout === 'rail' ? '0' : undefined}
         data-review-rail
         hidden
       ></div>
@@ -94,12 +100,58 @@ import { googleProfileUrl } from '../data/business';
         Read customer stories on <a href={googleProfileUrl}>Google Maps</a>.
       </p>
     </noscript>
+    {layout === 'rail' && (
+      <a class="reviews-page-link text-link" href="/reviews/">
+        More About Our Reviews <Icon name="arrow" size={18} />
+      </a>
+    )}
   </div>
 </section>
 <script>
   import '../scripts/google-reviews';
 </script>
 <style>
+  .reviews-page-link {
+    margin-top: 28px;
+  }
+  [data-review-layout='grid'] {
+    padding-top: 80px;
+  }
+  [data-review-layout='grid'] .review-rail {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    overflow: visible;
+    scroll-snap-type: none;
+    padding-bottom: 0;
+  }
+  [data-review-layout='grid'] .review-rail :global(.review-card) {
+    padding: 36px;
+  }
+  [data-review-layout='grid'] .review-rail :global(.review-card:first-child) {
+    grid-column: 1 / -1;
+  }
+  [data-review-layout='grid']
+    .review-rail
+    :global(.review-card:first-child .review-quote) {
+    font-size: 21px;
+    max-width: 970px;
+  }
+  @media (max-width: 700px) {
+    [data-review-layout='grid'] {
+      padding-top: 55px;
+    }
+    [data-review-layout='grid'] .review-rail {
+      grid-template-columns: 1fr;
+    }
+    [data-review-layout='grid'] .review-rail :global(.review-card) {
+      padding: 25px;
+    }
+    [data-review-layout='grid']
+      .review-rail
+      :global(.review-card:first-child .review-quote) {
+      font-size: 17px;
+    }
+  }
   .reviews-section {
     padding: 40px 0 105px;
   }

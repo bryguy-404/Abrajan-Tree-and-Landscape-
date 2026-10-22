@@ -44,6 +44,10 @@ if (section) {
     return node;
   };
   const updateControls = () => {
+    if (section.dataset.reviewLayout === 'grid') {
+      controls.hidden = true;
+      return;
+    }
     controls.hidden = rail.scrollWidth <= rail.clientWidth + 2;
     previous.disabled = rail.scrollLeft <= 2;
     next.disabled = rail.scrollLeft >= rail.scrollWidth - rail.clientWidth - 2;

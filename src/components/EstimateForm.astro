@@ -1,0 +1,130 @@
+---
+import Icon from './Icon.astro';
+import { estimateServiceOptions } from '../data/services';
+interface Props {
+  headingLevel?: 'h2' | 'h3';
+}
+const { headingLevel: Heading = 'h3' } = Astro.props;
+const formEnabled = import.meta.env.PUBLIC_CONTACT_FORM_ENABLED === 'true';
+---
+
+<form
+  class="estimate-form reveal"
+  action="/api/estimate"
+  method="post"
+  data-enabled={String(formEnabled)}
+>
+  <Heading>Let’s Talk About Your Project.</Heading>
+  <p class="form-intro">Tree work and property care, planned around you.</p>
+  <div class="form-row">
+    <div class="field">
+      <label for="name">
+        Your Name <span>*</span>
+      </label>
+      <input
+        id="name"
+        name="name"
+        type="text"
+        placeholder="First and last name"
+        autocomplete="name"
+        maxlength="100"
+        required
+      />
+    </div>
+    <div class="field">
+      <label for="phone">
+        Phone Number <span>*</span>
+      </label>
+      <input
+        id="phone"
+        name="phone"
+        type="tel"
+        placeholder="Your preferred contact number"
+        autocomplete="tel"
+        minlength="7"
+        maxlength="30"
+        required
+      />
+    </div>
+  </div>
+  <div class="field">
+    <label for="email">
+      Email Address <span>*</span>
+    </label>
+    <input
+      id="email"
+      name="email"
+      type="email"
+      placeholder="you@example.com"
+      autocomplete="email"
+      maxlength="254"
+      required
+    />
+  </div>
+  <div class="field">
+    <label for="service">
+      How Can We Help? <span>*</span>
+    </label>
+    <select id="service" name="service" required>
+      <option value="" disabled selected>
+        Select a Service
+      </option>
+      {estimateServiceOptions.map(({ value, label }) => (
+        <option value={value}>{label}</option>
+      ))}
+    </select>
+  </div>
+  <div class="field">
+    <label for="message">
+      A Little About Your Project <span>*</span>
+    </label>
+    <textarea
+      id="message"
+      name="message"
+      rows="3"
+      placeholder="Tell us about your trees or property, and include your city or neighborhood."
+      maxlength="3000"
+      required
+    ></textarea>
+  </div>
+  <div class="honey" aria-hidden="true">
+    <label for="website">Leave this field empty</label>
+    <input
+      id="website"
+      name="website"
+      type="text"
+      tabindex="-1"
+      autocomplete="off"
+    />
+  </div>
+  <button class="button button-green form-submit" type="submit">
+    Request My Free Estimate <Icon name="diagonal" size={20} />
+  </button>
+  <p class="form-note">
+    {formEnabled
+      ? 'Your details are only used to respond to your request.'
+      : 'Design preview — online requests are not enabled yet.'}
+  </p>
+  <p
+    class="form-status"
+    role="status"
+    aria-live="polite"
+    tabindex="-1"
+    hidden
+  ></p>
+  <noscript>
+    <p>
+      This form requires JavaScript. Online requests are not available while the
+      site is in preview mode.
+    </p>
+  </noscript>
+</form>
+<script>
+  import '../scripts/estimate-form';
+</script>
+<style>
+  h2 {
+    font-size: 24px;
+    letter-spacing: -0.6px;
+  }
+</style>

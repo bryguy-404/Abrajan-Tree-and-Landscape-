@@ -1,0 +1,81 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import Icon from '../components/Icon.astro';
+import SectionContours from '../components/SectionContours.astro';
+import CustomerReviews from '../components/CustomerReviews.astro';
+import ServiceCallout from '../components/ServiceCallout.astro';
+import { googleProfileUrl, locationLabel } from '../data/business';
+import '../styles/services.css';
+import '../styles/interior.css';
+---
+
+<SiteLayout
+  preloadImage={false}
+  title={`Customer Reviews | Abrajan Tree Services in ${locationLabel}`}
+  description="Read selected Google reviews from Abrajan customers, and explore the full review history on Google Maps."
+>
+  <main id="main" class="interior-page reviews-page">
+    <section
+      class="interior-hero reviews-hero"
+      data-page-hero
+      aria-labelledby="page-title"
+    >
+      <div class="reviews-hero-art">
+        <SectionContours />
+      </div>
+      <div class="container">
+        <nav class="interior-breadcrumb" aria-label="Breadcrumb">
+          <a href="/">Home</a>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page">Reviews</span>
+        </nav>
+        <div class="reviews-hero-copy">
+          <p class="eyebrow">
+            <span class="eyebrow-line"></span> FROM ONE NEIGHBOR TO THE NEXT
+          </p>
+          <h1 id="page-title">
+            Good Work.
+            <br />
+            <span>In Their Own Words.</span>
+          </h1>
+          <p class="interior-lead">
+            The work matters. So does the experience.
+            <br class="desktop-break" /> Hear from people who have trusted
+            Abrajan with their property.
+          </p>
+          <a class="text-link" href="#reviews">
+            Read Customer Reviews <Icon name="arrow" size={19} />
+          </a>
+        </div>
+      </div>
+    </section>
+    <CustomerReviews layout="grid" />
+    <section class="share-experience" aria-labelledby="experience-title">
+      <div class="container">
+        <div class="experience-icon">
+          <Icon name="leaf" size={33} />
+        </div>
+        <div>
+          <p class="eyebrow">ALREADY PART OF OUR STORY?</p>
+          <h2 id="experience-title">We’d Love to Hear From You.</h2>
+          <p>
+            Your honest feedback helps us and the next neighbor looking for a
+            crew.
+          </p>
+        </div>
+        <a
+          class="button button-green"
+          href={googleProfileUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Visit Us on Google <Icon name="diagonal" size={19} />
+        </a>
+      </div>
+    </section>
+    <ServiceCallout
+      title="Your Project Could Be Next."
+      text="Let’s talk about your trees, your property, and the work you have in mind. Estimates are free."
+    />
+  </main>
+</SiteLayout>
