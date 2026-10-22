@@ -1,6 +1,15 @@
-# Abrajan homepage
+# Abrajan Website
 
 An Astro homepage for **Abrajan Tree & Complete Landscaping Service**, inspired by the Gardenx reference supplied by Bryan. Built for client design review, with static Cloudflare Pages hosting and a private Cloudflare Worker for Google reviews and the future Resend contact endpoint.
+
+## Service pages and location
+
+- `/services/tree-services/` covers removal, emergency/storm work, trimming, and stump grinding.
+- `/services/tree-removal/` focuses on removal situations, planning, scope, stump grinding, and common questions.
+- The shared header has a Services dropdown and a matching mobile accordion. Other property services still link to the homepage section while their individual pages are developed.
+- `src/data/business.ts` contains `primaryLocation` (currently South Bend, Indiana), service navigation, and the separately maintained confirmed coverage list. Changing the primary city/state updates the homepage, service-page titles, metadata, local calls to action, and navigation location text. Verify coverage if choosing a city outside the existing area.
+- Copy is a working draft based on the client's existing website and supplied feedback. The two service pages have distinct layouts and imagery: a light canopy-led overview and a full-width removal worksite hero, with a separate removal timeline and stump section. Three AI-generated concepts are visibly identified as illustrations; originals live in `src/assets/service-concepts/` and exact built-in image-generation prompts in `source-assets/generated/service-image-prompts.json`. Astro builds responsive WebP versions. Replace these illustrations with approved client photography when available. About, Our Work, Reviews, and Contact remain homepage sections for now.
+- Service-specific estimate links preselect the matching homepage form option. Preview requests remain disabled, and every new service page retains `noindex, nofollow` until launch is approved.
 
 ## Run locally
 

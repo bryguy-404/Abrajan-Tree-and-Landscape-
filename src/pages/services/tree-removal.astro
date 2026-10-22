@@ -1,0 +1,239 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import RemovalHero from '../../components/RemovalHero.astro';
+import { serviceImage } from '../../data/service-images';
+const removalImage = await serviceImage('removal');
+const stumpImage = await serviceImage(
+  'stump',
+  960,
+  '(max-width: 760px) 100vw, 50vw',
+);
+import ServiceQuestions from '../../components/ServiceQuestions.astro';
+import ServiceCallout from '../../components/ServiceCallout.astro';
+import Icon from '../../components/Icon.astro';
+import {
+  locationLabel,
+  primaryLocation,
+  estimateHref,
+} from '../../data/business';
+import '../../styles/services.css';
+
+const situations = [
+  {
+    title: 'Damage That Needs Attention',
+    icon: 'storm',
+    text: 'Storm damage, broken sections, or a tree that has already fallen can change how you use your property. Tell us what happened and what is around the tree.',
+  },
+  {
+    title: 'A Tree That Has Outgrown Its Space',
+    icon: 'tree',
+    text: 'When a tree is crowding a building, driveway, or the space around it, it’s time to discuss the options. We offer trimming as well as removal, depending on the work you need.',
+  },
+  {
+    title: 'Room for Your Next Project',
+    icon: 'home',
+    text: 'A new use for your outdoor space may start with removing a tree. We can discuss individual removals and land clearing as part of your wider property plans.',
+  },
+];
+const steps = [
+  {
+    title: 'Walk Through the Project',
+    text: 'Tell us which tree needs attention and why. The tree’s size, condition, access, and surroundings help define the work.',
+  },
+  {
+    title: 'Agree on the Scope',
+    text: 'We’ll discuss the removal, the material to be handled, and whether you want stump grinding included in the estimate.',
+  },
+  {
+    title: 'Plan the Next Step',
+    text: 'With the work agreed, we can talk through scheduling, access to the property, and what you want to do with the space afterward.',
+  },
+];
+const questions = [
+  {
+    question: 'What affects the cost of tree removal?',
+    answer:
+      'The tree’s size and condition, access for the work, nearby structures, and the material to be handled all affect the scope. Stump grinding can also change the estimate. We provide a free estimate based on your project rather than a one-size-fits-all price.',
+  },
+  {
+    question: 'Is stump grinding part of tree removal?',
+    answer:
+      'Tree removal and stump grinding are different parts of the work. Let us know if you want the stump addressed so we can discuss it as part of your estimate and clarify what is included.',
+  },
+  {
+    question: 'What happens to the branches and wood?',
+    answer:
+      'Tell us how you want the area left and whether you want to keep any wood. We’ll discuss the material, handling, and cleanup as part of the scope before the work is agreed.',
+  },
+  {
+    question: 'Can you help after a storm?',
+    answer:
+      'Yes. Abrajan offers 24/7 emergency tree service for storm damage, fallen trees, and broken limbs. Online estimate requests are not an emergency dispatch service.',
+  },
+];
+---
+
+<SiteLayout
+  title={`Tree Removal in ${locationLabel} | Free Estimates | Abrajan`}
+  description={`Tree removal in ${locationLabel} with Abrajan. Discuss damaged trees, storm cleanup, stump grinding, and your property plans. Licensed, insured, and locally rooted since 2000.`}
+  image={removalImage.src}
+  imageSrcSet={removalImage.srcset}
+  imageSizes={removalImage.sizes}
+>
+  <main id="main" class="removal-page">
+    <RemovalHero image={removalImage} />
+    <section
+      class="section service-scenarios"
+      aria-labelledby="removal-reasons-title"
+    >
+      <div class="container">
+        <div class="service-intro-row reveal">
+          <div>
+            <p class="eyebrow">
+              <span class="eyebrow-line"></span> WHEN IT’S TIME FOR A CHANGE
+            </p>
+            <h2 id="removal-reasons-title">
+              Every Tree.
+              <br />
+              <span>A Different Situation.</span>
+            </h2>
+          </div>
+          <p>
+            Removal starts with a reason. We take the time to understand yours
+            and the property around the tree before planning the work.
+          </p>
+        </div>
+        <div class="service-scenario-grid">
+          {situations.map((item, index) => (
+            <article class="service-scenario reveal">
+              <span>
+                0{index + 1}
+                <Icon name={item.icon} size={29} />
+              </span>
+              <h3>{item.title}</h3>
+              <p>{item.text}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+    <section
+      class="section removal-plan"
+      id="removal-planning"
+      aria-labelledby="removal-plan-title"
+    >
+      <div class="container">
+        <div class="removal-plan-heading reveal">
+          <p class="eyebrow">
+            <span class="eyebrow-line"></span> FROM THE FIRST LOOK TO THE NEXT
+            STEP
+          </p>
+          <h2 id="removal-plan-title">
+            A Clear Plan.
+            <br />
+            <span>Before the First Cut.</span>
+          </h2>
+          <p>
+            No two removals are the same. Here’s what we’ll talk through
+            together.
+          </p>
+        </div>
+        <ol class="removal-timeline">
+          {steps.map((step, index) => (
+            <li class="reveal">
+              <span class="timeline-number">0{index + 1}</span>
+              <h3>{step.title}</h3>
+              <p>{step.text}</p>
+            </li>
+          ))}
+        </ol>
+        <div class="removal-scope reveal">
+          <p>THE DETAILS THAT SHAPE YOUR ESTIMATE</p>
+          <div>
+            <span>
+              <Icon name="tree" size={19} /> Tree Size & Condition
+            </span>
+            <span>
+              <Icon name="home" size={19} /> Access & Surroundings
+            </span>
+            <span>
+              <Icon name="stump" size={19} /> Wood, Stump & Cleanup
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="removal-stump-feature" aria-labelledby="stump-title">
+      <div class="container removal-stump-grid">
+        <figure class="reveal">
+          <img {...stumpImage} loading="lazy" />
+          <figcaption>
+            AI-generated illustration · Client photos coming soon
+          </figcaption>
+        </figure>
+        <div class="reveal">
+          <p class="eyebrow light">
+            <span class="eyebrow-line"></span> THE NEXT CHAPTER FOR YOUR YARD
+          </p>
+          <h2 id="stump-title">
+            The Tree Is Down.
+            <br />
+            <span>What About the Stump?</span>
+          </h2>
+          <p>
+            Removal and stump grinding are separate parts of the job. If you
+            want more room for mowing, planting, or a fresh start, let’s include
+            that in the conversation.
+          </p>
+          <p>
+            We’ll discuss access to the stump, the material left behind, and how
+            you hope to use the space afterward.
+          </p>
+          <a class="button button-lime" href={estimateHref('Stump grinding')}>
+            Include Stump Grinding <Icon name="diagonal" size={19} />
+          </a>
+        </div>
+      </div>
+    </section>
+    <ServiceQuestions
+      title="Before Your Tree Comes Down."
+      questions={questions}
+      intro="From the estimate to what stays behind, these are good questions to talk through before a removal."
+    />
+    <div class="container service-related">
+      <span>Looking for trimming or other tree work?</span>
+      <a class="text-link" href="/services/tree-services/">
+        Explore All Tree Services <Icon name="arrow" size={19} />
+      </a>
+    </div>
+    <ServiceCallout
+      title="Let’s Talk About Your Tree."
+      text={`A planned removal or a tree you’re unsure about—we’re here to discuss your ${primaryLocation.city} project and help you take the next step.`}
+      service="Tree removal"
+    />
+  </main>
+</SiteLayout>
+
+<style>
+  .service-related {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 880px;
+    gap: 20px;
+    padding: 0 0 80px;
+  }
+  .service-related > span {
+    font-size: 14px;
+    color: var(--muted);
+  }
+  @media (max-width: 760px) {
+    .service-related {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 10px;
+      padding-bottom: 55px;
+    }
+  }
+</style>

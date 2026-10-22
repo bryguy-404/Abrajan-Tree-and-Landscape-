@@ -1,8 +1,16 @@
 ---
 import Icon from './Icon.astro';
+import {
+  serviceNavigation,
+  primaryLocation,
+  serviceRegion,
+} from '../data/business';
+const isHome = Astro.url.pathname === '/';
+const homeLink = (id: string) => `${isHome ? '' : '/'}#${id}`;
+const isServicePage = Astro.url.pathname.startsWith('/services/');
 const links = [
   ['Home', 'top'],
-  ['Tree Services', 'services'],
+  ['Services', 'services'],
   ['About Us', 'about'],
   ['Our Work', 'our-work'],
   ['Reviews', 'reviews'],
@@ -22,7 +30,11 @@ const links = [
       <path d="M360 20C170 60 378 200 243 320S172 545 360 620M392 44C210 80 414 211 276 340S211 551 389 631M420 71C250 100 449 220 310 362S251 561 419 645" />
     </svg>
     <div class="drawer-heading">
-      <a class="drawer-brand" href="#top" aria-label="Abrajan home">
+      <a
+        class="drawer-brand"
+        href={isHome ? '#top' : '/'}
+        aria-label="Abrajan home"
+      >
         <span>
           <img
             src="/images/abrajan-logo.webp"
@@ -43,26 +55,63 @@ const links = [
     </div>
     <p class="drawer-eyebrow">Serving Michiana since 2000</p>
     <nav class="drawer-nav" aria-label="Mobile navigation">
-      {links.map(([label, id], index) => (
-        <a
-          href={`#${id}`}
-          data-nav-section={id}
-          style={`--link-order: ${index}`}
-        >
-          <span class="drawer-link-number" aria-hidden="true">
-            {String(index + 1).padStart(2, '0')}
-          </span>
-          <span class="drawer-link-label">{label}</span>
-          <Icon name="diagonal" size={18} />
-        </a>
-      ))}
+      {links.map(([label, id], index) =>
+        id === 'services' ? (
+          <details class="drawer-services" open={isServicePage}>
+            <summary
+              class:list={{ active: isServicePage }}
+              data-nav-section="services"
+            >
+              <span class="drawer-link-number" aria-hidden="true">
+                02
+              </span>
+              <span class="drawer-link-label">Services</span>
+              <Icon name="plus" size={18} />
+            </summary>
+            <div class="drawer-subnav">
+              {serviceNavigation.map((service) => (
+                <a
+                  href={service.href}
+                  aria-current={
+                    Astro.url.pathname.replace(/\/$/, '') ===
+                    service.href.replace(/\/$/, '')
+                      ? 'page'
+                      : undefined
+                  }
+                >
+                  {service.title}
+                  <Icon name="diagonal" size={16} />
+                </a>
+              ))}
+              <a href={homeLink('property-care')}>
+                Landscaping & Property Care
+                <Icon name="diagonal" size={16} />
+              </a>
+            </div>
+          </details>
+        ) : (
+          <a
+            href={homeLink(id)}
+            data-nav-section={id}
+            style={`--link-order: ${index}`}
+          >
+            <span class="drawer-link-number" aria-hidden="true">
+              {String(index + 1).padStart(2, '0')}
+            </span>
+            <span class="drawer-link-label">{label}</span>
+            <Icon name="diagonal" size={18} />
+          </a>
+        ),
+      )}
     </nav>
     <div class="drawer-contact">
       <p>Local roots. Experienced tree care.</p>
-      <a class="button button-lime" href="#contact">
+      <a class="button button-lime" href={homeLink('contact')}>
         Get a Free Estimate <Icon name="diagonal" size={18} />
       </a>
-      <span class="drawer-area">South Bend & the Michiana area</span>
+      <span class="drawer-area">
+        {primaryLocation.city} & the {serviceRegion} area
+      </span>
     </div>
     <div class="drawer-assurance">
       <Icon name="shield" size={17} />
@@ -72,7 +121,7 @@ const links = [
 </dialog>
 
 <nav class="mobile-contact-bar" aria-label="Quick contact" hidden>
-  <a class="mobile-estimate" href="#contact">
+  <a class="mobile-estimate" href={homeLink('contact')}>
     <span>Free Estimate</span>
     <Icon name="diagonal" size={18} />
   </a>
@@ -117,9 +166,9 @@ const links = [
       if (event.key !== 'Tab') return;
       const controls = [
         ...drawer.querySelectorAll<HTMLElement>(
-          'a[href], button:not([disabled])',
+          'a[href], button:not([disabled]), summary',
         ),
-      ];
+      ].filter((control) => control.getClientRects().length > 0);
       const first = controls[0];
       const last = controls[controls.length - 1];
       if (event.shiftKey && document.activeElement === first) {
@@ -141,18 +190,19 @@ const links = [
       )
         close();
     });
-    drawer
-      .querySelectorAll<HTMLAnchorElement>('a[href^="#"]')
-      .forEach((link) => {
-        link.addEventListener('click', () => {
-          close(true);
-          const target = document.getElementById(link.hash.slice(1));
-          if (target) {
-            target.setAttribute('tabindex', '-1');
-            target.focus({ preventScroll: true });
-          }
-        });
+    drawer.querySelectorAll<HTMLAnchorElement>('a[href]').forEach((link) => {
+      link.addEventListener('click', () => {
+        close(true);
+        const target =
+          link.pathname === window.location.pathname && link.hash
+            ? document.getElementById(link.hash.slice(1))
+            : null;
+        if (target) {
+          target.setAttribute('tabindex', '-1');
+          target.focus({ preventScroll: true });
+        }
       });
+    });
     matchMedia('(min-width: 1101px)').addEventListener('change', (event) => {
       if (event.matches && drawer.open) close(true);
     });
@@ -160,6 +210,36 @@ const links = [
 </script>
 
 <style>
+  .drawer-services summary {
+    list-style: none;
+    cursor: pointer;
+  }
+  .drawer-services summary::-webkit-details-marker {
+    display: none;
+  }
+  .drawer-services[open] summary {
+    color: var(--lime);
+    border-bottom-color: transparent;
+  }
+  .drawer-services[open] summary :global(svg) {
+    transform: rotate(45deg);
+  }
+  .drawer-subnav {
+    padding: 4px 0 13px 32px;
+    border-bottom: 1px solid #ffffff13;
+  }
+  .drawer-subnav a {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 44px;
+    padding: 8px 0;
+    color: #d3ddcf;
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
   .mobile-drawer {
     position: fixed;
     inset: 12px 12px 12px auto;
@@ -278,7 +358,8 @@ const links = [
     background: var(--lime);
     flex-shrink: 0;
   }
-  .drawer-nav a {
+  .drawer-nav > a,
+  .drawer-services summary {
     display: grid;
     grid-template-columns: 22px 1fr 18px;
     align-items: center;
@@ -312,6 +393,7 @@ const links = [
       opacity 0.2s;
   }
   .drawer-nav a:hover,
+  .drawer-services summary.active,
   .drawer-nav a[aria-current] {
     color: var(--lime);
   }

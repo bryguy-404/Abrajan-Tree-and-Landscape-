@@ -1,0 +1,50 @@
+---
+import Icon from './Icon.astro';
+import SectionContours from './SectionContours.astro';
+import {
+  locationLabel,
+  serviceCommunities,
+  primaryLocation,
+  estimateHref,
+} from '../data/business';
+interface Props {
+  title: string;
+  text: string;
+  service?: string;
+}
+const { title, text, service } = Astro.props;
+---
+
+<section
+  class="service-callout"
+  id="service-estimate"
+  aria-labelledby="estimate-title"
+>
+  <SectionContours tone="dark" />
+  <div class="container">
+    <div class="service-callout-top">
+      <div>
+        <p class="eyebrow light">
+          <span class="eyebrow-line"></span> YOUR LOCAL TREE CREW
+        </p>
+        <h2 id="estimate-title">{title}</h2>
+        <p>{text}</p>
+      </div>
+      <a class="button button-lime" href={estimateHref(service)}>
+        Get a Free Estimate <Icon name="diagonal" size={21} />
+      </a>
+    </div>
+    <div class="service-coverage">
+      <span>
+        <Icon name="pin" size={18} /> {locationLabel}
+      </span>
+      <p>
+        Also serving{' '}
+        {serviceCommunities
+          .filter((city) => city !== primaryLocation.city)
+          .join(', ')}
+        , and surrounding Michiana communities.
+      </p>
+    </div>
+  </div>
+</section>

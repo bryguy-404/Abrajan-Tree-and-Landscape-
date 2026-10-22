@@ -1,5 +1,6 @@
 ---
 import Icon from './Icon.astro';
+import { primaryLocation, serviceCommunities } from '../data/business';
 ---
 
 <section
@@ -11,7 +12,7 @@ import Icon from './Icon.astro';
     <div
       class="area-illustration"
       role="img"
-      aria-label="Illustration representing South Bend and the surrounding Michiana region, not an exact coverage map"
+      aria-label={`Illustration representing ${primaryLocation.city} and the surrounding Michiana region, not an exact coverage map`}
     >
       <svg
         class="region-art"
@@ -61,7 +62,7 @@ import Icon from './Icon.astro';
       <span class="region-label">MICHIANA</span>
       <div class="region-place">
         <Icon name="leaf" size={17} />
-        South Bend
+        {primaryLocation.city}
       </div>
       <span class="region-caption">Serving Michiana since 2000.</span>
       <span class="region-compass" aria-hidden="true">
@@ -79,19 +80,19 @@ import Icon from './Icon.astro';
       </h2>
       <p>
         Tree removal, trimming, stump grinding, and storm damage service for
-        homes and businesses across South Bend and the surrounding Michiana
-        communities.
+        homes and businesses across {primaryLocation.city} and the surrounding
+        Michiana communities.
       </p>
       <div class="area-tags">
         <span>
           <Icon name="pin" size={15} />
-          South Bend
+          {primaryLocation.city}
         </span>
-        <span>Mishawaka</span>
-        <span>Granger</span>
-        <span>Elkhart</span>
-        <span>Osceola</span>
-        <span>Notre Dame</span>
+        {serviceCommunities
+          .filter((city) => city !== primaryLocation.city)
+          .map((city) => (
+            <span>{city}</span>
+          ))}
       </div>
       <p class="area-help">
         In the surrounding Michiana area? Tell us where your property is. We’ll

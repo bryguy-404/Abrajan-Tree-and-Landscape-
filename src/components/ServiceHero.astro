@@ -1,0 +1,260 @@
+---
+import Icon from './Icon.astro';
+import { locationLabel, estimateHref } from '../data/business';
+import type { ServiceImage } from '../data/service-images';
+interface Props {
+  image: ServiceImage;
+}
+const { image } = Astro.props;
+const shortcuts = [
+  { title: 'Tree Removal', href: '#removal', icon: 'tree' },
+  { title: 'Tree Trimming', href: '#tree-trimming', icon: 'prune' },
+  { title: 'Stump Grinding', href: '#stump-grinding', icon: 'stump' },
+  { title: 'Emergency Service', href: '#emergency', icon: 'storm' },
+];
+---
+
+<section class="overview-hero" data-page-hero aria-labelledby="service-title">
+  <div class="container">
+    <nav class="service-breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">Tree Services</span>
+    </nav>
+    <div class="overview-intro">
+      <div>
+        <p class="eyebrow">
+          <span class="eyebrow-line"></span> CARE FOR EVERY CHAPTER
+        </p>
+        <h1 id="service-title">
+          Tree Services <span>in {locationLabel}.</span>
+        </h1>
+      </div>
+      <div class="overview-welcome">
+        <p>
+          Room to grow. Space to enjoy. From the trees you want to keep to the
+          ones that need to go, we help you plan the right care for your corner
+          of the outdoors.
+        </p>
+        <a class="text-link" href={estimateHref()}>
+          Find the Right Care for Your Trees <Icon name="diagonal" size={20} />
+        </a>
+      </div>
+    </div>
+    <figure class="overview-canopy">
+      <img {...image} fetchpriority="high" />
+      <figcaption>
+        AI-generated illustration · Client photos coming soon
+      </figcaption>
+    </figure>
+    <nav class="care-shortcuts" aria-label="Explore tree services">
+      {shortcuts.map((item, index) => (
+        <a href={item.href}>
+          <span class="shortcut-number">0{index + 1}</span>
+          <Icon name={item.icon} size={23} />
+          <span>{item.title}</span>
+          <Icon name="arrow" size={17} />
+        </a>
+      ))}
+    </nav>
+  </div>
+</section>
+<style>
+  .overview-hero {
+    position: relative;
+    background: var(--cream);
+    padding: 165px 0 46px;
+  }
+  .overview-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto;
+    height: 135px;
+    background: var(--deep);
+  }
+  .service-breadcrumb {
+    color: #68775d;
+    margin-bottom: 33px;
+  }
+  .service-breadcrumb [aria-current] {
+    color: var(--pine);
+  }
+  .service-breadcrumb a:hover {
+    color: #526f29;
+  }
+  .overview-intro {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 90px;
+    align-items: center;
+    margin-bottom: 38px;
+  }
+  .overview-intro .eyebrow {
+    margin-bottom: 18px;
+  }
+  h1 {
+    font-size: clamp(44px, 4.8vw, 65px);
+    letter-spacing: -2.6px;
+    line-height: 1.1;
+    font-weight: 500;
+  }
+  h1 span {
+    display: block;
+    font-size: 0.64em;
+    letter-spacing: -1.4px;
+    line-height: 1.3;
+    margin-top: 8px;
+    color: #627743;
+  }
+  .overview-welcome p {
+    font-size: 14px;
+    line-height: 1.9;
+    max-width: 450px;
+  }
+  .overview-welcome a {
+    margin-top: 22px;
+  }
+  .overview-canopy {
+    position: relative;
+    height: 375px;
+    overflow: hidden;
+    border-radius: 5px;
+    background: #cdd4bd;
+  }
+  .overview-canopy img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 69%;
+  }
+  figcaption {
+    position: absolute;
+    bottom: 13px;
+    left: 16px;
+    border-radius: 3px;
+    background: #092719c9;
+    padding: 4px 9px;
+    font-size: 9px;
+    color: #f0f3e9;
+  }
+  .care-shortcuts {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin-top: 20px;
+  }
+  .care-shortcuts a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 63px;
+    padding: 14px 20px;
+    border-right: 1px solid #cfd8c1;
+    font-size: 12px;
+    font-weight: 650;
+  }
+  .care-shortcuts a:first-child {
+    padding-left: 0;
+  }
+  .care-shortcuts a:last-child {
+    border: 0;
+    padding-right: 0;
+  }
+  .care-shortcuts a:hover {
+    color: #637b39;
+  }
+  .shortcut-number {
+    font-size: 9px;
+    color: #879477;
+    font-weight: 500;
+  }
+  .care-shortcuts a :global(svg:last-child) {
+    margin-left: auto;
+    transform: rotate(90deg);
+  }
+  @media (max-width: 1100px) {
+    .overview-intro {
+      gap: 40px;
+    }
+    .care-shortcuts a {
+      gap: 9px;
+      padding-inline: 12px;
+      font-size: 11px;
+    }
+    .shortcut-number {
+      display: none;
+    }
+  }
+  @media (max-width: 900px) {
+    .overview-hero {
+      padding-top: 142px;
+    }
+    .overview-hero::before {
+      height: 112px;
+    }
+  }
+  @media (max-width: 760px) {
+    .overview-intro {
+      grid-template-columns: 1fr;
+      gap: 25px;
+    }
+    .overview-canopy {
+      height: 320px;
+    }
+    .overview-canopy img {
+      object-position: 70% 55%;
+    }
+    .care-shortcuts {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0 18px;
+    }
+    .care-shortcuts a {
+      border-right: 0;
+      border-bottom: 1px solid #cfd8c1;
+      padding: 15px 0;
+    }
+    .care-shortcuts a:last-child {
+      border-bottom: 1px solid #cfd8c1;
+    }
+    h1 {
+      font-size: 51px;
+    }
+  }
+  @media (max-width: 600px) {
+    .overview-hero {
+      padding-top: 125px;
+      padding-bottom: 25px;
+    }
+    .overview-hero::before {
+      height: 100px;
+    }
+    .service-breadcrumb {
+      margin-bottom: 25px;
+    }
+    .overview-welcome a {
+      font-size: 12px;
+      gap: 17px;
+    }
+    figcaption {
+      left: 9px;
+      right: 9px;
+      bottom: 9px;
+      font-size: 8px;
+      width: fit-content;
+    }
+  }
+  @media (max-width: 360px) {
+    h1 {
+      font-size: 44px;
+    }
+    .care-shortcuts a {
+      font-size: 10px;
+      gap: 7px;
+    }
+    .care-shortcuts a :global(svg) {
+      width: 18px;
+    }
+    .care-shortcuts a :global(svg:last-child) {
+      display: none;
+    }
+  }
+</style>

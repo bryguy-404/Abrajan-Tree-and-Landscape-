@@ -1,0 +1,43 @@
+---
+import Icon from './Icon.astro';
+---
+
+<footer class="site-footer">
+  <div class="container footer-top">
+    <a class="brand footer-brand" href="/" aria-label="Abrajan home">
+      <span class="brand-window">
+        <img
+          src="/images/abrajan-logo.webp"
+          width="700"
+          height="350"
+          alt="Abrajan Tree & Complete Landscaping Service"
+          loading="lazy"
+        />
+      </span>
+    </a>
+    <p>
+      Tree Care With Local Roots.
+      <br />
+      <span>Serving Michiana Since 2000.</span>
+    </p>
+    <a class="back-top" href="#top">
+      Back to Top{' '}
+      <span>
+        <Icon name="arrow" size={20} />
+      </span>
+    </a>
+  </div>
+  <div class="container footer-bottom">
+    <span>
+      © {new Date().getFullYear()} Abrajan Tree & Complete Landscaping Service.
+    </span>
+    <nav aria-label="Footer navigation">
+      <a href="/#about">About</a>
+      <a href="/services/tree-services/">Services</a>
+      <a href="/#our-work">Our Work</a>
+      <a href="/#contact">Contact</a>
+      <a href="/privacy/">Privacy</a>
+      <a href="/terms/">Terms</a>
+    </nav>
+  </div>
+</footer>

@@ -1,0 +1,32 @@
+---
+import Icon from './Icon.astro';
+interface Props {
+  title: string;
+  questions: { question: string; answer: string }[];
+  intro: string;
+}
+const { title, questions, intro } = Astro.props;
+---
+
+<section class="section service-questions" aria-labelledby="questions-title">
+  <div class="container faq-grid">
+    <div class="reveal">
+      <p class="eyebrow">
+        <span class="eyebrow-line"></span> BEFORE WE GET STARTED
+      </p>
+      <h2 id="questions-title">{title}</h2>
+      <p class="service-question-intro">{intro}</p>
+    </div>
+    <div class="faq-list reveal">
+      {questions.map(({ question, answer }, index) => (
+        <details name="service-faq" open={index === 0}>
+          <summary>
+            {question}
+            <Icon name="plus" size={20} />
+          </summary>
+          <p>{answer}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>

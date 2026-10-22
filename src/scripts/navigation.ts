@@ -1,14 +1,17 @@
 const header = document.querySelector<HTMLElement>('.site-header');
-const hero = document.querySelector<HTMLElement>('.hero');
-const contact = document.querySelector<HTMLElement>('#contact');
+const hero = document.querySelector<HTMLElement>('.hero, [data-page-hero]');
+const contact = document.querySelector<HTMLElement>(
+  '#contact, #service-estimate',
+);
 const quickContact = document.querySelector<HTMLElement>('.mobile-contact-bar');
 const navLinks = [
-  ...document.querySelectorAll<HTMLAnchorElement>('[data-nav-section]'),
+  ...document.querySelectorAll<HTMLElement>('[data-nav-section]'),
 ];
 const sectionIds = [
   'top',
   'services',
   'about',
+  'property-care',
   'our-work',
   'reviews',
   'service-area',
@@ -28,16 +31,21 @@ function updateNavigation() {
     if (section && section.getBoundingClientRect().top <= headerHeight + 100)
       active = sectionIds[index];
   });
-  navLinks.forEach((link) => {
-    const current = link.dataset.navSection === active;
-    link.classList.toggle('active', current);
-    if (current) link.setAttribute('aria-current', 'location');
-    else link.removeAttribute('aria-current');
-  });
-  if (quickContact && hero && contact) {
+  if (header.dataset.home === 'true')
+    navLinks.forEach((link) => {
+      const current =
+        link.dataset.navSection ===
+        (active === 'property-care' ? 'services' : active);
+      link.classList.toggle('active', current);
+      if (current && link.tagName === 'A')
+        link.setAttribute('aria-current', 'location');
+      else link.removeAttribute('aria-current');
+    });
+  if (quickContact && hero) {
     const afterHero = hero.getBoundingClientRect().bottom <= headerHeight;
-    const contactReached =
-      contact.getBoundingClientRect().top < window.innerHeight;
+    const contactReached = contact
+      ? contact.getBoundingClientRect().top < window.innerHeight
+      : false;
     const show = phoneScreen.matches && afterHero && !contactReached;
     quickContact.hidden = !show;
     document.documentElement.classList.toggle('has-contact-bar', show);

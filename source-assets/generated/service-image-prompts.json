@@ -1,0 +1,21 @@
+{
+  "tool": "Built-in image_gen",
+  "purpose": "Temporary illustrative website images. Replace with approved client photography before presenting as actual project work.",
+  "assets": [
+    {
+      "key": "tree-care-canopy",
+      "prompt": "Use case: photorealistic-natural. Asset type: landscape website hero photo for a local tree care company, a temporary illustrative image, no branding. Create an exceptionally believable editorial landscape photograph in a leafy northern Indiana residential yard in late spring. A magnificent mature deciduous maple tree with an open healthy green canopy and a strong branching trunk is the clear hero, filling the right two thirds of the composition; another oak and a modest softly blurred Midwest home recede behind it. A small professional tree-care worker in helmet, eye protection, dark green work shirt and work trousers stands at the far lower right looking up to assess the canopy, not posing, no machinery or tool operation. Lush but natural grass, detailed bark, dappled sun filtering through leaves, refined warm greens, believable daylight, calm welcoming premium landscaping editorial mood. Wide 3:2 image, camera at ground height, tree canopy and trunk dominant. No palm trees, no exaggerated perfect mansion, no text, no logo, no watermark, no identifiable real company. This is a fresh standalone image, not an edit.",
+      "path": "src/assets/service-concepts/tree-care-canopy.png"
+    },
+    {
+      "key": "tree-removal-worksite",
+      "prompt": "Use case: photorealistic-natural. Asset type: panoramic hero background for a tree removal service web page. Generate an authentic-looking professional editorial photo of a tidy tree removal worksite in a northern Indiana residential yard on a crisp bright morning. Primary subject on the RIGHT HALF: a substantial freshly cut hardwood trunk lying horizontally on grass, its warm circular grain and textured bark prominent, a few manageable cut log sections placed nearby. One professional worker wearing forestry helmet with ear protection and clear eye protection, unbranded muted orange work shirt, protective work trousers and sturdy boots is on the right inspecting the completed ground work, natural candid posture, no active chainsaw use. Mature leafy trees and a distant modest Midwestern home in background. The LEFT HALF is quiet shaded lawn and soft tree foliage with low visual detail, leaving negative space for white website headline overlay. Wide 16:9 landscape composition. Crisp natural textures, warm wood, deep forest greens, no disaster spectacle, no falling trees, no people under suspended branches, no unsafe actions, no cranes, no logos, no text, no watermark. Illustrative generic scene, not an actual company's documented project.",
+      "path": "src/assets/service-concepts/tree-removal-worksite.png"
+    },
+    {
+      "key": "stump-detail",
+      "prompt": "Use case: photorealistic-natural. Asset type: supporting landscape photograph for a stump grinding section of a tree removal website. Close editorial view of a freshly cut broad hardwood stump low to the ground in a northern Indiana backyard, detailed warm growth rings and rough dark bark, a few natural wood shavings in surrounding soil and grass. Ground-level three-quarter angle, stump filling foreground on left and center, shallow depth of field with soft green deciduous trees and lawn behind it. Warm morning sunlight, subtle natural earthy color, realistic unretouched outdoor photography, wide 3:2 framing. No equipment, no people, no text, no logos, no watermark, no before-after composite. This depicts a stump awaiting further work, not a completed stump-grinding result. Temporary illustrative website asset.",
+      "path": "src/assets/service-concepts/stump-detail.png"
+    }
+  ]
+}

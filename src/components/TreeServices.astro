@@ -65,11 +65,14 @@ import { treeServices } from '../data/services';
             <small>{service.detail}</small>
             <a
               class="text-link"
-              href="#contact"
-              data-service={service.value}
-              aria-label={`Request an estimate for ${service.title.toLowerCase()}`}
+              href={
+                index === 0
+                  ? '/services/tree-removal/'
+                  : `/services/tree-services/#${service.id === 'emergency-tree-service' ? 'emergency' : service.id}`
+              }
+              aria-label={`Explore ${service.title.toLowerCase()}`}
             >
-              Request an Estimate <Icon name="diagonal" size={19} />
+              Explore This Service <Icon name="diagonal" size={19} />
             </a>
           </article>
         ))}

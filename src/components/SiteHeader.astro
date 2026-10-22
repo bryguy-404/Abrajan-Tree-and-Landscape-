@@ -1,0 +1,266 @@
+---
+import Icon from './Icon.astro';
+import MobileNavigation from './MobileNavigation.astro';
+import {
+  serviceNavigation,
+  primaryLocation,
+  serviceRegion,
+} from '../data/business';
+const isHome = Astro.url.pathname === '/';
+const homeLink = (id: string) => `${isHome ? '' : '/'}#${id}`;
+const isServicePage = Astro.url.pathname.startsWith('/services/');
+const links = [
+  ['About Us', 'about'],
+  ['Our Work', 'our-work'],
+  ['Reviews', 'reviews'],
+  ['Contact', 'contact'],
+];
+---
+
+<a class="skip-link" href="#main">
+  Skip to content
+</a>
+<div class="topbar">
+  <div class="container topbar-inner">
+    <span>
+      <Icon name="pin" size={15} /> {primaryLocation.city} & {serviceRegion}{' '}
+      Since 2000
+    </span>
+    <div>
+      <span class="topbar-assurance">
+        <Icon name="shield" size={15} /> Licensed & Insured
+      </span>
+      <a
+        href="/services/tree-services/#emergency"
+        aria-label="24/7 emergency tree service"
+      >
+        <Icon name="storm" size={15} /> 24/7 Emergency Service
+      </a>
+    </div>
+  </div>
+</div>
+<header class="site-header" data-home={String(isHome)}>
+  <div class="container nav-inner">
+    <a
+      class="brand"
+      href={isHome ? '#top' : '/'}
+      aria-label="Abrajan Tree & Complete Landscaping Service home"
+    >
+      <span class="brand-window">
+        <img
+          src="/images/abrajan-logo.webp"
+          width="700"
+          height="350"
+          alt="Abrajan Tree & Complete Landscaping Service"
+        />
+      </span>
+    </a>
+    <nav class="desktop-nav" aria-label="Main navigation">
+      <a
+        href={isHome ? '#top' : '/'}
+        data-nav-section="top"
+        aria-current={isHome ? 'page' : undefined}
+      >
+        Home
+      </a>
+      <details class="services-dropdown">
+        <summary
+          class:list={{ active: isServicePage }}
+          data-nav-section="services"
+        >
+          Services{' '}
+          <svg
+            width="12"
+            height="12"
+            viewBox="0 0 12 12"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path d="m3 4.5 3 3 3-3" stroke="currentColor" stroke-width="1.5" />
+          </svg>
+        </summary>
+        <div class="services-panel">
+          <p class="dropdown-eyebrow">TREE WORK IS AT OUR ROOTS</p>
+          {serviceNavigation.map((service) => (
+            <a
+              class="dropdown-service"
+              href={service.href}
+              aria-current={
+                Astro.url.pathname.replace(/\/$/, '') ===
+                service.href.replace(/\/$/, '')
+                  ? 'page'
+                  : undefined
+              }
+            >
+              <span class="dropdown-icon">
+                <Icon name={service.icon} size={24} />
+              </span>
+              <span>
+                <strong>{service.title}</strong>
+                <small>{service.description}</small>
+              </span>
+              <Icon name="diagonal" size={16} />
+            </a>
+          ))}
+          <a class="dropdown-more" href={homeLink('property-care')}>
+            Landscaping & Property Care <Icon name="arrow" size={16} />
+          </a>
+        </div>
+      </details>
+      {links.map(([label, id]) => (
+        <a href={homeLink(id)} data-nav-section={id}>
+          {label}
+        </a>
+      ))}
+    </nav>
+    <a class="button button-lime nav-cta" href={homeLink('contact')}>
+      Get a Free Estimate <Icon name="diagonal" size={19} />
+    </a>
+    <button
+      class="menu-toggle"
+      type="button"
+      aria-label="Open navigation menu"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+      aria-haspopup="dialog"
+    >
+      <span class="menu-label" aria-hidden="true">
+        Menu
+      </span>
+      <span class="menu-lines" aria-hidden="true">
+        <span></span>
+        <span></span>
+      </span>
+    </button>
+  </div>
+</header>
+<MobileNavigation />
+
+<script>
+  import '../scripts/navigation';
+  const dropdown =
+    document.querySelector<HTMLDetailsElement>('.services-dropdown');
+  if (dropdown) {
+    document.addEventListener('click', (event) => {
+      if (event.target instanceof Node && !dropdown.contains(event.target))
+        dropdown.open = false;
+    });
+    dropdown.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && dropdown.open) {
+        dropdown.open = false;
+        dropdown.querySelector('summary')?.focus();
+        event.preventDefault();
+      }
+    });
+    dropdown.addEventListener('focusout', (event) => {
+      if (
+        event.relatedTarget instanceof Node &&
+        !dropdown.contains(event.relatedTarget)
+      )
+        dropdown.open = false;
+    });
+    dropdown.querySelectorAll('a').forEach((link) =>
+      link.addEventListener('click', () => {
+        dropdown.open = false;
+      }),
+    );
+    matchMedia('(max-width: 1100px)').addEventListener('change', () => {
+      dropdown.open = false;
+    });
+  }
+</script>
+
+<style>
+  .services-dropdown {
+    position: relative;
+  }
+  summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 25px 0;
+  }
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  summary.active,
+  .services-dropdown[open] summary {
+    color: var(--lime);
+  }
+  summary svg {
+    transition: transform 0.2s;
+  }
+  [open] summary svg {
+    transform: rotate(180deg);
+  }
+  .services-panel {
+    position: absolute;
+    top: calc(100% - 5px);
+    left: -25px;
+    width: 380px;
+    padding: 23px;
+    border: 1px solid #dfe3d7;
+    background: #f9faf3;
+    color: var(--ink);
+    border-radius: 12px;
+    box-shadow: 0 18px 45px #061b1433;
+  }
+  .dropdown-eyebrow {
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 1.7px;
+    margin-bottom: 13px;
+  }
+  :global(.desktop-nav) .services-panel a {
+    padding: 14px 0;
+    color: var(--ink);
+  }
+  :global(.desktop-nav) .services-panel a::after {
+    display: none;
+  }
+  :global(.desktop-nav) .services-panel a:hover,
+  :global(.desktop-nav) .services-panel a[aria-current] {
+    color: #4c662b;
+  }
+  .dropdown-service {
+    display: grid;
+    grid-template-columns: 40px 1fr 16px;
+    align-items: center;
+    gap: 12px;
+  }
+  .dropdown-icon {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 44px;
+    background: #e9efda;
+    border-radius: 8px;
+  }
+  .dropdown-service strong {
+    font-size: 15px;
+    font-weight: 650;
+    display: block;
+  }
+  .dropdown-service small {
+    display: block;
+    font-size: 10px;
+    color: #657260;
+    line-height: 1.5;
+    margin-top: 3px;
+  }
+  :global(.desktop-nav) .dropdown-more {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid var(--line);
+    margin-top: 14px;
+    padding-bottom: 0;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  :global(.site-header.is-sticky) summary {
+    padding-block: 20px;
+  }
+</style>
