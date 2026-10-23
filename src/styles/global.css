@@ -2045,3 +2045,23 @@ button {
     height: 44px;
   }
 }
+
+/* Secondary services remain easy to explore from the homepage. */
+.season-list h3 a {
+  display: inline-flex;
+  gap: 12px;
+  align-items: center;
+}
+.season-list h3 a svg {
+  opacity: 0.65;
+  transition:
+    transform 0.2s,
+    opacity 0.2s;
+}
+.season-list h3 a:hover {
+  color: var(--lime);
+}
+.season-list h3 a:hover svg {
+  opacity: 1;
+  transform: translate(2px, -2px);
+}

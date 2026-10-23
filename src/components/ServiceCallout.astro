@@ -11,8 +11,9 @@ interface Props {
   title: string;
   text: string;
   service?: string;
+  eyebrow?: string;
 }
-const { title, text, service } = Astro.props;
+const { title, text, service, eyebrow = 'YOUR LOCAL TREE CREW' } = Astro.props;
 ---
 
 <section
@@ -25,7 +26,7 @@ const { title, text, service } = Astro.props;
     <div class="service-callout-top">
       <div>
         <p class="eyebrow light">
-          <span class="eyebrow-line"></span> YOUR LOCAL TREE CREW
+          <span class="eyebrow-line"></span> {eyebrow}
         </p>
         <h2 id="estimate-title">{title}</h2>
         <p>{text}</p>

@@ -1,7 +1,7 @@
 ---
 import Icon from './Icon.astro';
 import {
-  serviceNavigation,
+  serviceNavigationGroups,
   primaryLocation,
   serviceRegion,
   estimateHref,
@@ -70,24 +70,25 @@ const links = [
               <Icon name="plus" size={18} />
             </summary>
             <div class="drawer-subnav">
-              {serviceNavigation.map((service) => (
-                <a
-                  href={service.href}
-                  aria-current={
-                    Astro.url.pathname.replace(/\/$/, '') ===
-                    service.href.replace(/\/$/, '')
-                      ? 'page'
-                      : undefined
-                  }
-                >
-                  {service.title}
-                  <Icon name="diagonal" size={16} />
-                </a>
+              {serviceNavigationGroups.map((group) => (
+                <div class="drawer-service-group">
+                  <p>{group.title}</p>
+                  {group.services.map((service) => (
+                    <a
+                      href={service.href}
+                      aria-current={
+                        Astro.url.pathname.replace(/\/$/, '') ===
+                        service.href.replace(/\/$/, '')
+                          ? 'page'
+                          : undefined
+                      }
+                    >
+                      {service.title}
+                      <Icon name="diagonal" size={16} />
+                    </a>
+                  ))}
+                </div>
               ))}
-              <a href={homeLink('property-care')}>
-                Landscaping & Property Care
-                <Icon name="diagonal" size={16} />
-              </a>
             </div>
           </details>
         ) : (
@@ -232,6 +233,18 @@ const links = [
   .drawer-subnav {
     padding: 4px 0 13px 32px;
     border-bottom: 1px solid #ffffff13;
+  }
+  .drawer-service-group p {
+    color: var(--lime);
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin: 15px 0 5px;
+  }
+  .drawer-subnav a[aria-current] {
+    color: var(--lime);
+    text-decoration: underline;
+    text-underline-offset: 4px;
   }
   .drawer-subnav a {
     display: flex;

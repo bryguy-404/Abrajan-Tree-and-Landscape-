@@ -2,7 +2,7 @@
 import Icon from './Icon.astro';
 import MobileNavigation from './MobileNavigation.astro';
 import {
-  serviceNavigation,
+  serviceNavigationGroups,
   primaryLocation,
   serviceRegion,
   estimateHref,
@@ -32,7 +32,7 @@ const links = [
         <Icon name="shield" size={15} /> Licensed & Insured
       </span>
       <a
-        href="/services/tree-services/#emergency"
+        href="/services/emergency-tree-service/"
         aria-label="24/7 emergency tree service"
       >
         <Icon name="storm" size={15} /> 24/7 Emergency Service
@@ -81,31 +81,32 @@ const links = [
           </svg>
         </summary>
         <div class="services-panel">
-          <p class="dropdown-eyebrow">TREE WORK IS AT OUR ROOTS</p>
-          {serviceNavigation.map((service) => (
-            <a
-              class="dropdown-service"
-              href={service.href}
-              aria-current={
-                Astro.url.pathname.replace(/\/$/, '') ===
-                service.href.replace(/\/$/, '')
-                  ? 'page'
-                  : undefined
-              }
-            >
-              <span class="dropdown-icon">
-                <Icon name={service.icon} size={24} />
-              </span>
-              <span>
-                <strong>{service.title}</strong>
-                <small>{service.description}</small>
-              </span>
-              <Icon name="diagonal" size={16} />
-            </a>
+          {serviceNavigationGroups.map((group) => (
+            <div class="dropdown-group">
+              <p class="dropdown-eyebrow">{group.title}</p>
+              {group.services.map((service) => (
+                <a
+                  class="dropdown-service"
+                  href={service.href}
+                  aria-current={
+                    Astro.url.pathname.replace(/\/$/, '') ===
+                    service.href.replace(/\/$/, '')
+                      ? 'page'
+                      : undefined
+                  }
+                >
+                  <span class="dropdown-icon">
+                    <Icon name={service.icon} size={21} />
+                  </span>
+                  <span>
+                    <strong>{service.title}</strong>
+                    <small>{service.description}</small>
+                  </span>
+                  <Icon name="diagonal" size={15} />
+                </a>
+              ))}
+            </div>
           ))}
-          <a class="dropdown-more" href={homeLink('property-care')}>
-            Landscaping & Property Care <Icon name="arrow" size={16} />
-          </a>
         </div>
       </details>
       {links.map(([label, id, href]) => (
@@ -235,7 +236,12 @@ const links = [
     position: absolute;
     top: calc(100% - 5px);
     left: -25px;
-    width: 380px;
+    width: 660px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 26px;
+    max-height: calc(100dvh - 150px);
+    overflow-y: auto;
     padding: 23px;
     border: 1px solid #dfe3d7;
     background: #f9faf3;
@@ -244,13 +250,14 @@ const links = [
     box-shadow: 0 18px 45px #061b1433;
   }
   .dropdown-eyebrow {
-    font-size: 8px;
+    font-size: 9px;
+    text-transform: uppercase;
     font-weight: 700;
     letter-spacing: 1.7px;
     margin-bottom: 13px;
   }
   :global(.desktop-nav) .services-panel a {
-    padding: 14px 0;
+    padding: 13px 0;
     color: var(--ink);
   }
   :global(.desktop-nav) .services-panel a::after {
@@ -262,20 +269,20 @@ const links = [
   }
   .dropdown-service {
     display: grid;
-    grid-template-columns: 40px 1fr 16px;
+    grid-template-columns: 32px 1fr 15px;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
   }
   .dropdown-icon {
     display: grid;
     place-items: center;
-    width: 40px;
-    height: 44px;
+    width: 32px;
+    height: 38px;
     background: #e9efda;
     border-radius: 8px;
   }
   .dropdown-service strong {
-    font-size: 15px;
+    font-size: 13px;
     font-weight: 650;
     display: block;
   }
@@ -286,15 +293,9 @@ const links = [
     line-height: 1.5;
     margin-top: 3px;
   }
-  :global(.desktop-nav) .dropdown-more {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-top: 1px solid var(--line);
-    margin-top: 14px;
-    padding-bottom: 0;
-    font-size: 11px;
-    font-weight: 600;
+  .dropdown-group + .dropdown-group {
+    border-left: 1px solid var(--line);
+    padding-left: 24px;
   }
   :global(.site-header.is-sticky) summary {
     padding-block: 20px;

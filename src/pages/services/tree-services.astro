@@ -14,7 +14,6 @@ import {
   locationLabel,
   primaryLocation,
   serviceCommunities,
-  estimateHref,
 } from '../../data/business';
 import '../../styles/services.css';
 
@@ -34,7 +33,7 @@ const offerings = [
     icon: 'storm',
     number: '24/7',
     text: 'Fallen trees and broken limbs can turn a familiar yard into an urgent problem. Our emergency tree service focuses on the tree work needed after unexpected damage.',
-    href: '#emergency',
+    href: '/services/emergency-tree-service/',
     link: 'About Emergency Tree Service',
   },
   {
@@ -43,7 +42,7 @@ const offerings = [
     icon: 'prune',
     number: '03',
     text: 'Give growing trees the room and attention they need. From overextended branches to clearance around your property, we’ll discuss what needs trimming and the result you have in mind.',
-    href: estimateHref('Tree trimming'),
+    href: '/services/tree-trimming/',
     link: 'Plan Your Tree Trimming',
   },
   {
@@ -52,7 +51,7 @@ const offerings = [
     icon: 'stump',
     number: '04',
     text: 'An old stump doesn’t have to be part of your next chapter. Grinding can help reclaim space for a more usable yard. Ask us about access, the remaining material, and your plans for the area.',
-    href: estimateHref('Stump grinding'),
+    href: '/services/stump-grinding/',
     link: 'Talk About Stump Grinding',
   },
 ];
@@ -207,7 +206,7 @@ const questions = [
             clearing out an overgrown space, tell us what you have in mind.
           </p>
           <div class="service-property-links">
-            <a href="/#property-care">
+            <a href="/services/landscaping/">
               Landscaping & Property Care <Icon name="arrow" size={16} />
             </a>
             <a href="/#our-work">

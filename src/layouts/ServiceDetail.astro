@@ -1,0 +1,306 @@
+---
+import SiteLayout from './SiteLayout.astro';
+import Icon from '../components/Icon.astro';
+import SectionContours from '../components/SectionContours.astro';
+import ServiceQuestions from '../components/ServiceQuestions.astro';
+import ServiceCallout from '../components/ServiceCallout.astro';
+import {
+  locationLabel,
+  primaryLocation,
+  estimateHref,
+  serviceNavigation,
+  propertyNavigation,
+} from '../data/business';
+import { serviceImage } from '../data/service-images';
+import type { ServicePage } from '../data/service-pages';
+import '../styles/services.css';
+import '../styles/service-detail.css';
+
+interface Props {
+  page: ServicePage;
+}
+const { page } = Astro.props;
+const isEmergency = page.theme === 'urgent';
+const isClearing = page.theme === 'clearing';
+const imageSizes = isClearing ? '100vw' : '(max-width: 800px) 100vw, 650px';
+const image =
+  page.image === 'stump' || page.image === 'winter' || page.image === 'clearing'
+    ? await serviceImage(page.image, isClearing ? 1600 : 1100, imageSizes)
+    : {
+        src: page.image,
+        alt: page.imageAlt,
+        width: page.imageWidth,
+        height: page.imageHeight,
+      };
+const allServices = [...serviceNavigation, ...propertyNavigation];
+const related = page.related
+  .map((slug) =>
+    allServices.find((service) => service.href === `/services/${slug}/`),
+  )
+  .filter(Boolean);
+const caption = page.generated
+  ? 'AI-generated illustration · Client photos coming soon'
+  : 'From the Abrajan project gallery';
+const estimate = estimateHref(page.value);
+---
+
+<SiteLayout
+  title={`${page.title} in ${locationLabel} | Abrajan`}
+  description={page.description}
+  image={image.src}
+  imageSrcSet={'srcset' in image ? image.srcset : undefined}
+  imageSizes={'sizes' in image ? image.sizes : undefined}
+  preloadImage={!isEmergency}
+>
+  <main id="main" class:list={['service-detail', `detail-${page.theme}`]}>
+    <section class="detail-hero" data-page-hero aria-labelledby="detail-title">
+      {isClearing && (
+        <img class="clearing-backdrop" {...image} fetchpriority="high" />
+      )}
+      {(page.theme === 'ground' || isEmergency) && (
+        <SectionContours tone={isEmergency ? 'dark' : 'light'} />
+      )}
+      <div class="container detail-hero-inner">
+        <nav class="service-breadcrumb" aria-label="Breadcrumb">
+          <a href="/">Home</a>
+          <span aria-hidden="true">/</span>
+          {page.category === 'tree' && (
+            <>
+              <a href="/services/tree-services/">Tree Services</a>
+              <span aria-hidden="true">/</span>
+            </>
+          )}
+          <span aria-current="page">{page.title}</span>
+        </nav>
+        <div class="detail-hero-grid">
+          <div class="detail-hero-copy">
+            <p class="eyebrow">
+              <span class="eyebrow-line"></span>
+              {page.eyebrow}
+            </p>
+            <h1 id="detail-title">
+              {page.title} <span>in {locationLabel}.</span>
+            </h1>
+            <p class="detail-promise">{page.headline}</p>
+            <p class="detail-lead">{page.intro}</p>
+            {isEmergency ? (
+              <div class="emergency-online-note">
+                <Icon name="storm" size={22} />
+                <p>
+                  <strong>
+                    For urgent situations, don’t wait on an online form.
+                  </strong>{' '}
+                  Online requests are for non-urgent estimates and are not
+                  emergency dispatch.
+                </p>
+              </div>
+            ) : (
+              <a class="button button-lime" href={estimate}>
+                Get a Free Estimate <Icon name="diagonal" size={20} />
+              </a>
+            )}
+            <a class="detail-explore" href="#service-details">
+              {isEmergency
+                ? 'Read Emergency Service Information'
+                : 'Explore This Service'}{' '}
+              <Icon name="arrow" size={17} />
+            </a>
+          </div>
+          {isEmergency ? (
+            <div
+              class="emergency-hero-art"
+              aria-label="24 hours a day, 7 days a week emergency tree service"
+            >
+              <Icon name="storm" size={52} />
+              <span class="emergency-numeral" aria-hidden="true">
+                24<span>/</span>7
+              </span>
+              <p>STORM DAMAGE & EMERGENCY TREE WORK</p>
+              <div>
+                <span>Local Roots.</span>
+                <span>Experienced Hands.</span>
+              </div>
+            </div>
+          ) : (
+            !isClearing && (
+              <figure class="detail-hero-media">
+                <img {...image} fetchpriority="high" />
+                <figcaption>{caption}</figcaption>
+                {page.theme === 'winter' && (
+                  <span class="winter-mark" aria-hidden="true">
+                    <Icon name="snow" size={45} />
+                  </span>
+                )}
+              </figure>
+            )
+          )}
+        </div>
+        {isClearing && <p class="clearing-caption">{caption}</p>}
+      </div>
+    </section>
+
+    <div class="detail-assurance">
+      <div class="container">
+        <span>
+          <Icon name="shield" size={18} /> Licensed & Insured
+        </span>
+        <span>
+          <Icon name="leaf" size={18} /> Serving Michiana Since 2000
+        </span>
+        <a href={isEmergency ? '#service-details' : estimate}>
+          {isEmergency ? 'Emergency Tree Work: 24/7' : 'Free Estimates'}{' '}
+          <Icon name="diagonal" size={16} />
+        </a>
+      </div>
+    </div>
+
+    <section
+      class="section detail-work"
+      id="service-details"
+      aria-labelledby="detail-work-title"
+    >
+      <div class="container">
+        <div class="detail-section-heading reveal">
+          <div>
+            <p class="eyebrow">
+              <span class="eyebrow-line"></span>
+              {page.category === 'tree'
+                ? 'CARE WITH A CLEAR PURPOSE'
+                : 'CARE FOR YOUR CORNER OF THE OUTDOORS'}
+            </p>
+            <h2 id="detail-work-title">{page.workTitle}</h2>
+          </div>
+          <p>{page.workIntro}</p>
+        </div>
+        <div class="detail-work-list">
+          {page.work.map((item, index) => (
+            <article class="detail-work-item reveal">
+              <div class="detail-work-mark">
+                <Icon name={item.icon} size={29} />
+                <span>0{index + 1}</span>
+              </div>
+              <h3>{item.title}</h3>
+              <p>{item.text}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="detail-feature" aria-labelledby="detail-feature-title">
+      <SectionContours
+        tone={
+          ['garden', 'ground', 'editorial', 'urgent'].includes(page.theme)
+            ? 'light'
+            : 'dark'
+        }
+      />
+      <div class="container detail-feature-grid">
+        <div class="detail-feature-intro reveal">
+          <p class="eyebrow">
+            <span class="eyebrow-line"></span>
+            {page.featureEyebrow}
+          </p>
+          <h2 id="detail-feature-title">{page.featureTitle}</h2>
+          <p>{page.featureText}</p>
+          {page.theme === 'garden' && (
+            <div
+              class="landscape-finishes"
+              aria-label="Available landscape materials"
+            >
+              <span>
+                <i class="finish-mulch" aria-hidden="true"></i>Mulch
+              </span>
+              <span>
+                <i class="finish-stone" aria-hidden="true"></i>Stone
+              </span>
+              <span>
+                <i class="finish-sod" aria-hidden="true"></i>Sod
+              </span>
+            </div>
+          )}
+          {page.theme === 'ground' && (
+            <p class="stump-scope-note">
+              <Icon name="stump" size={26} /> Grinding, material handling, and
+              yard restoration are separate details to agree on.
+            </p>
+          )}
+          {isEmergency && (
+            <a
+              class="text-link"
+              href="https://www.in.gov/dhs/get-prepared/emergencies/power-outages/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Power Line Safety From Indiana DHS{' '}
+              <Icon name="diagonal" size={18} />
+            </a>
+          )}
+        </div>
+        <div class="detail-feature-items">
+          {page.featureItems.map((item, index) => (
+            <article class="detail-feature-item reveal">
+              <span class="feature-count" aria-hidden="true">
+                {page.theme === 'editorial' ? (
+                  <Icon name={index === 0 ? 'sun' : 'leaf'} size={32} />
+                ) : (
+                  `0${index + 1}`
+                )}
+              </span>
+              <div>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <ServiceQuestions
+      title={page.faqTitle}
+      questions={page.questions}
+      intro={`Helpful details before planning ${page.title.toLowerCase()} for your property.`}
+    />
+
+    <section class="detail-related" aria-labelledby="related-title">
+      <div class="container">
+        <div class="detail-related-heading">
+          <p class="eyebrow">THE REST OF YOUR PROJECT</p>
+          <h2 id="related-title">It Can All Work Together.</h2>
+        </div>
+        <div class="detail-related-links">
+          {related.map(
+            (service) =>
+              service && (
+                <a href={service.href}>
+                  <Icon name={service.icon} size={28} />
+                  <span>
+                    <strong>{service.title}</strong>
+                    <small>{service.description}</small>
+                  </span>
+                  <Icon name="diagonal" size={22} />
+                </a>
+              ),
+          )}
+        </div>
+      </div>
+    </section>
+    <ServiceCallout
+      title={page.cta}
+      service={page.value}
+      eyebrow={
+        isEmergency
+          ? 'NON-URGENT PROJECT PLANNING'
+          : page.category === 'tree'
+            ? 'YOUR LOCAL TREE CREW'
+            : 'YOUR LOCAL PROPERTY CARE TEAM'
+      }
+      text={
+        isEmergency
+          ? 'Once immediate dangers have been addressed, share the work you’re planning. Online estimate requests are not an emergency dispatch service.'
+          : `Tell us what you have in mind for your ${primaryLocation.city} property. We’ll discuss the details and start with a free estimate.`
+      }
+    />
+  </main>
+</SiteLayout>

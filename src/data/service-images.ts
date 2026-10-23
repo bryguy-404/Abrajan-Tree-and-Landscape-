@@ -2,6 +2,8 @@ import { getImage } from 'astro:assets';
 import canopy from '../assets/service-concepts/tree-care-canopy.png';
 import removal from '../assets/service-concepts/tree-removal-worksite.png';
 import stump from '../assets/service-concepts/stump-detail.png';
+import clearing from '../assets/service-concepts/land-clearing.png';
+import winter from '../assets/service-concepts/winter-property.png';
 
 const images = {
   canopy: {
@@ -15,6 +17,14 @@ const images = {
   stump: {
     source: stump,
     alt: 'Illustrative close view of a cut tree stump awaiting grinding',
+  },
+  clearing: {
+    source: clearing,
+    alt: 'Illustrative residential clearing with retained mature trees along a wooded edge',
+  },
+  winter: {
+    source: winter,
+    alt: 'Illustrative cleared driveway and walkway bordered by winter snow',
   },
 };
 
