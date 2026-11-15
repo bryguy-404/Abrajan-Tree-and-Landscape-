@@ -9,6 +9,7 @@ import ServiceArea from '../components/ServiceArea.astro';
 import TreeServices from '../components/TreeServices.astro';
 import EstimateForm from '../components/EstimateForm.astro';
 import ProjectPhotos from '../components/ProjectPhotos.astro';
+import HeroVideo from '../components/HeroVideo.astro';
 import { clientPhoto } from '../data/client-photos';
 // The tall phone hero crops this wide photo by height, so it needs more than
 // a viewport-width thumbnail to keep the equipment sharp.
@@ -56,6 +57,7 @@ const faqs = [
   <main id="main">
     <section class="hero" aria-labelledby="hero-title">
       <img class="hero-image" {...heroPhoto} fetchpriority="high" />
+      <HeroVideo />
       <div class="hero-shade"></div>
       <div class="container hero-inner">
         <div class="hero-copy">

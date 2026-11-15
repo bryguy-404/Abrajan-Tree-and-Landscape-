@@ -1,0 +1,122 @@
+<div class="hero-motion" data-hero-motion>
+  <video
+    id="hero-background-video"
+    class="hero-video"
+    data-src="/videos/tree-work-loop.mp4"
+    autoplay
+    muted
+    loop
+    playsinline
+    preload="none"
+    disablepictureinpicture
+    aria-hidden="true"
+    tabindex="-1"
+  ></video>
+</div>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-hero-motion]');
+  const video = root?.querySelector<HTMLVideoElement>('video');
+  const hero = root?.closest<HTMLElement>('.hero');
+  if (root && video && hero) {
+    const desktop = matchMedia('(min-width: 901px)');
+    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+    const connection = (
+      navigator as Navigator & {
+        connection?: EventTarget & { saveData?: boolean };
+      }
+    ).connection;
+    let failed = false;
+    let pageLoaded = document.readyState === 'complete';
+    let inView = hero.getBoundingClientRect().bottom > 0;
+
+    function syncPlayback() {
+      if (!video) return;
+      const allowed =
+        desktop.matches &&
+        !reducedMotion.matches &&
+        !connection?.saveData &&
+        !failed;
+      if (!allowed) {
+        video.pause();
+        video.classList.remove('is-ready');
+        if (video.hasAttribute('src')) {
+          video.removeAttribute('src');
+          video.load();
+        }
+        return;
+      }
+      if (!pageLoaded || !inView || document.hidden) {
+        video.pause();
+        return;
+      }
+      // Load only after the still hero, and never request video for the phone
+      // or reduced-motion/data-saving versions of the page.
+      if (!video.hasAttribute('src')) video.src = video.dataset.src!;
+      video.muted = true;
+      void video.play().catch((error: DOMException) => {
+        // Keep the photo if autoplay is blocked. An interrupted play() during
+        // scrolling or resizing is expected and can resume when visible.
+        if (error.name !== 'AbortError') {
+          failed = true;
+          syncPlayback();
+        }
+      });
+    }
+
+    video.addEventListener('playing', () => {
+      video.classList.add('is-ready');
+    });
+    video.addEventListener('error', () => {
+      failed = true;
+      syncPlayback();
+    });
+    desktop.addEventListener('change', syncPlayback);
+    reducedMotion.addEventListener('change', syncPlayback);
+    connection?.addEventListener('change', syncPlayback);
+    document.addEventListener('visibilitychange', syncPlayback);
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(([entry]) => {
+        inView = entry.isIntersecting;
+        syncPlayback();
+      }).observe(hero);
+    }
+    if (!pageLoaded) {
+      window.addEventListener(
+        'load',
+        () => {
+          pageLoaded = true;
+          syncPlayback();
+        },
+        { once: true },
+      );
+    }
+    syncPlayback();
+  }
+</script>
+
+<style>
+  .hero-motion {
+    display: contents;
+  }
+  .hero-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 55% 50%;
+    z-index: -2;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 400ms ease;
+  }
+  .hero-video.is-ready {
+    opacity: 1;
+  }
+  @media (max-width: 900px), (prefers-reduced-motion: reduce) {
+    .hero-video {
+      display: none;
+    }
+  }
+</style>
