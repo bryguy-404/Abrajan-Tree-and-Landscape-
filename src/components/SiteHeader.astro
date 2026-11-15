@@ -8,11 +8,10 @@ import {
   estimateHref,
 } from '../data/business';
 const isHome = Astro.url.pathname === '/';
-const homeLink = (id: string) => `${isHome ? '' : '/'}#${id}`;
 const isServicePage = Astro.url.pathname.startsWith('/services/');
 const links = [
   ['About Us', 'about', '/about/'],
-  ['Our Work', 'our-work', homeLink('our-work')],
+  ['Our Work', 'our-work', '/our-work/'],
   ['Reviews', 'reviews', '/reviews/'],
   ['Contact', 'contact', '/contact/'],
 ];
@@ -109,10 +108,9 @@ const links = [
           ))}
         </div>
       </details>
-      {links.map(([label, id, href]) => (
+      {links.map(([label, , href]) => (
         <a
           href={href}
-          data-nav-section={id === 'our-work' ? id : undefined}
           aria-current={Astro.url.pathname === href ? 'page' : undefined}
           class:list={{ active: Astro.url.pathname === href }}
         >

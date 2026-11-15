@@ -1,0 +1,82 @@
+{
+  "received": "2026-11-15",
+  "sourceFolder": "Abrajam-Videos, supplied by Bryan",
+  "processing": "Silent H.264 MP4, 24 fps, CRF 26, maxrate 1700k, bufsize 3400k, yuv420p, faststart. Rotation baked in; metadata removed. Original source files unchanged. Poster frames extracted with FFmpeg and compressed with Sharp.",
+  "featured": {
+    "file": "/videos/tree-work-loop.mp4",
+    "source": "20241116_123955.MP4",
+    "note": "Reuses approved 24-second hero edit; does not loop in gallery viewer.",
+    "posterAtSeconds": 1.5
+  },
+  "clips": [
+    {
+      "slug": "crane-work",
+      "source": "20240321_131915.MP4",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_type": "video",
+          "width": 540,
+          "height": 1200
+        }
+      ],
+      "format": {
+        "duration": "7.458333",
+        "size": "836580"
+      }
+    },
+    {
+      "slug": "bucket-work",
+      "source": "Snapchat-998605042.MP4",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_type": "video",
+          "width": 540,
+          "height": 960
+        }
+      ],
+      "format": {
+        "duration": "21.583333",
+        "size": "3272971"
+      }
+    },
+    {
+      "slug": "winter-tree-work",
+      "source": "20241211_123559.MP4",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_type": "video",
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "format": {
+        "duration": "18.083333",
+        "size": "4014857"
+      }
+    },
+    {
+      "slug": "equipment-at-work",
+      "source": "20240725_150928.MP4",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_type": "video",
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "format": {
+        "duration": "4.625000",
+        "size": "1106424"
+      }
+    }
+  ],
+  "omitted": "Other similar views, fast camera movement, and 320x180 compressed exports; not all supplied clips were needed."
+}

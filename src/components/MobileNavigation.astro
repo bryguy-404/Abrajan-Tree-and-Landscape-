@@ -13,7 +13,7 @@ const links = [
   ['Home', 'top', isHome ? '#top' : '/'],
   ['Services', 'services', '/services/tree-services/'],
   ['About Us', 'about', '/about/'],
-  ['Our Work', 'our-work', homeLink('our-work')],
+  ['Our Work', 'our-work', '/our-work/'],
   ['Reviews', 'reviews', '/reviews/'],
   ['Service Area', 'service-area', homeLink('service-area')],
   ['Contact', 'contact', '/contact/'],
@@ -95,7 +95,7 @@ const links = [
           <a
             href={href}
             data-nav-section={
-              ['top', 'our-work', 'service-area'].includes(id) ? id : undefined
+              ['top', 'service-area'].includes(id) ? id : undefined
             }
             aria-current={Astro.url.pathname === href ? 'page' : undefined}
             class:list={{ active: Astro.url.pathname === href }}
