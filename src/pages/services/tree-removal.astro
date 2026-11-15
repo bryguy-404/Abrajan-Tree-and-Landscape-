@@ -2,7 +2,12 @@
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import RemovalHero from '../../components/RemovalHero.astro';
 import { serviceImage } from '../../data/service-images';
-const removalImage = await serviceImage('removal');
+import { clientPhoto } from '../../data/client-photos';
+const removalImage = await clientPhoto(
+  'hauling',
+  1920,
+  '(max-width: 900px) 1500px, 100vw',
+);
 const stumpImage = await serviceImage(
   'stump',
   960,

@@ -5,6 +5,18 @@ import ServiceCallout from '../components/ServiceCallout.astro';
 import { locationLabel, estimateHref } from '../data/business';
 import '../styles/services.css';
 import '../styles/interior.css';
+import { clientPhoto } from '../data/client-photos';
+const teamPhoto = {
+  src: '/images/abrajan-crew.webp',
+  width: 800,
+  height: 553,
+  alt: 'The Abrajan Tree & Complete Landscaping Service crew',
+};
+const workPhoto = await clientPhoto(
+  'bucket',
+  1200,
+  '(max-width: 760px) 100vw, 45vw',
+);
 const values = [
   {
     number: '01',
@@ -30,7 +42,7 @@ const values = [
 <SiteLayout
   title={`About Abrajan | Tree Care in ${locationLabel}`}
   description={`Meet Abrajan, serving Michiana since 2000. Licensed and insured tree services, tree removal, and property care for homes and businesses in ${locationLabel}.`}
-  image="/images/abrajan-crew.webp"
+  image={teamPhoto.src}
 >
   <main id="main" class="interior-page about-page">
     <section
@@ -68,16 +80,7 @@ const values = [
             </a>
           </div>
           <figure class="about-team">
-            <img
-              src="/images/abrajan-crew.webp"
-              alt="The Abrajan Tree & Complete Landscaping Service crew"
-              width="800"
-              height="553"
-              fetchpriority="high"
-            />
-            <figcaption>
-              <span class="status-dot"></span> YOUR LOCAL ABRAJAN CREW
-            </figcaption>
+            <img {...teamPhoto} fetchpriority="high" />
             <div class="team-year">
               <Icon name="leaf" size={28} />
               <span>
@@ -134,13 +137,7 @@ const values = [
     <section class="about-tree-story" aria-labelledby="tree-story-title">
       <div class="container about-story-grid">
         <figure class="reveal">
-          <img
-            src="/images/tree-care.webp"
-            alt="Abrajan crew member carrying out tree work"
-            width="720"
-            height="900"
-            loading="lazy"
-          />
+          <img {...workPhoto} loading="lazy" />
           <figcaption>TREE WORK IS AT OUR ROOTS</figcaption>
         </figure>
         <div class="reveal">

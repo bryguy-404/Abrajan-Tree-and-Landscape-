@@ -4,9 +4,9 @@ import ServiceHero from '../../components/ServiceHero.astro';
 import ServiceQuestions from '../../components/ServiceQuestions.astro';
 import ServiceCallout from '../../components/ServiceCallout.astro';
 import Icon from '../../components/Icon.astro';
-import { serviceImage } from '../../data/service-images';
-const canopyImage = await serviceImage(
-  'canopy',
+import { clientPhoto } from '../../data/client-photos';
+const canopyImage = await clientPhoto(
+  'bucket',
   1600,
   '(max-width: 760px) 100vw, (max-width: 1352px) 90vw, 1240px',
 );

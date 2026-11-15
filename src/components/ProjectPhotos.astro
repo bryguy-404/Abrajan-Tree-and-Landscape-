@@ -1,0 +1,300 @@
+---
+import Icon from './Icon.astro';
+import { clientPhoto } from '../data/client-photos';
+const photos = await Promise.all(
+  [
+    {
+      key: 'bucket' as const,
+      title: 'Up in the Canopy',
+      label: 'TREE WORK',
+      position: '50% 44%',
+    },
+    {
+      key: 'hauling' as const,
+      title: 'From the Tree to the Truck',
+      label: 'ON THE JOB',
+      position: '50% 48%',
+    },
+    {
+      key: 'together' as const,
+      title: 'Faces Behind the Work',
+      label: 'LOCAL ROOTS',
+      position: '50% 22%',
+    },
+  ].map(async (photo) => ({
+    ...photo,
+    image: await clientPhoto(
+      photo.key,
+      1600,
+      '(max-width: 650px) 100vw, (max-width: 1400px) 48vw, 660px',
+    ),
+  })),
+);
+---
+
+<div class="project-photos" data-project-photos>
+  <div class="project-photo-grid">
+    {photos.map((photo, index) => (
+      <a
+        class:list={[
+          'project-photo',
+          'reveal',
+          { 'project-photo-tall': index === 0 },
+        ]}
+        href={photo.image.src}
+        target="_blank"
+        rel="noopener"
+        data-photo-title={photo.title}
+        data-photo-alt={photo.image.alt}
+        aria-label={`Enlarge photo: ${photo.title}`}
+        aria-haspopup="dialog"
+        aria-controls="project-photo-viewer"
+      >
+        <img
+          {...photo.image}
+          loading="lazy"
+          decoding="async"
+          style={`object-position: ${photo.position}`}
+        />
+        <div class="project-photo-caption">
+          <div>
+            <span>{photo.label}</span>
+            <h3>{photo.title}</h3>
+          </div>
+          <span class="photo-expand" aria-hidden="true">
+            <Icon name="diagonal" size={22} />
+          </span>
+        </div>
+      </a>
+    ))}
+  </div>
+  <p class="project-photo-note">
+    A look at our crew and tree work. Select a photo for a closer look.
+  </p>
+  <dialog
+    id="project-photo-viewer"
+    class="project-photo-viewer"
+    aria-labelledby="project-photo-title"
+  >
+    <div class="photo-viewer-heading">
+      <h3 id="project-photo-title"></h3>
+      <button type="button" aria-label="Close project photo" autofocus>
+        <Icon name="close" size={23} />
+      </button>
+    </div>
+    <img data-full-photo alt="" />
+  </dialog>
+</div>
+
+<script>
+  const gallery = document.querySelector('[data-project-photos]');
+  const dialog = gallery?.querySelector<HTMLDialogElement>('dialog');
+  const fullPhoto =
+    dialog?.querySelector<HTMLImageElement>('[data-full-photo]');
+  const title = dialog?.querySelector<HTMLElement>('#project-photo-title');
+  if (
+    gallery &&
+    dialog &&
+    fullPhoto &&
+    title &&
+    typeof dialog.showModal === 'function'
+  ) {
+    let previousOverflow = '';
+    let opener: HTMLAnchorElement | null = null;
+    gallery
+      .querySelectorAll<HTMLAnchorElement>('[data-photo-title]')
+      .forEach((link) => {
+        link.addEventListener('click', (event) => {
+          if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey)
+            return;
+          event.preventDefault();
+          opener = link;
+          fullPhoto.src = link.href;
+          fullPhoto.alt = link.dataset.photoAlt ?? '';
+          title.textContent = link.dataset.photoTitle ?? '';
+          previousOverflow = document.body.style.overflow;
+          document.body.style.overflow = 'hidden';
+          dialog.showModal();
+        });
+      });
+    dialog
+      .querySelector('button')
+      ?.addEventListener('click', () => dialog.close());
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog) dialog.close();
+    });
+    dialog.addEventListener('close', () => {
+      document.body.style.overflow = previousOverflow;
+      opener?.focus({ preventScroll: true });
+    });
+  }
+</script>
+
+<style>
+  .project-photo-grid {
+    display: grid;
+    grid-template-columns: 0.82fr 1.18fr;
+    grid-template-rows: repeat(2, 280px);
+    gap: 18px;
+  }
+  .project-photo {
+    position: relative;
+    overflow: hidden;
+    display: block;
+    border-radius: 4px;
+    background: var(--deep);
+    color: white;
+  }
+  .project-photo-tall {
+    grid-row: span 2;
+  }
+  .project-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 500ms ease;
+  }
+  .project-photo::after {
+    content: '';
+    position: absolute;
+    inset: 38% 0 0;
+    background: linear-gradient(transparent, #061d13d9);
+    pointer-events: none;
+  }
+  .project-photo:hover img {
+    transform: scale(1.025);
+  }
+  .project-photo:focus-visible {
+    outline: 3px solid var(--pine);
+    outline-offset: 5px;
+  }
+  .project-photo-caption {
+    position: absolute;
+    z-index: 1;
+    bottom: 25px;
+    left: 28px;
+    right: 25px;
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .project-photo-caption span:not(.photo-expand) {
+    font-size: 9px;
+    letter-spacing: 1.8px;
+    color: var(--lime);
+  }
+  .project-photo-caption h3 {
+    font-size: 23px;
+    margin-top: 7px;
+    font-weight: 500;
+    letter-spacing: -0.6px;
+  }
+  .photo-expand {
+    display: grid;
+    flex: 0 0 44px;
+    height: 44px;
+    place-items: center;
+    border: 1px solid #ffffff70;
+    border-radius: 50%;
+  }
+  .project-photo-note {
+    font-size: 11px;
+    color: var(--muted);
+    margin: 17px 0 0;
+  }
+  .project-photo-viewer {
+    width: min(1100px, calc(100vw - 40px));
+    max-width: none;
+    max-height: calc(100dvh - 40px);
+    padding: 0;
+    border: 0;
+    border-radius: 5px;
+    background: var(--deep);
+    color: white;
+    margin: auto;
+  }
+  .project-photo-viewer::backdrop {
+    background: #03140de8;
+  }
+  .photo-viewer-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 22px;
+    gap: 16px;
+  }
+  .photo-viewer-heading h3 {
+    font-size: 18px;
+    font-weight: 500;
+  }
+  .photo-viewer-heading button {
+    color: white;
+    background: transparent;
+    border: 1px solid #ffffff65;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+  }
+  .project-photo-viewer > img {
+    width: 100%;
+    height: auto;
+    max-height: calc(100dvh - 118px);
+    object-fit: contain;
+    display: block;
+  }
+  @media (max-width: 900px) {
+    .project-photo-grid {
+      grid-template-rows: repeat(2, 240px);
+    }
+    .project-photo-caption {
+      left: 20px;
+      right: 20px;
+      bottom: 20px;
+    }
+    .project-photo-caption h3 {
+      font-size: 20px;
+    }
+  }
+  @media (max-width: 650px) {
+    .project-photo-grid {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
+      gap: 14px;
+    }
+    .project-photo {
+      aspect-ratio: 4 / 3;
+    }
+    .project-photo-tall {
+      grid-row: auto;
+      aspect-ratio: 4 / 5;
+    }
+    .project-photo-caption h3 {
+      font-size: 21px;
+    }
+    .project-photo-note {
+      line-height: 1.8;
+    }
+    .project-photo-viewer {
+      width: calc(100vw - 24px);
+    }
+    .photo-viewer-heading {
+      padding: 12px 15px;
+    }
+    .photo-viewer-heading h3 {
+      font-size: 15px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .project-photo img {
+      transition: none;
+    }
+    .project-photo:hover img {
+      transform: none;
+    }
+  }
+</style>

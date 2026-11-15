@@ -12,6 +12,7 @@ import {
   propertyNavigation,
 } from '../data/business';
 import { serviceImage } from '../data/service-images';
+import { clientPhoto } from '../data/client-photos';
 import type { ServicePage } from '../data/service-pages';
 import '../styles/services.css';
 import '../styles/service-detail.css';
@@ -24,14 +25,18 @@ const isEmergency = page.theme === 'urgent';
 const isClearing = page.theme === 'clearing';
 const imageSizes = isClearing ? '100vw' : '(max-width: 800px) 100vw, 650px';
 const image =
-  page.image === 'stump' || page.image === 'winter' || page.image === 'clearing'
-    ? await serviceImage(page.image, isClearing ? 1600 : 1100, imageSizes)
-    : {
-        src: page.image,
-        alt: page.imageAlt,
-        width: page.imageWidth,
-        height: page.imageHeight,
-      };
+  page.image === 'climber'
+    ? await clientPhoto('climber', 1200, imageSizes)
+    : page.image === 'stump' ||
+        page.image === 'winter' ||
+        page.image === 'clearing'
+      ? await serviceImage(page.image, isClearing ? 1600 : 1100, imageSizes)
+      : {
+          src: page.image,
+          alt: page.imageAlt,
+          width: page.imageWidth,
+          height: page.imageHeight,
+        };
 const allServices = [...serviceNavigation, ...propertyNavigation];
 const related = page.related
   .map((slug) =>

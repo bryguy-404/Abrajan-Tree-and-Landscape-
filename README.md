@@ -2,6 +2,22 @@
 
 An Astro homepage for **Abrajan Tree & Complete Landscaping Service**, inspired by the Gardenx reference supplied by Bryan. Built for client design review, with static Cloudflare Pages hosting and a private Cloudflare Worker for Google reviews and the future Resend contact endpoint.
 
+## Client photography update — November 15, 2026
+
+Six of the 15 client-supplied still images in Bryan’s `Abrajam-Assets` folder now appear across the site. A seventh selected image, the two-person company-shirt portrait, is retained for possible later use; Bryan asked to restore the original full-team photo on About. Original copies and the source-filename manifest are in `src/assets/client-photos/`; `src/data/client-photos.ts` creates responsive WebP derivatives through Astro. Originals are unchanged, and generated derivatives omit EXIF metadata. No videos were processed.
+
+- **Homepage:** real log-handling equipment replaces the generated garden hero; a tree climber appears in the service feature; two crew members introduce the business. The Our Work section now leads with three genuine photographs of bucket work, loaded logs, and people at a job, with an accessible enlarged-photo viewer.
+- **About:** the original full-team photograph, restored at Bryan’s request, and the new bucket-work photograph.
+- **Tree Services:** a close banner crop of the bucket operator. **Tree Removal:** a separate truck-and-logs photograph. **Tree Trimming:** the supplied climber photograph.
+- Existing client landscaping photographs remain. The remaining generated stump, land-clearing, winter, and before/after illustrations retain their disclosures. This batch does not contain verified before/after pairs; the comparisons remain separate from the genuine gallery and do not represent completed Abrajan projects.
+- Gallery images are lazy-loaded; hero images use matching responsive preloads. The photo viewer supports keyboard activation, Escape, close-button/backdrop dismissal, focus return, and a direct-image fallback without JavaScript. Phone layouts stack the photographs.
+
+This is a local design-review update; publishing requires Bryan’s approval. Retain the approved design, Granger focus, removed contact phone numbers, preview-only form, private review integration, and noindex settings. Videos, final copy, and launch requirements remain for later work.
+
+Verification and image-placement notes below are scoped to this update, using the ADA AI Design and Build Standard v1.1 (October 2026) content/asset rules and the image, accessibility, and responsive portions of the ADA Web Launch Checklist (reviewed October 19, 2026). Prefer the Codex built-in browser for website preview checks. This is not a whole-site launch audit.
+
+Photo-update checks: `npm run check` passes across 48 files with no diagnostics; `npm run build` produces all 16 pages. The built-in browser checked the five affected pages at 1440px and 390px, with 768px/320px overflow and hero-load checks. The gallery was visually reviewed on desktop, tablet, and phone. All three enlarged photographs load; keyboard activation, Escape, close button, backdrop dismissal, body-scroll restoration, and focus return were verified. Existing comparison keyboard controls still reach their endpoints. Built output contains 26 responsive client-photo WebP variants with no EXIF/XMP/IPTC metadata; image paths and matching hero preloads were checked. Desktop/phone screenshots are in the ignored `output/client-photos-*` files. Physical-device checks and final client photo/alt-text approval remain for launch; no backend, review API, form delivery, or deployment changes were made.
+
 ## Service pages and location
 
 - `/services/tree-services/` covers removal, emergency/storm work, trimming, and stump grinding.
@@ -102,15 +118,15 @@ Then set `PUBLIC_CONTACT_FORM_ENABLED=true` in the build environment, rebuild, a
 - Original downloaded photos are retained in `source-assets/`. Optimization only resizes and compresses; the photos' contents were not altered.
 - The decorative leaf favicon is a simple original UI asset, not a replacement company logo.
 
-## Temporary generated hero
+## Archived generated hero
 
-`public/images/hero-landscape.webp` is a generated photo. It is a temporary illustrative image. Replace it with approved client photography when available. Generated with the built-in ImageGen tool; original retained at `source-assets/hero-generated.png`.
+`public/images/hero-landscape.webp` and `source-assets/hero-generated.png` preserve the earlier generated concept. It is no longer used by the homepage; the supplied tree-work photograph replaced it on November 15, 2026.
 
 The exact generation prompt is saved in `source-assets/hero-prompt.txt`.
 
 ## Before the approved site launches
 
-- Replace the temporary hero if client photos are available and confirm the existing team/project photos are still preferred.
+- Review the newly supplied photography and confirm the selected placements; add approved videos and genuine before/after pairs when available.
 - Confirm both phone numbers, business name, recipient email, and desired service coverage with the client.
 - Connect Resend and verify delivery.
 - Remove the `noindex, nofollow` meta tag from `src/pages/index.astro` and replace the review-only `Disallow: /` in `public/robots.txt` when this becomes the approved public website.
@@ -126,7 +142,7 @@ Technical references: [Astro + Cloudflare](https://docs.astro.build/en/guides/de
 
 The “Good work. Right in your backyard.” section presents three full-width, side-by-side comparison cards for tree care, lawn care, and landscaping, following the user's supplied layout reference. Each card has overlaid category/title text, Before/After labels, its own drag handle, an expand button, and a dark instruction strip. Cards stack vertically on screens up to 800px so slider gestures do not compete with horizontal scrolling. The existing green/lime branding is retained.
 
-Each pair uses the same generated property and camera angle; the before state was made by editing its matching after image. These are visibly labeled AI-generated examples, not claims about actual Abrajan jobs. The client's genuine crew and service photos elsewhere on the page are unchanged.
+Each pair uses the same generated property and camera angle; the before state was made by editing its matching after image. These are visibly labeled AI-generated examples, not claims about actual Abrajan jobs. The client’s genuine photographs now appear first in the Our Work section, separately from these examples.
 
 - Gallery component: `src/components/BeforeAfterGallery.astro` (service data, card layout, expanded dialogs, and JavaScript controller).
 - Shared comparison component: `src/components/ComparisonStage.astro` (responsive images, clipping, labels, native range input, and handle).

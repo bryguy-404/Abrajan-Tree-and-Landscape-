@@ -1,6 +1,12 @@
 ---
 import Icon from './Icon.astro';
 import { treeServices } from '../data/services';
+import { clientPhoto } from '../data/client-photos';
+const climberPhoto = await clientPhoto(
+  'climber',
+  1200,
+  '(max-width: 800px) 100vw, 40vw',
+);
 ---
 
 <section
@@ -27,13 +33,7 @@ import { treeServices } from '../data/services';
     </div>
     <div class="tree-services-layout">
       <figure class="tree-feature reveal">
-        <img
-          src="/images/tree-care.webp"
-          width="900"
-          height="1471"
-          loading="lazy"
-          alt="An Abrajan crew member working high in a tree on a residential property"
-        />
+        <img {...climberPhoto} loading="lazy" />
         <figcaption>
           <span>
             <span class="status-dot"></span> YOUR LOCAL TREE CREW
@@ -111,7 +111,7 @@ import { treeServices } from '../data/services';
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: 48% 37%;
+    object-position: 45% 38%;
     z-index: -2;
   }
   .tree-feature::after {

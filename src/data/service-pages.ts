@@ -45,11 +45,11 @@ export const servicePages: ServicePage[] = [
     value: 'Tree trimming',
     category: 'tree',
     theme: 'portrait',
-    image: '/images/tree-care.webp',
+    image: 'climber',
     imageAlt:
-      'An Abrajan crew member working among the branches of a mature tree',
-    imageWidth: 900,
-    imageHeight: 1471,
+      'An Abrajan tree climber wearing a helmet and harness among sunlit branches',
+    imageWidth: 1200,
+    imageHeight: 1600,
     eyebrow: 'ROOM TO GROW. ROOM TO ENJOY.',
     headline: 'Thoughtful Cuts. Lasting Care.',
     intro:

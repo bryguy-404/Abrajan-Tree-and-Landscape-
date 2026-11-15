@@ -1,0 +1,14 @@
+{
+  "received": "2026-11-15",
+  "source": "Client-supplied still photographs via Bryan, Abrajam-Assets folder",
+  "processing": "Unaltered source copies. Astro creates responsive WebP derivatives with metadata stripped. Layout crops use object-fit; no generative editing.",
+  "files": {
+    "tree-removal-equipment": "20241010_180440.JPG",
+    "tree-climber-canopy": "image000000.JPG",
+    "crew-at-work": "1000081322.JPG",
+    "bucket-operator": "Rodriguez Prod.-11079.JPG",
+    "log-hauling": "20240925_191317.JPG",
+    "crew-together": "1000081325.JPG",
+    "team-portrait": "Diego Miguel_2024_1134.JPG"
+  }
+}

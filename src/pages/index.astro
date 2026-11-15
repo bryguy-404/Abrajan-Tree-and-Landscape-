@@ -8,6 +8,20 @@ import CustomerReviews from '../components/CustomerReviews.astro';
 import ServiceArea from '../components/ServiceArea.astro';
 import TreeServices from '../components/TreeServices.astro';
 import EstimateForm from '../components/EstimateForm.astro';
+import ProjectPhotos from '../components/ProjectPhotos.astro';
+import { clientPhoto } from '../data/client-photos';
+// The tall phone hero crops this wide photo by height, so it needs more than
+// a viewport-width thumbnail to keep the equipment sharp.
+const heroPhoto = await clientPhoto(
+  'equipment',
+  1920,
+  '(max-width: 900px) 1500px, 100vw',
+);
+const crewPhoto = await clientPhoto(
+  'crew',
+  1200,
+  '(max-width: 900px) 100vw, 50vw',
+);
 const faqs = [
   {
     question: 'Can I get a free estimate?',
@@ -35,18 +49,13 @@ const faqs = [
 <SiteLayout
   title={`Tree Removal & Tree Services in ${locationLabel} | Abrajan`}
   description={`Tree removal, trimming, stump grinding, and 24/7 emergency tree service in ${locationLabel} and across Michiana. Serving the area since 2000. Free estimates.`}
-  image="/images/hero-landscape.webp"
+  image={heroPhoto.src}
+  imageSrcSet={heroPhoto.srcset}
+  imageSizes={heroPhoto.sizes}
 >
   <main id="main">
     <section class="hero" aria-labelledby="hero-title">
-      <img
-        class="hero-image"
-        src="/images/hero-landscape.webp"
-        alt="Illustrative aerial view of a lush garden, green lawn, and winding path"
-        width="1536"
-        height="1024"
-        fetchpriority="high"
-      />
+      <img class="hero-image" {...heroPhoto} fetchpriority="high" />
       <div class="hero-shade"></div>
       <div class="container hero-inner">
         <div class="hero-copy">
@@ -118,13 +127,7 @@ const faqs = [
     <section class="section about" id="about" aria-labelledby="about-title">
       <div class="container about-grid">
         <div class="about-visual reveal">
-          <img
-            src="/images/abrajan-crew.webp"
-            width="800"
-            height="553"
-            alt="The Abrajan Tree & Complete Landscaping Service team"
-            loading="lazy"
-          />
+          <img {...crewPhoto} loading="lazy" />
           <div class="photo-caption">
             <span class="status-dot"></span> YOUR LOCAL ABRAJAN TEAM
           </div>
@@ -284,7 +287,8 @@ const faqs = [
         <div class="section-heading reveal">
           <div>
             <p class="eyebrow">
-              <Icon name="leaf" size={18} /> A LITTLE BEFORE. A BEAUTIFUL AFTER.
+              <Icon name="leaf" size={18} /> THE PEOPLE. THE WORK. THE LOCAL
+              ROOTS.
             </p>
             <h2 id="work-title">
               Good Work.
@@ -293,10 +297,23 @@ const faqs = [
             </h2>
           </div>
           <p>
-            A little attention can change everything.
-            <br class="desktop-break" /> Slide to explore the before and after.
+            From the canopy to the cleanup, get a closer look at the people and
+            the work behind Abrajan.
           </p>
         </div>
+      </div>
+      <div class="container">
+        <ProjectPhotos />
+      </div>
+      <div class="container comparison-intro">
+        <p class="eyebrow">
+          <span class="eyebrow-line"></span> PICTURE THE POSSIBILITIES
+        </p>
+        <h3>See What a Little Care Can Do.</h3>
+        <p>
+          Slide through these illustrative before-and-after examples to explore
+          ideas for your property.
+        </p>
       </div>
       <BeforeAfterGallery />
     </section>
