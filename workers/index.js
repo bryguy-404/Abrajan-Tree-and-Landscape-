@@ -97,6 +97,34 @@ export async function handleEstimate(request, env, send = fetch) {
       },
       503,
     );
+  // Fail closed if production spam protection is unavailable.
+  if (!env.CONTACT_LIMITER)
+    return json(
+      {
+        error:
+          'Online requests are temporarily unavailable. Please try again later.',
+      },
+      503,
+    );
+  try {
+    const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+    const { success } = await env.CONTACT_LIMITER.limit({
+      key: `estimate:${ip}`,
+    });
+    if (!success)
+      return json(
+        { error: 'Too many requests. Please wait a minute and try again.' },
+        429,
+      );
+  } catch {
+    return json(
+      {
+        error:
+          'Online requests are temporarily unavailable. Please try again later.',
+      },
+      503,
+    );
+  }
   try {
     const response = await send('https://api.resend.com/emails', {
       method: 'POST',
@@ -105,6 +133,7 @@ export async function handleEstimate(request, env, send = fetch) {
         'Content-Type': 'application/json',
       },
       signal: AbortSignal.timeout(10000),
+      redirect: 'manual',
       body: JSON.stringify({
         from: env.CONTACT_FROM_EMAIL,
         to: [env.CONTACT_TO_EMAIL],

@@ -10,6 +10,11 @@
   },
   "ratelimits": [
     {
+      "name": "CONTACT_LIMITER",
+      "namespace_id": "202611231701",
+      "simple": { "limit": 3, "period": 60 },
+    },
+    {
       "name": "GOOGLE_REVIEWS_LIMITER",
       "namespace_id": "202610211315",
       "simple": { "limit": 10, "period": 60 },

@@ -10,6 +10,7 @@ const valid = {
   website: '',
 };
 const env = {
+  CONTACT_LIMITER: { limit: async () => ({ success: true }) },
   RESEND_API_KEY: 'test-key',
   CONTACT_FROM_EMAIL: 'Website <website@example.com>',
   CONTACT_TO_EMAIL: 'owner@example.com',
@@ -152,6 +153,50 @@ test('provider failures never return false success', async () => {
     ).status,
     502,
   );
+});
+test('rate limiting blocks delivery and fails closed when unavailable', async () => {
+  for (const [limiter, status] of [
+    [undefined, 503],
+    [{ limit: async () => ({ success: false }) }, 429],
+    [
+      {
+        limit: async () => {
+          throw new Error('Unavailable');
+        },
+      },
+      503,
+    ],
+  ]) {
+    assert.equal(
+      (
+        await handleEstimate(
+          request(),
+          { ...env, CONTACT_LIMITER: limiter },
+          neverSend,
+        )
+      ).status,
+      status,
+    );
+  }
+});
+test('rate limit key uses the Cloudflare client address', async () => {
+  let key;
+  const req = request();
+  req.headers.set('CF-Connecting-IP', '192.0.2.5');
+  await handleEstimate(
+    req,
+    {
+      ...env,
+      CONTACT_LIMITER: {
+        limit: async (input) => {
+          key = input.key;
+          return { success: true };
+        },
+      },
+    },
+    async () => Response.json({ id: 'test-email' }),
+  );
+  assert.equal(key, 'estimate:192.0.2.5');
 });
 test('static assets pass through and unknown APIs return 404', async () => {
   const assets = { ASSETS: { fetch: async () => new Response('Homepage') } };
