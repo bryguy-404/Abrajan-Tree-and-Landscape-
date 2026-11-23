@@ -1,0 +1,388 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import poster from '../assets/video/abrajan-film-poster.jpg';
+const watchUrl = 'https://www.youtube.com/watch?v=hBSjE6t1Ch0';
+---
+
+<section class="home-film" id="meet-abrajan" aria-labelledby="film-heading">
+  <div class="container">
+    <div class="film-intro reveal">
+      <div>
+        <p class="eyebrow">
+          <span class="eyebrow-line"></span> A CLOSER LOOK
+        </p>
+        <h2 id="film-heading">
+          The People Behind
+          <br />
+          the Work.
+        </h2>
+      </div>
+      <p>
+        Spend a few minutes with Abrajan. Get to know the people who bring our
+        tree work and local roots to life.
+      </p>
+    </div>
+    <a
+      class="film-preview reveal"
+      href={watchUrl}
+      target="_blank"
+      rel="noopener"
+      aria-label="Watch the Abrajan video, 2 minutes 20 seconds"
+      data-film-open
+    >
+      <Image
+        src={poster}
+        alt=""
+        widths={[480, 768, 1280]}
+        sizes="(max-width: 650px) 100vw, 90vw"
+        format="webp"
+        quality={85}
+        loading="lazy"
+        decoding="async"
+      />
+      <span class="film-preview-shade" aria-hidden="true"></span>
+      <span class="film-play-row">
+        <span class="film-play" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="25" height="25" fill="currentColor">
+            <path d="M8 4.5v15L20 12Z" />
+          </svg>
+        </span>
+        <span class="film-play-label">
+          Watch Our Video<span>Abrajan Tree & Complete Landscaping</span>
+        </span>
+        <span class="film-duration" aria-hidden="true">
+          2:20
+        </span>
+      </span>
+    </a>
+    <p class="film-note">
+      A few minutes with our team. Opens a YouTube player.
+    </p>
+  </div>
+  <dialog
+    class="film-dialog"
+    id="abrajan-film"
+    aria-labelledby="film-dialog-title"
+  >
+    <div class="film-dialog-heading">
+      <h2 id="film-dialog-title">A Closer Look at Abrajan</h2>
+      <button type="button" aria-label="Close video" data-film-close autofocus>
+        <Icon name="close" size={24} />
+      </button>
+    </div>
+    <div class="film-player" data-film-player></div>
+    <div class="film-dialog-footer">
+      <span>Abrajan Tree & Complete Landscaping</span>
+      <a href={watchUrl} target="_blank" rel="noopener">
+        Watch on YouTube <Icon name="diagonal" size={16} />
+      </a>
+    </div>
+  </dialog>
+</section>
+
+<script>
+  const opener = document.querySelector<HTMLAnchorElement>('[data-film-open]');
+  const dialog = document.querySelector<HTMLDialogElement>('#abrajan-film');
+  const player = dialog?.querySelector<HTMLElement>('[data-film-player]');
+  if (opener && dialog && player && typeof dialog.showModal === 'function') {
+    // Keep the normal YouTube link as the no-JavaScript fallback.
+    opener.setAttribute('aria-haspopup', 'dialog');
+    opener.setAttribute('aria-controls', dialog.id);
+    opener.addEventListener('click', (event) => {
+      if (
+        event.button !== 0 ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        event.altKey
+      )
+        return;
+      event.preventDefault();
+      if (dialog.open) return;
+      const frame = document.createElement('iframe');
+      frame.title =
+        'Abrajan Tree & Complete Landscaping — Serving Michiana Since 2000';
+      frame.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+      frame.allowFullscreen = true;
+      frame.referrerPolicy = 'strict-origin-when-cross-origin';
+      frame.src =
+        'https://www.youtube-nocookie.com/embed/hBSjE6t1Ch0?autoplay=1&rel=0&playsinline=1';
+      dialog.showModal();
+      player.replaceChildren(frame);
+    });
+    dialog
+      .querySelector('[data-film-close]')
+      ?.addEventListener('click', () => dialog.close());
+    dialog.addEventListener('keydown', (event) => {
+      if (event.key !== 'Tab') return;
+      const first =
+        dialog.querySelector<HTMLButtonElement>('[data-film-close]');
+      const last = dialog.querySelector<HTMLAnchorElement>(
+        '.film-dialog-footer a',
+      );
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last?.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first?.focus();
+      }
+    });
+    // Close only an actual backdrop click, not blank space within the dialog.
+    dialog.addEventListener('click', (event) => {
+      const rect = dialog.getBoundingClientRect();
+      if (
+        event.target === dialog &&
+        (event.clientX < rect.left ||
+          event.clientX > rect.right ||
+          event.clientY < rect.top ||
+          event.clientY > rect.bottom)
+      )
+        dialog.close();
+    });
+    dialog.addEventListener('close', () => {
+      // Removing the frame stops video/audio and resets the next opening.
+      player.replaceChildren();
+      opener.focus({ preventScroll: true });
+    });
+  }
+</script>
+
+<style>
+  .home-film {
+    padding: 0 0 96px;
+  }
+  .film-intro {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 48px;
+    margin-bottom: 36px;
+  }
+  .film-intro h2 {
+    margin-top: 20px;
+  }
+  .film-intro > p {
+    max-width: 340px;
+    padding-bottom: 5px;
+  }
+  .film-preview {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    border-radius: 4px;
+    background: var(--deep);
+    color: #fff;
+  }
+  .film-preview > img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 2.15;
+    object-fit: cover;
+    object-position: center 38%;
+    transition: transform 600ms ease;
+  }
+  .film-preview:hover > img {
+    transform: scale(1.025);
+  }
+  .film-preview-shade {
+    position: absolute;
+    inset: 45% 0 0;
+    background: linear-gradient(transparent, #041d15d9);
+  }
+  .film-play-row {
+    position: absolute;
+    bottom: 36px;
+    left: 36px;
+    right: 36px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+  .film-play {
+    display: grid;
+    place-items: center;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: var(--lime);
+    color: var(--deep);
+    flex-shrink: 0;
+    transition: background 200ms ease;
+  }
+  .film-preview:hover .film-play {
+    background: #fff;
+  }
+  .film-play-label {
+    font-size: 23px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    line-height: 1.4;
+  }
+  .film-play-label > span {
+    display: block;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.1px;
+    margin-top: 5px;
+    color: #ffffffe0;
+  }
+  .film-duration {
+    margin-left: auto;
+    padding: 5px 12px;
+    border: 1px solid #ffffff70;
+    border-radius: 3px;
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+  }
+  .film-note {
+    font-size: 11px;
+    margin-top: 14px;
+  }
+  .film-dialog {
+    padding: 0;
+    border: 1px solid #ffffff24;
+    border-radius: 6px;
+    background: var(--deep);
+    color: white;
+    width: min(1100px, calc(100vw - 32px));
+    max-width: none;
+    max-height: calc(100dvh - 32px);
+    margin: auto;
+  }
+  .film-dialog::backdrop {
+    background: #03140deb;
+  }
+  .film-dialog-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 24px;
+  }
+  .film-dialog-heading h2 {
+    font-size: 18px;
+    letter-spacing: -0.4px;
+  }
+  .film-dialog-heading button {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    background: transparent;
+    color: #fff;
+    border: 1px solid #ffffff70;
+    border-radius: 50%;
+  }
+  .film-player {
+    background: #000;
+    aspect-ratio: 16 / 9;
+    min-height: 200px;
+    max-height: calc(100dvh - 170px);
+  }
+  .film-player :global(iframe) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+  .film-dialog-footer {
+    padding: 14px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    font-size: 11px;
+  }
+  .film-dialog-footer > span {
+    color: #c8d6ce;
+  }
+  .film-dialog-footer a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--lime);
+  }
+  @media (max-width: 900px) {
+    .film-intro {
+      gap: 28px;
+    }
+    .film-intro > p {
+      max-width: 280px;
+    }
+    .film-play-row {
+      bottom: 24px;
+      left: 24px;
+      right: 24px;
+    }
+    .film-preview > img {
+      aspect-ratio: 16 / 9;
+    }
+  }
+  @media (max-width: 650px) {
+    .home-film {
+      padding-bottom: 64px;
+    }
+    .film-intro {
+      display: block;
+      margin-bottom: 26px;
+    }
+    .film-intro > p {
+      margin-top: 20px;
+      max-width: 360px;
+    }
+    .film-preview > img {
+      aspect-ratio: 4 / 5;
+      object-position: 56% center;
+    }
+    .film-play-row {
+      left: 18px;
+      right: 18px;
+      bottom: 22px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .film-play {
+      width: 54px;
+      height: 54px;
+    }
+    .film-play-label {
+      font-size: 18px;
+    }
+    .film-play-label > span {
+      display: none;
+    }
+    .film-duration {
+      position: absolute;
+      right: 0;
+      bottom: 68px;
+      font-size: 11px;
+    }
+    .film-dialog-heading {
+      padding: 12px 16px;
+    }
+    .film-dialog-heading h2 {
+      font-size: 16px;
+    }
+    .film-dialog-footer {
+      padding: 12px 16px;
+    }
+    .film-dialog-footer > span {
+      display: none;
+    }
+    .film-dialog-footer a {
+      min-height: 32px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .film-preview > img,
+    .film-play {
+      transition: none;
+    }
+    .film-preview:hover > img {
+      transform: none;
+    }
+  }
+</style>
