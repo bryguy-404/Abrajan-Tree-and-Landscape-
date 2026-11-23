@@ -3,10 +3,21 @@
   "name": "abrajan-tree-and-landscape",
   "pages_build_output_dir": "./dist",
   "compatibility_date": "2026-10-20",
+  "vars": {
+    "PUBLIC_CONTACT_FORM_ENABLED": "false",
+  },
   "services": [
     {
       "binding": "SITE_API",
       "service": "abrajan-site-api",
     },
   ],
+  "env": {
+    "production": {
+      "vars": {
+        "PUBLIC_CONTACT_FORM_ENABLED": "true",
+      },
+      "services": [{ "binding": "SITE_API", "service": "abrajan-site-api" }],
+    },
+  },
 }
